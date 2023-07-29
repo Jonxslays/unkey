@@ -1,6 +1,6 @@
 # Unkey SDK
 
-An asynchronous SDK for the Unkey API.
+An asynchronous SDK for the [Unkey API](https://docs.unkey.dev/introduction).
 
 ## MSRV
 

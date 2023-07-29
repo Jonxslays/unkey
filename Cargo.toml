@@ -1,0 +1,26 @@
+[package]
+name = "unkey_sdk"
+description = "An asynchronous SDK for the Unkey API."
+version = "0.1.0"
+edition = "2021"
+authors = ["Jonxslays"]
+readme = "README.md"
+license = "MIT"
+rust-version = "1.60.0"
+homepage = "https://github.com/Jonxslays/unkey_sdk"
+repository = "https://github.com/Jonxslays/unkey_sdk"
+documentation = "https://docs.rs/unkey_sdk"
+keywords = ["unkey-sdk", "unkey", "unkeyed", "api"]
+categories = ["api-bindings", "asynchronous"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+name = "unkey_sdk"
+
+[dependencies]
+reqwest = { version = "0.11", features = ["json", "rustls-tls"], default-features = false }
+serde = { version = "1", features = ["derive"] }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros"] }

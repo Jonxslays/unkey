@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use reqwest::Method;
 
 // Keys
@@ -23,32 +21,52 @@ impl Route {
         Self { method, uri }
     }
 
-    pub fn compile_empty(&self) -> CompiledRoute {
-        self.compile(&[])
-    }
-
-    pub fn compile(&self, params: &[&str]) -> CompiledRoute {
-        let mut compiled = CompiledRoute::new(self.clone());
-
-        for param in params {
-            compiled.uri = compiled.uri.replacen("{}", param, 1);
-        }
-
-        compiled
+    pub fn compile(&self) -> CompiledRoute {
+        CompiledRoute::new(self)
     }
 }
 
 #[derive(Debug, Clone)]
-pub struct CompiledRoute {
-    pub route: Route,
+pub struct CompiledRoute<'a> {
     pub uri: String,
-    pub params: HashMap<String, String>,
+    pub method: Method,
+    pub params: Vec<(&'a str, String)>,
 }
 
-impl CompiledRoute {
-    pub fn new(route: Route) -> Self {
-        let params = HashMap::new();
+impl<'a> CompiledRoute<'a> {
+    pub fn new(route: &Route) -> Self {
+        let params = Vec::new();
         let uri = route.uri.to_string();
-        Self { route, uri, params }
+        let method = route.method.clone();
+
+        Self {
+            method,
+            params,
+            uri,
+        }
+    }
+
+    /// Inserts the given param into the route uri.
+    pub fn uri_insert(&mut self, param: impl ToString) -> &mut Self {
+        self.uri = self.uri.replacen("{}", &param.to_string(), 1);
+        self
+    }
+
+    /// Adds a query param with the given name and value.
+    pub fn with_query(&mut self, name: &'a str, value: impl ToString) -> &mut Self {
+        self.params.push((name, value.to_string()));
+        self
+    }
+
+    /// Builds the query string for this route. i.e. `?a=b&c=d`.
+    pub fn build_query(&self) -> String {
+        let mut query = String::new();
+
+        for (name, value) in &self.params {
+            query.push(if query.is_empty() { '?' } else { '&' });
+            query.push_str(&format!("{}={}", name, value));
+        }
+
+        query
     }
 }

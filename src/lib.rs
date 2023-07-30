@@ -4,5 +4,6 @@ pub fn placeholder() {
 
 mod client;
 pub mod models;
+pub mod routes;
 
 pub use client::Client;

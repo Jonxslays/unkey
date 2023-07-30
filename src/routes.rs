@@ -34,16 +34,13 @@ pub struct CompiledRoute<'a> {
 }
 
 impl<'a> CompiledRoute<'a> {
+    #[rustfmt::skip]
     pub fn new(route: &Route) -> Self {
         let params = Vec::new();
         let uri = route.uri.to_string();
         let method = route.method.clone();
 
-        Self {
-            method,
-            params,
-            uri,
-        }
+        Self { method, params, uri }
     }
 
     /// Inserts the given param into the route uri.

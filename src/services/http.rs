@@ -1,7 +1,7 @@
 use reqwest::header::{HeaderMap, HeaderValue};
 use serde::Serialize;
 
-use super::routes::CompiledRoute;
+use crate::routes::CompiledRoute;
 
 // TODO: implement versioning at some point
 static BASE_API_URL: &'static str = "https://api.unkey.dev/v1";

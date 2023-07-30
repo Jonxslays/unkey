@@ -49,8 +49,8 @@ impl<'a> CompiledRoute<'a> {
         self
     }
 
-    /// Adds a query param with the given name and value.
-    pub fn with_query(&mut self, name: &'a str, value: impl ToString) -> &mut Self {
+    /// Inserts a query param with the given name and value.
+    pub fn query_insert(&mut self, name: &'a str, value: impl ToString) -> &mut Self {
         self.params.push((name, value.to_string()));
         self
     }

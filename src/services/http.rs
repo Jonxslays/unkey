@@ -6,7 +6,7 @@ use crate::routes::CompiledRoute;
 // TODO: implement versioning at some point
 static BASE_API_URL: &'static str = "https://api.unkey.dev/v1";
 
-type HttpResult = Result<reqwest::Response, reqwest::Error>;
+pub type HttpResult = Result<reqwest::Response, reqwest::Error>;
 
 #[derive(Debug, Clone)]
 pub struct HttpService {

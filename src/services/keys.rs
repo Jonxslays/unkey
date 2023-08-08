@@ -1,6 +1,6 @@
 use crate::{models, routes};
 
-use super::{HttpService, ServiceResult};
+use super::{HttpService, ServiceResult, unwind_response};
 
 #[derive(Debug, Clone)]
 pub struct KeyService;
@@ -10,7 +10,10 @@ impl KeyService {
         Self
     }
 
+    pub async fn create_key() {}
+
     pub async fn verify_key<T: ToString>(
+        &self,
         http: &HttpService,
         key: T,
     ) -> ServiceResult<models::VerifyKeyResponse> {
@@ -18,13 +21,6 @@ impl KeyService {
         let payload = models::VerifyKeyRequest::new(key.to_string());
         let response = http.fetch(route, Some(payload)).await;
 
-        if response.is_err() {
-            return Err(models::HttpError::new(
-                models::ErrorCode::Unknown,
-                response.unwrap_err().to_string(),
-            ));
-        }
-
-        todo!() // This is not idiomatic, rethink the models
+        unwind_response(response).await
     }
 }

@@ -1,9 +1,9 @@
-use super::services;
+use super::{models, services};
 
 #[derive(Debug, Clone)]
 pub struct Client {
     http: services::HttpService,
-    pub keys: services::KeyService,
+    keys: services::KeyService,
 }
 
 impl Client {
@@ -27,5 +27,12 @@ impl Client {
 
     pub fn set_url(&mut self, url: &str) {
         self.http.set_url(url)
+    }
+
+    pub async fn verify_key<T: ToString>(
+        &self,
+        key: T,
+    ) -> services::ServiceResult<models::VerifyKeyResponse> {
+        self.keys.verify_key(&self.http, key).await
     }
 }

@@ -32,7 +32,7 @@ impl KeyService {
         let route = routes::VERIFY_KEY.compile();
         let payload = models::VerifyKeyRequest::new(key.to_string());
         let response = http.fetch(route, Some(payload)).await;
-        println!("{:?}", response);
+        
         unwind_response(response).await
     }
 }

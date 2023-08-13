@@ -1,7 +1,4 @@
-use crate::{
-    models::{self, CreateKeyRequest},
-    routes,
-};
+use crate::{models, routes};
 
 use super::{unwind_response, HttpService, ServiceResult};
 
@@ -16,7 +13,7 @@ impl KeyService {
     pub async fn create_key(
         &self,
         http: &HttpService,
-        key: CreateKeyRequest,
+        key: models::CreateKeyRequest,
     ) -> ServiceResult<models::CreateKeyResponse> {
         let route = routes::CREATE_KEY.compile();
         let response = http.fetch(route, Some(key)).await;
@@ -32,7 +29,7 @@ impl KeyService {
         let route = routes::VERIFY_KEY.compile();
         let payload = models::VerifyKeyRequest::new(key.to_string());
         let response = http.fetch(route, Some(payload)).await;
-        
+
         unwind_response(response).await
     }
 }

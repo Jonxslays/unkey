@@ -38,10 +38,11 @@ impl HttpService {
         let mut headers = HeaderMap::with_capacity(3);
         let version = env!("CARGO_PKG_VERSION");
         let user_agent = format!("Unkey Rust SDK v{}", version);
+        let key = String::from("Bearer ") + key;
 
         headers.insert("Accept", HeaderValue::from_str("application/json").unwrap());
         headers.insert("x-user-agent", HeaderValue::from_str(&user_agent).unwrap());
-        headers.insert("Authorization", HeaderValue::from_str(key).unwrap());
+        headers.insert("Authorization", HeaderValue::from_str(&key).unwrap());
 
         headers
     }

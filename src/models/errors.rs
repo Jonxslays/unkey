@@ -55,11 +55,11 @@ pub enum ErrorCode {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct HttpError {
     pub code: ErrorCode,
-    pub error: String,
+    pub message: String,
 }
 
 impl HttpError {
-    pub fn new(code: ErrorCode, error: String) -> Self {
-        Self { code, error }
+    pub fn new(code: ErrorCode, message: String) -> Self {
+        Self { code, message }
     }
 }

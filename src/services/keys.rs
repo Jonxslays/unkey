@@ -1,6 +1,13 @@
-use crate::{models, routes};
+use crate::{
+    models::{CreateKeyRequest, CreateKeyResponse, VerifyKeyRequest, VerifyKeyResponse},
+    routes,
+    services::HttpService,
+    types::unwind_response,
+    types::Response,
+};
 
-use super::{unwind_response, HttpService, ServiceResult};
+#[allow(unused_imports)]
+use crate::models::HttpError;
 
 /// The service that handles key related requests.
 #[derive(Debug, Clone)]
@@ -19,16 +26,16 @@ impl KeyService {
     ///
     /// # Arguments
     /// - `http`: The [`HttpService`] to use for the request.
-    /// - `key`: The [`models::CreateKeyRequest`] to send.
+    /// - `key`: The [`CreateKeyRequest`] to send.
     ///
     /// # Returns
-    /// - [`ServiceResult<CreateKeyResponse>`]: A result containing
-    ///     the [`models::CreateKeyResponse`], or a [`models::HttpError`].
+    /// - [`Response<CreateKeyResponse>`]: A result containing
+    ///     the [`CreateKeyResponse`], or an [`HttpError`].
     pub async fn create_key(
         &self,
         http: &HttpService,
-        key: models::CreateKeyRequest,
-    ) -> ServiceResult<models::CreateKeyResponse> {
+        key: CreateKeyRequest,
+    ) -> Response<CreateKeyResponse> {
         let route = routes::CREATE_KEY.compile();
         let response = http.fetch(route, Some(key)).await;
 
@@ -42,15 +49,11 @@ impl KeyService {
     /// - `key`: The key to verify.
     ///
     /// # Returns
-    /// - [`ServiceResult<VerifyKeyResponse>`]: A result containing
-    ///     the [`models::VerifyKeyResponse`], or a [`models::HttpError`].
-    pub async fn verify_key(
-        &self,
-        http: &HttpService,
-        key: &str,
-    ) -> ServiceResult<models::VerifyKeyResponse> {
+    /// - [`Response<VerifyKeyResponse>`]: A result containing
+    ///     the [`VerifyKeyResponse`], or a [`HttpError`].
+    pub async fn verify_key(&self, http: &HttpService, key: &str) -> Response<VerifyKeyResponse> {
         let route = routes::VERIFY_KEY.compile();
-        let payload = models::VerifyKeyRequest::new(key);
+        let payload = VerifyKeyRequest::new(key);
         let response = http.fetch(route, Some(payload)).await;
 
         unwind_response(response).await

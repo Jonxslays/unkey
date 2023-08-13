@@ -221,8 +221,7 @@ impl CreateKeyRequest {
     /// # Example
     /// ```
     /// # use unkey_sdk::models::CreateKeyRequest;
-    /// let r = CreateKeyRequest::new("test")
-    ///     .set_owner_id("jonxslays");
+    /// let r = CreateKeyRequest::new("test").set_owner_id("jonxslays");
     ///
     /// assert_eq!(r.owner_id.unwrap(), String::from("jonxslays"));
     /// ```
@@ -242,8 +241,7 @@ impl CreateKeyRequest {
     /// # Example
     /// ```
     /// # use unkey_sdk::models::CreateKeyRequest;
-    /// let r = CreateKeyRequest::new("test")
-    ///     .set_byte_length(32);
+    /// let r = CreateKeyRequest::new("test").set_byte_length(32);
     ///
     /// assert_eq!(r.byte_length.unwrap(), 32);
     /// ```
@@ -263,8 +261,7 @@ impl CreateKeyRequest {
     /// # Example
     /// ```
     /// # use unkey_sdk::models::CreateKeyRequest;
-    /// let r = CreateKeyRequest::new("test")
-    ///     .set_prefix("dev");
+    /// let r = CreateKeyRequest::new("test").set_prefix("dev");
     ///
     /// assert_eq!(r.prefix.unwrap(), String::from("dev"));
     /// ```
@@ -284,8 +281,7 @@ impl CreateKeyRequest {
     /// # Example
     /// ```
     /// # use unkey_sdk::models::CreateKeyRequest;
-    /// let r = CreateKeyRequest::new("test")
-    ///     .set_name("example_key");
+    /// let r = CreateKeyRequest::new("test").set_name("example_key");
     ///
     /// assert_eq!(r.name.unwrap(), String::from("example_key"));
     /// ```
@@ -306,8 +302,7 @@ impl CreateKeyRequest {
     /// ```
     /// # use unkey_sdk::models::CreateKeyRequest;
     /// # use serde_json::json;
-    /// let r = CreateKeyRequest::new("test")
-    ///     .set_meta(json!({"test": 1}));
+    /// let r = CreateKeyRequest::new("test").set_meta(json!({"test": 1}));
     ///
     /// assert_eq!(r.meta.unwrap(), json!({"test": 1}));
     /// ```
@@ -334,9 +329,9 @@ impl CreateKeyRequest {
     ///    .unwrap()
     ///    .as_millis() as usize;
     ///
-    /// let r = CreateKeyRequest::new("test")
-    ///     .set_expires(1000 * 60 * 10); // 10 minutes
-    ///
+    /// let r = CreateKeyRequest::new("test").set_expires(1000 * 60 * 10);
+    /// 
+    /// // 10 minutes in the future
     /// assert_eq!(now + 1000 * 60 * 10, r.expires.unwrap());
     /// ```
     pub fn set_expires(mut self, expires: usize) -> Self {
@@ -360,8 +355,7 @@ impl CreateKeyRequest {
     /// # Example
     /// ```
     /// # use unkey_sdk::models::CreateKeyRequest;
-    /// let r = CreateKeyRequest::new("test")
-    ///     .set_remaining(100);
+    /// let r = CreateKeyRequest::new("test").set_remaining(100);
     ///
     /// assert_eq!(r.remaining.unwrap(), 100);
     /// ```
@@ -390,8 +384,7 @@ impl CreateKeyRequest {
     ///     100
     /// );
     ///
-    /// let r = CreateKeyRequest::new("test")
-    ///     .set_ratelimit(ratelimit.clone());
+    /// let r = CreateKeyRequest::new("test").set_ratelimit(ratelimit.clone());
     ///
     /// assert_eq!(r.ratelimit.unwrap(), ratelimit);
     /// ```

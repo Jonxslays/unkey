@@ -29,10 +29,17 @@ impl Client {
         self.http.set_url(url)
     }
 
-    pub async fn verify_key<T: ToString>(
+    pub async fn verify_key(
         &self,
-        key: T,
+        key: &str,
     ) -> services::ServiceResult<models::VerifyKeyResponse> {
         self.keys.verify_key(&self.http, key).await
+    }
+
+    pub async fn create_key(
+        &self,
+        key: models::CreateKeyRequest,
+    ) -> services::ServiceResult<models::CreateKeyResponse> {
+        self.keys.create_key(&self.http, key).await
     }
 }

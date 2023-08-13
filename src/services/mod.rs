@@ -8,10 +8,12 @@ use serde::Deserialize;
 use crate::models::ErrorCode;
 
 #[derive(Deserialize, Debug, Clone)]
-#[serde(untagged)]
+
 pub enum ServiceResult<T> {
-    Ok(T),
+    #[serde(rename = "error")]
     Err(crate::models::HttpError),
+    #[serde(untagged)]
+    Ok(T),
 }
 
 macro_rules! service_error {

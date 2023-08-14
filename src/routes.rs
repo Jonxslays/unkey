@@ -1,39 +1,122 @@
 use reqwest::Method;
 
-// Keys
+////////////////////////////////////////////////////////////////////////////////
+// ROUTES
+////////////////////////////////////////////////////////////////////////////////
+
+/// The create key endpoint `POST /keys`
 pub static CREATE_KEY: Route = Route::new(Method::POST, "/keys");
+
+/// The verify key endpoint `POST /keys/verify`
 pub static VERIFY_KEY: Route = Route::new(Method::POST, "/keys/verify");
+
+/// The delete key endpoint `DELETE /keys/{id}`
 pub static DELETE_KEY: Route = Route::new(Method::DELETE, "/keys/{}");
+
+/// The update key endpoint `PUT /keys/{id}`
 pub static UPDATE_KEY: Route = Route::new(Method::PUT, "/keys/{}");
 
-// Apis
+////////////////////////////////////////////////////////////////////////////////
+
+/// The get api endpoint `GET /apis/{id}`
 pub static GET_API: Route = Route::new(Method::GET, "/apis/{}");
+
+/// The list keys endpoint `GET /apis/{id}/keys`
 pub static LIST_KEYS: Route = Route::new(Method::GET, "/apis/{}/keys");
 
+////////////////////////////////////////////////////////////////////////////////
+// END ROUTES
+////////////////////////////////////////////////////////////////////////////////
+
+/// A route mapping to an unkey api endpoint.
 #[derive(Debug, Clone)]
 pub struct Route {
+    /// The http method for the route.
     pub method: Method,
+
+    /// The routes uri.
     pub uri: &'static str,
 }
 
 impl Route {
+    /// Creates a new route.
+    ///
+    /// # Note
+    /// These should really only be created internally by the library.
+    ///
+    /// Arguments
+    /// - `method`: The http [`Method`] for the route.
+    /// - `uri`: The routes uri.
+    ///
+    /// Returns
+    /// - [`Self`]: The new route.
+    ///
+    /// Example
+    /// ```
+    /// # use unkey_sdk::routes::Route;
+    /// # use reqwest::Method;
+    /// let r = Route::new(Method::GET, "/keys/owo");
+    ///
+    /// assert_eq!(r.method, Method::GET);
+    /// assert_eq!(r.uri, "/keys/owo");
+    /// ```
     pub const fn new(method: Method, uri: &'static str) -> Self {
         Self { method, uri }
     }
 
+    /// Compiles the properties of this static route into a new object.
+    ///
+    /// Returns
+    /// - [`CompiledRoute`]: The compiled route.
+    ///
+    /// Example
+    /// ```
+    /// # use unkey_sdk::routes::Route;
+    /// # use reqwest::Method;
+    /// let r = Route::new(Method::GET, "/apis/woot").compile();
+    ///
+    /// assert_eq!(r.params, vec![]);
+    /// assert_eq!(r.method, Method::GET);
+    /// assert_eq!(r.uri, String::from("/apis/woot"));
+    /// ```
     pub fn compile(&self) -> CompiledRoute {
         CompiledRoute::new(self)
     }
 }
 
 #[derive(Debug, Clone)]
-pub struct CompiledRoute<'a> {
+pub struct CompiledRoute {
+    /// The routes uri.
     pub uri: String,
+
+    /// The http method for the route.
     pub method: Method,
-    pub params: Vec<(&'a str, String)>,
+
+    /// The query params for the route.
+    pub params: Vec<(String, String)>,
 }
 
-impl<'a> CompiledRoute<'a> {
+impl CompiledRoute {
+    /// Creates a new compiled route.
+    ///
+    /// Arguments
+    /// - `route`: The static [`Route`] this one will extend.
+    ///
+    /// Returns
+    /// - [`Self`]: The new route.
+    ///
+    /// Example
+    /// ```
+    /// # use unkey_sdk::routes::CompiledRoute;
+    /// # use unkey_sdk::routes::Route;
+    /// # use reqwest::Method;
+    /// let r = Route::new(Method::GET, "/apis/hi");
+    /// let c = CompiledRoute::new(&r);
+    ///
+    /// assert_eq!(c.params, vec![]);
+    /// assert_eq!(c.method, Method::GET);
+    /// assert_eq!(c.uri, String::from("/apis/hi"));
+    /// ```
     #[rustfmt::skip]
     pub fn new(route: &Route) -> Self {
         let params = Vec::new();
@@ -44,24 +127,28 @@ impl<'a> CompiledRoute<'a> {
     }
 
     /// Inserts the given param into the route uri.
-    pub fn uri_insert(&mut self, param: impl ToString) -> &mut Self {
-        self.uri = self.uri.replacen("{}", &param.to_string(), 1);
+    pub fn uri_insert<T: Into<String>>(&mut self, param: T) -> &mut Self {
+        self.uri = self.uri.replacen("{}", &param.into(), 1);
         self
     }
 
     /// Inserts a query param with the given name and value.
-    pub fn query_insert(&mut self, name: &'a str, value: impl ToString) -> &mut Self {
-        self.params.push((name, value.to_string()));
+    pub fn query_insert<T: Into<String>>(&mut self, name: T, value: T) -> &mut Self {
+        self.params.push((name.into(), value.into()));
         self
     }
 
-    /// Builds the query string for this route. i.e. `?a=b&c=d`.
+    /// Builds the query string for this route, i.e. `?a=b&c=d`.
     pub fn build_query(&self) -> String {
-        let mut query = String::new();
+        let mut query = self
+            .params
+            .iter()
+            .map(|(k, v)| format!("{}={}", k, v))
+            .collect::<Vec<String>>()
+            .join("&");
 
-        for (name, value) in &self.params {
-            query.push(if query.is_empty() { '?' } else { '&' });
-            query.push_str(&format!("{}={}", name, value));
+        if !query.is_empty() {
+            query.insert(0, '?');
         }
 
         query

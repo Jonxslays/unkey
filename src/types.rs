@@ -68,6 +68,7 @@ impl HttpError {
     /// assert_eq!(e.code, ErrorCode::Unknown);
     /// assert_eq!(e.message, String::from("err"));
     /// ```
+    #[must_use]
     pub fn new(code: ErrorCode, message: String) -> Self {
         Self { code, message }
     }
@@ -107,11 +108,14 @@ macro_rules! response_error {
 /// # Returns
 /// - [`Response<T>`]: The response or an error.
 pub async fn unwind_response<T: for<'a> Deserialize<'a>>(response: HttpResult) -> Response<T> {
-    if response.is_err() {
-        return response_error!(ErrorCode::Unknown, response.unwrap_err());
+    if let Err(e) = response {
+        return response_error!(ErrorCode::Unknown, e);
     }
 
-    let data = response.unwrap().json::<Response<T>>().await;
+    let data = match response {
+        Ok(r) => r.json::<Response<T>>().await,
+        Err(e) => return response_error!(ErrorCode::Unknown, e),
+    };
 
     match data {
         Ok(data) => data,

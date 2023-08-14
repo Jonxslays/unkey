@@ -60,6 +60,7 @@ impl Route {
     /// assert_eq!(r.method, Method::GET);
     /// assert_eq!(r.uri, "/keys/owo");
     /// ```
+    #[must_use]
     pub const fn new(method: Method, uri: &'static str) -> Self {
         Self { method, uri }
     }
@@ -79,6 +80,7 @@ impl Route {
     /// assert_eq!(r.method, Method::GET);
     /// assert_eq!(r.uri, String::from("/apis/woot"));
     /// ```
+    #[must_use]
     pub fn compile(&self) -> CompiledRoute {
         CompiledRoute::new(self)
     }
@@ -118,13 +120,14 @@ impl CompiledRoute {
     /// assert_eq!(c.method, Method::GET);
     /// assert_eq!(c.uri, String::from("/apis/hi"));
     /// ```
+    #[must_use]
     #[rustfmt::skip]
     pub fn new(route: &Route) -> Self {
         let params = Vec::new();
         let uri = route.uri.to_string();
         let method = route.method.clone();
 
-        Self { method, params, uri }
+        Self { uri, method, params }
     }
 
     /// Inserts the given param into the route uri.
@@ -196,6 +199,7 @@ impl CompiledRoute {
     ///
     /// assert_eq!(c.build_query(), String::from("?test=value&js=bad"));
     /// ```
+    #[must_use]
     pub fn build_query(&self) -> String {
         let mut query = self
             .params

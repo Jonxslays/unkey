@@ -13,11 +13,18 @@ use crate::types::HttpError;
 #[derive(Debug, Clone)]
 pub struct KeyService;
 
+impl Default for KeyService {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl KeyService {
     /// Creates a new key service.
     ///
     /// # Returns
     /// - [`Self`]: The new service.
+    #[must_use]
     pub fn new() -> Self {
         Self
     }

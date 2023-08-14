@@ -4,9 +4,10 @@ use serde::Serialize;
 use crate::{routes::CompiledRoute, types::HttpResult};
 
 // TODO: implement versioning at some point
-static BASE_API_URL: &'static str = "https://api.unkey.dev/v1";
+static BASE_API_URL: &str = "https://api.unkey.dev/v1";
 
 /// The http service used for handling requests.
+#[allow(clippy::module_name_repetitions)]
 #[derive(Debug, Clone)]
 pub struct HttpService {
     /// The base url to use for requests.
@@ -33,6 +34,7 @@ impl HttpService {
     /// # use unkey_sdk::services::HttpService;
     /// let s = HttpService::new("unkey_abds");
     /// ```
+    #[must_use]
     #[rustfmt::skip]
     pub fn new(key: &str) -> Self {
         let headers = Self::generate_headers(key);
@@ -57,6 +59,7 @@ impl HttpService {
     /// # use unkey_sdk::services::HttpService;
     /// let s = HttpService::with_url("unkey_abds", "http://localhost:3000");
     /// ```
+    #[must_use]
     #[rustfmt::skip]
     pub fn with_url(key: &str, url: &str) -> Self {
         let headers = Self::generate_headers(key);
@@ -73,15 +76,29 @@ impl HttpService {
     ///
     /// # Returns
     /// - [`HeaderMap`]: The header map to use.
+    ///
     fn generate_headers(key: &str) -> HeaderMap {
         let mut headers = HeaderMap::with_capacity(3);
-        let key = format!("Bearer {}", key);
+        let key = format!("Bearer {key}");
         let version = env!("CARGO_PKG_VERSION");
-        let user_agent = format!("Unkey Rust SDK v{}", version);
+        let user_agent = format!("Unkey Rust SDK v{version}");
 
-        headers.insert("Accept", HeaderValue::from_str("application/json").unwrap());
-        headers.insert("x-user-agent", HeaderValue::from_str(&user_agent).unwrap());
-        headers.insert("Authorization", HeaderValue::from_str(&key).unwrap());
+        let buffer: [(&'static str, Result<HeaderValue, _>); 3] = [
+            ("Accept", HeaderValue::from_str("application/json")),
+            ("x-user-agent", HeaderValue::from_str(&user_agent)),
+            ("Authorization", HeaderValue::from_str(&key)),
+        ];
+
+        for (k, v) in &buffer {
+            match v {
+                Ok(h) => headers.insert(*k, h.clone()),
+                Err(e) => {
+                    eprintln!("Invalid header value: {e:?}");
+                    std::process::exit(1);
+                }
+            };
+        }
+
         headers
     }
 
@@ -97,8 +114,14 @@ impl HttpService {
     /// s.set_key("unkey_abc");
     /// ```
     pub fn set_key(&mut self, key: &str) {
-        let value = HeaderValue::from_str(key).unwrap();
-        self.headers.insert("Authorization", value);
+        let header = HeaderValue::from_str(key);
+
+        match header {
+            Err(e) => eprintln!("Error setting header value: {e:?}"),
+            Ok(h) => {
+                self.headers.insert("Authorization", h);
+            }
+        }
     }
 
     /// Sets the url the client will send requests to.
@@ -124,6 +147,9 @@ impl HttpService {
     ///
     /// # Returns
     /// - [`HttpResult`]: The result of the http request.
+    ///
+    /// # Errors
+    /// - [`reqwest::Error`]: The error encountered during the request.
     ///
     /// # Example
     /// ```no_run

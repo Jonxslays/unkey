@@ -31,6 +31,7 @@ impl Client {
     /// # use unkey_sdk::Client;
     /// let c = Client::new("unkey_ghj");
     /// ```
+    #[must_use]
     pub fn new(key: &str) -> Self {
         let http = HttpService::new(key);
         let keys = KeyService::new();
@@ -54,6 +55,7 @@ impl Client {
     /// # use unkey_sdk::Client;
     /// let c = Client::with_url("unkey_ghj", "http://localhost:3000");
     /// ```
+    #[must_use]
     pub fn with_url(key: &str, url: &str) -> Self {
         let http = HttpService::with_url(key, url);
         let keys = KeyService::new();
@@ -73,7 +75,7 @@ impl Client {
     /// c.set_key("unkey_abc");
     /// ```
     pub fn set_key(&mut self, key: &str) {
-        self.http.set_key(key)
+        self.http.set_key(key);
     }
 
     /// Sets the url the client will send requests to.
@@ -88,7 +90,7 @@ impl Client {
     /// c.set_url("http://localhost:6969");
     /// ```
     pub fn set_url(&mut self, url: &str) {
-        self.http.set_url(url)
+        self.http.set_url(url);
     }
 
     /// Verifies an existing api key.

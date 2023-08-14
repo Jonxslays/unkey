@@ -26,6 +26,7 @@ impl VerifyKeyRequest {
     ///
     /// assert_eq!(r.key, String::from("test"));
     /// ```
+    #[must_use]
     pub fn new<T: Into<String>>(key: T) -> Self {
         Self { key: key.into() }
     }
@@ -112,6 +113,7 @@ impl Ratelimit {
     /// assert_eq!(r.refill_interval, 10000);
     /// assert_eq!(r.limit, 100);
     /// ```
+    #[must_use]
     pub fn new(
         ratelimit_type: RatelimitType,
         refill_rate: usize,
@@ -185,6 +187,7 @@ impl CreateKeyRequest {
     /// assert_eq!(r.remaining, None);
     /// assert_eq!(r.ratelimit, None);
     /// ```
+    #[must_use]
     pub fn new<T: Into<String>>(api_id: T) -> Self {
         Self {
             api_id: api_id.into(),
@@ -214,6 +217,7 @@ impl CreateKeyRequest {
     ///
     /// assert_eq!(r.owner_id.unwrap(), String::from("jonxslays"));
     /// ```
+    #[must_use]
     pub fn set_owner_id<T: Into<String>>(mut self, owner_id: T) -> Self {
         self.owner_id = Some(owner_id.into());
         self
@@ -234,6 +238,7 @@ impl CreateKeyRequest {
     ///
     /// assert_eq!(r.byte_length.unwrap(), 32);
     /// ```
+    #[must_use]
     pub fn set_byte_length(mut self, byte_length: usize) -> Self {
         self.byte_length = Some(byte_length);
         self
@@ -254,6 +259,7 @@ impl CreateKeyRequest {
     ///
     /// assert_eq!(r.prefix.unwrap(), String::from("dev"));
     /// ```
+    #[must_use]
     pub fn set_prefix<T: Into<String>>(mut self, prefix: T) -> Self {
         self.prefix = Some(prefix.into());
         self
@@ -274,6 +280,7 @@ impl CreateKeyRequest {
     ///
     /// assert_eq!(r.name.unwrap(), String::from("example_key"));
     /// ```
+    #[must_use]
     pub fn set_name<T: Into<String>>(mut self, name: T) -> Self {
         self.name = Some(name.into());
         self
@@ -295,6 +302,7 @@ impl CreateKeyRequest {
     ///
     /// assert_eq!(r.meta.unwrap(), json!({"test": 1}));
     /// ```
+    #[must_use]
     pub fn set_meta(mut self, meta: Value) -> Self {
         self.meta = Some(meta);
         self
@@ -314,7 +322,7 @@ impl CreateKeyRequest {
     /// # use unkey_sdk::models::CreateKeyRequest;
     /// # use std::time::SystemTime;
     /// let now = SystemTime::now()
-    ///    .duration_since(SystemTime::from(std::time::UNIX_EPOCH))
+    ///    .duration_since(std::time::UNIX_EPOCH)
     ///    .unwrap()
     ///    .as_millis() as usize;
     ///
@@ -323,10 +331,14 @@ impl CreateKeyRequest {
     /// // 10 minutes in the future
     /// assert_eq!(now + 1000 * 60 * 10, r.expires.unwrap());
     /// ```
+    #[must_use]
     pub fn set_expires(mut self, expires: usize) -> Self {
         let duration = SystemTime::now()
-            .duration_since(SystemTime::from(std::time::UNIX_EPOCH))
-            .unwrap();
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap_or_else(|e| {
+                eprintln!("Error fetching duration since unix epoch: {e}");
+                std::process::exit(1);
+            });
 
         let expires = duration.as_millis() as usize + expires;
         self.expires = Some(expires);
@@ -348,6 +360,7 @@ impl CreateKeyRequest {
     ///
     /// assert_eq!(r.remaining.unwrap(), 100);
     /// ```
+    #[must_use]
     pub fn set_remaining(mut self, remaining: usize) -> Self {
         self.remaining = Some(remaining);
         self
@@ -377,6 +390,7 @@ impl CreateKeyRequest {
     ///
     /// assert_eq!(r.ratelimit.unwrap(), ratelimit);
     /// ```
+    #[must_use]
     pub fn set_ratelimit(mut self, ratelimit: Ratelimit) -> Self {
         self.ratelimit = Some(ratelimit);
         self

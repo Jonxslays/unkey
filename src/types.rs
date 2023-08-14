@@ -1,13 +1,50 @@
-use serde::Deserialize;
-
-use super::models::ErrorCode;
+use serde::{Deserialize, Serialize};
 
 pub type HttpResult = Result<reqwest::Response, reqwest::Error>;
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum ErrorCode {
+    #[serde(rename = "NOT_FOUND")]
+    NotFound,
+
+    #[serde(rename = "FORBIDDEN")]
+    Forbidden,
+
+    #[serde(rename = "BAD_REQUEST")]
+    BadRequest,
+
+    #[serde(rename = "RATELIMITED")]
+    Ratelimited,
+
+    #[serde(rename = "UNAUTHORIZED")]
+    Unauthorized,
+
+    #[serde(rename = "USAGE_EXCEEDED")]
+    UsageExceeded,
+
+    #[serde(rename = "INTERNAL_SERVER_ERROR")]
+    InternalServerError,
+
+    #[serde(rename = "UNKNOWN")]
+    Unknown,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct HttpError {
+    pub code: ErrorCode,
+    pub message: String,
+}
+
+impl HttpError {
+    pub fn new(code: ErrorCode, message: String) -> Self {
+        Self { code, message }
+    }
+}
 
 #[derive(Deserialize, Debug, Clone)]
 pub enum Response<T> {
     #[serde(rename = "error")]
-    Err(crate::models::HttpError),
+    Err(HttpError),
     #[serde(untagged)]
     Ok(T),
 }
@@ -15,7 +52,7 @@ pub enum Response<T> {
 #[macro_export]
 macro_rules! response_error {
     ($code:expr, $err:expr) => {
-        crate::types::Response::Err(crate::models::HttpError::new($code, $err.to_string()))
+        crate::types::Response::Err(crate::types::HttpError::new($code, $err.to_string()))
     };
 }
 

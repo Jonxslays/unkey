@@ -22,13 +22,13 @@ pub struct HttpService {
 impl HttpService {
     /// Creates a new http service.
     ///
-    /// Arguments
+    /// # Arguments
     /// - `key`: The root api key to use.
     ///
-    /// Returns
+    /// # Returns
     /// - [`Self`]: The new http service.
     ///
-    /// Example
+    /// # Example
     /// ```
     /// # use unkey_sdk::services::HttpService;
     /// let s = HttpService::new("unkey_abds");
@@ -45,14 +45,14 @@ impl HttpService {
     /// Creates a new http service that does not use the production
     /// unkey api url.
     ///
-    /// Arguments
+    /// # Arguments
     /// - `key`: The root api key to use.
     /// - `url`: The base url to use.
     ///
-    /// Returns
+    /// # Returns
     /// - [`Self`]: The new http service.
     ///
-    /// Example
+    /// # Example
     /// ```
     /// # use unkey_sdk::services::HttpService;
     /// let s = HttpService::with_url("unkey_abds", "http://localhost:3000");
@@ -68,10 +68,10 @@ impl HttpService {
 
     /// Generates the headers the client will use.
     ///
-    /// Arguments
+    /// # Arguments
     /// - `key`: The root api key to use.
     ///
-    /// Returns
+    /// # Returns
     /// - [`HeaderMap`]: The header map to use.
     fn generate_headers(key: &str) -> HeaderMap {
         let mut headers = HeaderMap::with_capacity(3);
@@ -87,10 +87,10 @@ impl HttpService {
 
     /// Updates the root api key to send with requests.
     ///
-    /// Arguments
+    /// # Arguments
     /// - `key`: The new root api key to use.
     ///
-    /// Example
+    /// # Example
     /// ```
     /// # use unkey_sdk::services::HttpService;
     /// let mut s = HttpService::new("unkey_ghj");
@@ -103,10 +103,10 @@ impl HttpService {
 
     /// Sets the url the client will send requests to.
     ///
-    /// Arguments
+    /// # Arguments
     /// - `url`: The new api base url to use.
     ///
-    /// Example
+    /// # Example
     /// ```
     /// # use unkey_sdk::services::HttpService;
     /// let mut s = HttpService::new("unkey_ghj");
@@ -118,14 +118,14 @@ impl HttpService {
 
     /// Makes the http request.
     ///
-    /// Arguments
+    /// # Arguments
     /// - `route`: The [`CompiledRoute`] to fetch.
     /// - `payload`: The optional json payload.
     ///
-    /// Returns
+    /// # Returns
     /// - [`HttpResult`]: The result of the http request.
     ///
-    /// Example
+    /// # Example
     /// ```no_run
     /// # use unkey_sdk::services::HttpService;
     /// # use unkey_sdk::routes::Route;

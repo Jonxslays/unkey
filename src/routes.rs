@@ -28,7 +28,7 @@ pub static LIST_KEYS: Route = Route::new(Method::GET, "/apis/{}/keys");
 // END ROUTES
 ////////////////////////////////////////////////////////////////////////////////
 
-/// A route mapping to an unkey api endpoint.
+/// A static route mapping to an unkey api endpoint.
 #[derive(Debug, Clone)]
 pub struct Route {
     /// The http method for the route.
@@ -84,6 +84,7 @@ impl Route {
     }
 }
 
+/// A dynamic route that can be used directly for an outgoing request.
 #[derive(Debug, Clone)]
 pub struct CompiledRoute {
     /// The routes uri.

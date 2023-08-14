@@ -145,7 +145,7 @@ impl HttpService {
         route: CompiledRoute,
         payload: Option<T>,
     ) -> HttpResult {
-        let url = self.url.clone() + &route.uri;
+        let url = self.url.clone() + &route.uri + &route.build_query();
         let mut req = self
             .client
             .request(route.method, url)

@@ -7,13 +7,30 @@ use crate::{
 #[allow(unused_imports)]
 use crate::types::HttpError;
 
+/// The client used to make requests to the unkey api.
 #[derive(Debug, Clone)]
 pub struct Client {
+    /// The internal http service handling requests.
     http: HttpService,
+
+    /// The key service handling key related serialization and deserialization.
     keys: KeyService,
 }
 
 impl Client {
+    /// Creates a new client.
+    ///
+    /// Arguments
+    /// - `key`: The root api key the client should send with requests.
+    ///
+    /// Returns
+    /// - [`Self`]: The new client.
+    ///
+    /// Example
+    /// ```
+    /// # use unkey_sdk::Client;
+    /// let c = Client::new("unkey_ghj");
+    /// ```
     pub fn new(key: &str) -> Self {
         let http = HttpService::new(key);
         let keys = KeyService::new();
@@ -21,6 +38,22 @@ impl Client {
         Self { http, keys }
     }
 
+    /// Creates a new client with a different base url than the production
+    /// unkey api url.
+    ///
+    /// Arguments
+    /// - `key`: The root api key the client should send with requests.
+    /// - `url`: The base url to use, excluding trailing slash.
+    ///     i.e. `http://localhost:3000`.
+    ///
+    /// Returns
+    /// - [`Self`]: The new client.
+    ///
+    /// Example
+    /// ```
+    /// # use unkey_sdk::Client;
+    /// let c = Client::with_url("unkey_ghj", "http://localhost:3000");
+    /// ```
     pub fn with_url(key: &str, url: &str) -> Self {
         let http = HttpService::with_url(key, url);
         let keys = KeyService::new();
@@ -28,10 +61,32 @@ impl Client {
         Self { http, keys }
     }
 
+    /// Updates the root api key for the client.
+    ///
+    /// Arguments
+    /// - `key`: The new root api key the client should send with requests.
+    ///
+    /// Example
+    /// ```
+    /// # use unkey_sdk::Client;
+    /// let mut c = Client::new("unkey_ghj");
+    /// c.set_key("unkey_abc");
+    /// ```
     pub fn set_key(&mut self, key: &str) {
         self.http.set_key(key)
     }
 
+    /// Sets the url the client will send requests to. 
+    ///
+    /// Arguments
+    /// - `url`: The new base url to use.
+    ///
+    /// Example
+    /// ```
+    /// # use unkey_sdk::Client;
+    /// let mut c = Client::new("unkey_ghj");
+    /// c.set_url("http://localhost:6969");
+    /// ```
     pub fn set_url(&mut self, url: &str) {
         self.http.set_url(url)
     }

@@ -127,18 +127,74 @@ impl CompiledRoute {
     }
 
     /// Inserts the given param into the route uri.
+    ///
+    /// Arguments
+    /// - `param`: The param to insert.
+    ///
+    /// Returns
+    /// - [`Self`]: for chained calls.
+    ///
+    /// Example
+    /// ```
+    /// # use unkey_sdk::routes::CompiledRoute;
+    /// # use unkey_sdk::routes::Route;
+    /// # use reqwest::Method;
+    /// let r = Route::new(Method::GET, "/apis/{}/keys/{}");
+    /// let mut c = CompiledRoute::new(&r);
+    /// c.uri_insert("5").uri_insert("1");
+    ///
+    /// assert_eq!(c.params, vec![]);
+    /// assert_eq!(c.method, Method::GET);
+    /// assert_eq!(c.uri, String::from("/apis/5/keys/1"));
+    /// ```
     pub fn uri_insert<T: Into<String>>(&mut self, param: T) -> &mut Self {
         self.uri = self.uri.replacen("{}", &param.into(), 1);
         self
     }
 
     /// Inserts a query param with the given name and value.
+    ///
+    /// Arguments
+    /// - `name`: The param name to insert.
+    /// - `param`: The param value to insert.
+    ///
+    /// Returns
+    /// - [`Self`]: for chained calls.
+    ///
+    /// Example
+    /// ```
+    /// # use unkey_sdk::routes::CompiledRoute;
+    /// # use unkey_sdk::routes::Route;
+    /// # use reqwest::Method;
+    /// let r = Route::new(Method::GET, "/apis/milk");
+    /// let mut c = CompiledRoute::new(&r);
+    /// c.query_insert("test", "value");
+    ///
+    /// assert_eq!(c.params, vec![(String::from("test"), String::from("value"))]);
+    /// assert_eq!(c.method, Method::GET);
+    /// assert_eq!(c.uri, String::from("/apis/milk"));
+    /// ```
     pub fn query_insert<T: Into<String>>(&mut self, name: T, value: T) -> &mut Self {
         self.params.push((name.into(), value.into()));
         self
     }
 
     /// Builds the query string for this route, i.e. `?a=b&c=d`.
+    ///
+    /// Returns
+    /// - [`String`]: The formatted query string.
+    ///
+    /// Example
+    /// ```
+    /// # use unkey_sdk::routes::CompiledRoute;
+    /// # use unkey_sdk::routes::Route;
+    /// # use reqwest::Method;
+    /// let r = Route::new(Method::GET, "/apis/milk");
+    /// let mut c = CompiledRoute::new(&r);
+    /// c.query_insert("test", "value").query_insert("js", "bad");
+    ///
+    /// assert_eq!(c.build_query(), String::from("?test=value&js=bad"));
+    /// ```
     pub fn build_query(&self) -> String {
         let mut query = self
             .params

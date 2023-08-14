@@ -20,13 +20,13 @@ pub struct Client {
 impl Client {
     /// Creates a new client.
     ///
-    /// Arguments
+    /// # Arguments
     /// - `key`: The root api key the client should send with requests.
     ///
-    /// Returns
+    /// # Returns
     /// - [`Self`]: The new client.
     ///
-    /// Example
+    /// # Example
     /// ```
     /// # use unkey_sdk::Client;
     /// let c = Client::new("unkey_ghj");
@@ -41,15 +41,15 @@ impl Client {
     /// Creates a new client with a different base url than the production
     /// unkey api url.
     ///
-    /// Arguments
+    /// # Arguments
     /// - `key`: The root api key the client should send with requests.
     /// - `url`: The base url to use, excluding trailing slash.
     ///     i.e. `http://localhost:3000`.
     ///
-    /// Returns
+    /// # Returns
     /// - [`Self`]: The new client.
     ///
-    /// Example
+    /// # Example
     /// ```
     /// # use unkey_sdk::Client;
     /// let c = Client::with_url("unkey_ghj", "http://localhost:3000");
@@ -63,10 +63,10 @@ impl Client {
 
     /// Updates the root api key for the client.
     ///
-    /// Arguments
+    /// # Arguments
     /// - `key`: The new root api key the client should send with requests.
     ///
-    /// Example
+    /// # Example
     /// ```
     /// # use unkey_sdk::Client;
     /// let mut c = Client::new("unkey_ghj");
@@ -76,12 +76,12 @@ impl Client {
         self.http.set_key(key)
     }
 
-    /// Sets the url the client will send requests to. 
+    /// Sets the url the client will send requests to.
     ///
-    /// Arguments
+    /// # Arguments
     /// - `url`: The new base url to use.
     ///
-    /// Example
+    /// # Example
     /// ```
     /// # use unkey_sdk::Client;
     /// let mut c = Client::new("unkey_ghj");

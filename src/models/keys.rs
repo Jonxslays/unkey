@@ -166,15 +166,6 @@ impl CreateKeyRequest {
     ///
     /// # Arguments
     /// - `api_id`: The api id to create this key for.
-    /// - `owner_id`: The optional owner for the key.
-    /// - `byte_length`: The optional byte length for the key, defaults to 16.
-    /// - `prefix`: The optional prefix for the key.
-    /// - `name`: The optional name for the key.
-    /// - `meta`: The optional dynamic meta mapping for the key. Use the
-    ///     `json!` macro.
-    /// - `expires`: The optional unix epoch in ms when the key should expire.
-    /// - `remaining`: The optional number of uses remaining to set for the key.
-    /// - `ratelimit`: The optional ratelimit to set for the key.
     ///
     /// # Returns
     /// - [`Self`]: The new create key request.

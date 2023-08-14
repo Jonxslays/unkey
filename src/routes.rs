@@ -44,14 +44,14 @@ impl Route {
     /// # Note
     /// These should really only be created internally by the library.
     ///
-    /// Arguments
+    /// # Arguments
     /// - `method`: The http [`Method`] for the route.
     /// - `uri`: The routes uri.
     ///
-    /// Returns
+    /// # Returns
     /// - [`Self`]: The new route.
     ///
-    /// Example
+    /// # Example
     /// ```
     /// # use unkey_sdk::routes::Route;
     /// # use reqwest::Method;
@@ -66,10 +66,10 @@ impl Route {
 
     /// Compiles the properties of this static route into a new object.
     ///
-    /// Returns
+    /// # Returns
     /// - [`CompiledRoute`]: The compiled route.
     ///
-    /// Example
+    /// # Example
     /// ```
     /// # use unkey_sdk::routes::Route;
     /// # use reqwest::Method;
@@ -99,13 +99,13 @@ pub struct CompiledRoute {
 impl CompiledRoute {
     /// Creates a new compiled route.
     ///
-    /// Arguments
+    /// # Arguments
     /// - `route`: The static [`Route`] this one will extend.
     ///
-    /// Returns
+    /// # Returns
     /// - [`Self`]: The new route.
     ///
-    /// Example
+    /// # Example
     /// ```
     /// # use unkey_sdk::routes::CompiledRoute;
     /// # use unkey_sdk::routes::Route;
@@ -128,13 +128,13 @@ impl CompiledRoute {
 
     /// Inserts the given param into the route uri.
     ///
-    /// Arguments
+    /// # Arguments
     /// - `param`: The param to insert.
     ///
-    /// Returns
+    /// # Returns
     /// - [`Self`]: for chained calls.
     ///
-    /// Example
+    /// # Example
     /// ```
     /// # use unkey_sdk::routes::CompiledRoute;
     /// # use unkey_sdk::routes::Route;
@@ -154,14 +154,14 @@ impl CompiledRoute {
 
     /// Inserts a query param with the given name and value.
     ///
-    /// Arguments
+    /// # Arguments
     /// - `name`: The param name to insert.
     /// - `param`: The param value to insert.
     ///
-    /// Returns
+    /// # Returns
     /// - [`Self`]: for chained calls.
     ///
-    /// Example
+    /// # Example
     /// ```
     /// # use unkey_sdk::routes::CompiledRoute;
     /// # use unkey_sdk::routes::Route;
@@ -181,10 +181,10 @@ impl CompiledRoute {
 
     /// Builds the query string for this route, i.e. `?a=b&c=d`.
     ///
-    /// Returns
+    /// # Returns
     /// - [`String`]: The formatted query string.
     ///
-    /// Example
+    /// # Example
     /// ```
     /// # use unkey_sdk::routes::CompiledRoute;
     /// # use unkey_sdk::routes::Route;

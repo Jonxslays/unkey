@@ -1,13 +1,10 @@
 use reqwest::header::{HeaderMap, HeaderValue};
 use serde::Serialize;
 
-use crate::routes::CompiledRoute;
+use crate::{routes::CompiledRoute, types::HttpResult};
 
 // TODO: implement versioning at some point
 static BASE_API_URL: &'static str = "https://api.unkey.dev/v1";
-
-/// A lower level http result.
-pub type HttpResult = Result<reqwest::Response, reqwest::Error>;
 
 /// The http service used for handling requests.
 #[derive(Debug, Clone)]
@@ -122,7 +119,7 @@ impl HttpService {
     /// Makes the http request.
     ///
     /// Arguments
-    /// - `route`: The [`CompiledRoute`] to request.
+    /// - `route`: The [`CompiledRoute`] to fetch.
     /// - `payload`: The optional json payload.
     ///
     /// Returns

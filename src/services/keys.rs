@@ -7,7 +7,7 @@ use crate::{
 };
 
 #[allow(unused_imports)]
-use crate::models::HttpError;
+use crate::types::HttpError;
 
 /// The service that handles key related requests.
 #[derive(Debug, Clone)]

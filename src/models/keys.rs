@@ -26,14 +26,12 @@ impl VerifyKeyRequest {
     ///
     /// assert_eq!(r.key, String::from("test"));
     /// ```
-    pub fn new(key: &str) -> Self {
-        Self {
-            key: key.to_string(),
-        }
+    pub fn new<T: Into<String>>(key: T) -> Self {
+        Self { key: key.into() }
     }
 }
 
-/// An incoming key verification response.
+/// An incoming verify key response.
 #[derive(Debug, Clone, Deserialize)]
 pub struct VerifyKeyResponse {
     /// Whether or not the key is valid for any reason.
@@ -196,9 +194,9 @@ impl CreateKeyRequest {
     /// assert_eq!(r.remaining, None);
     /// assert_eq!(r.ratelimit, None);
     /// ```
-    pub fn new(api_id: &str) -> Self {
+    pub fn new<T: Into<String>>(api_id: T) -> Self {
         Self {
-            api_id: api_id.to_string(),
+            api_id: api_id.into(),
             owner_id: None,
             byte_length: None,
             prefix: None,
@@ -225,8 +223,8 @@ impl CreateKeyRequest {
     ///
     /// assert_eq!(r.owner_id.unwrap(), String::from("jonxslays"));
     /// ```
-    pub fn set_owner_id(mut self, owner_id: &str) -> Self {
-        self.owner_id = Some(owner_id.to_string());
+    pub fn set_owner_id<T: Into<String>>(mut self, owner_id: T) -> Self {
+        self.owner_id = Some(owner_id.into());
         self
     }
 
@@ -265,8 +263,8 @@ impl CreateKeyRequest {
     ///
     /// assert_eq!(r.prefix.unwrap(), String::from("dev"));
     /// ```
-    pub fn set_prefix(mut self, prefix: &str) -> Self {
-        self.prefix = Some(prefix.to_string());
+    pub fn set_prefix<T: Into<String>>(mut self, prefix: T) -> Self {
+        self.prefix = Some(prefix.into());
         self
     }
 
@@ -285,8 +283,8 @@ impl CreateKeyRequest {
     ///
     /// assert_eq!(r.name.unwrap(), String::from("example_key"));
     /// ```
-    pub fn set_name(mut self, name: &str) -> Self {
-        self.name = Some(name.to_string());
+    pub fn set_name<T: Into<String>>(mut self, name: T) -> Self {
+        self.name = Some(name.into());
         self
     }
 
@@ -330,7 +328,7 @@ impl CreateKeyRequest {
     ///    .as_millis() as usize;
     ///
     /// let r = CreateKeyRequest::new("test").set_expires(1000 * 60 * 10);
-    /// 
+    ///
     /// // 10 minutes in the future
     /// assert_eq!(now + 1000 * 60 * 10, r.expires.unwrap());
     /// ```

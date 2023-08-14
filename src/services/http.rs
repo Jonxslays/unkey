@@ -58,7 +58,7 @@ impl HttpService {
 
     pub async fn fetch<T: Serialize>(
         &self,
-        route: CompiledRoute<'_>,
+        route: CompiledRoute,
         payload: Option<T>,
     ) -> HttpResult {
         let url = self.url.clone() + &route.uri;

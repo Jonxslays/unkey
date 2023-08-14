@@ -5,7 +5,7 @@ use crate::{
 };
 
 #[allow(unused_imports)]
-use crate::models::HttpError;
+use crate::types::HttpError;
 
 #[derive(Debug, Clone)]
 pub struct Client {

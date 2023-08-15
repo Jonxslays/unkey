@@ -4,11 +4,11 @@ First off, thank you for considering contributing to `unkey_sdk`. It's people li
 
 Please read the [Code of Conduct](CODE_OF_CONDUCT.md) before contributing.
 
-**Note**: Please get your contributions approved by the maintainers of [unkey_sdk](https://github.com/jonxslays/unkey_sdk) or the official [unkey](https://github.com/unkeyed/unkey/) before you start working on them. This will help avoid any conflicts and also help you understand if the contribution is in line with the project goals. You can do this by opening an issue with appropriate label and describing your contribution in detail.
+**Note**: Please get your contributions approved by the maintainers of [unkey_sdk](https://github.com/jonxslays/unkey_sdk) or the official [unkey](https://github.com/unkeyed/unkey/) maintainers before you start working on them. This will help avoid any conflicts and also help you understand if the contribution is in line with the project goals. You can do this by opening an issue with appropriate label and describing your contribution in detail.
 
 ### You have found a bug
 
-Please open an issue with the label `bug`. To clearly explain the bug, describe it in as much detail as possible. Please add the steps-to-reproduce as well.
+Please open an issue with the label `bug`. To clearly explain the bug, describe it in as much detail as possible. Please add the steps to reproduce as well.
 
 ### You are requesting a new feature
 
@@ -35,10 +35,9 @@ Please keep commits modular. One big commit or commits with many files and break
 Please follow the semantic commit messages pattern similar to the one mentioned [here](https://gist.github.com/joshbuchea/6f47e86d2510bce28f8e7f42ae84c716).
 
 ### Pull Requests
-Each pull request must have it own branch named `<issue>-description`. For eg. `1-add-readme`.
+
+Each pull request should have its own branch named `issue/<issue>-description`, e.g. `issue/5-update-docs`.
 
 ### Anything Else
 
-Open an issue with the label `random` and discuss them there. You can ping us on [Discord](https://unkey.dev/discord) as well.
-
-
+Open an issue with the label `random`. You can ping us on [Discord](https://unkey.dev/discord) as well.

@@ -1,5 +1,5 @@
 name: Other
-description: Use this for any other issues. PLEASE do not create blank issues
+description: Use this for any other issues.
 title: "[other]"
 labels: ["random"]
 body:

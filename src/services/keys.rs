@@ -2,7 +2,7 @@ use crate::{
     models::{CreateKeyRequest, CreateKeyResponse, VerifyKeyRequest, VerifyKeyResponse},
     routes,
     services::HttpService,
-    types::unwind_response,
+    unwind_response,
     types::Response,
 };
 

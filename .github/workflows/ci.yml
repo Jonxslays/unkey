@@ -80,10 +80,10 @@ jobs:
         run: cargo install cargo-msrv
 
       - name: Run cargo-msrv 
-        run: ./scripts/msrv.sh 
+        run: cargo msrv verify 
 
-  test-and-build:
-    name: Test and build
+  test:
+    name: Test
 
     strategy:
       fail-fast: false
@@ -104,6 +104,3 @@ jobs:
 
       - name: Run tests
         run: cargo test
-
-      - name: Build package
-        run: cargo build

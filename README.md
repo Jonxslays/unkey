@@ -4,7 +4,7 @@ An asynchronous SDK for the [Unkey API](https://docs.unkey.dev/introduction).
 
 ## MSRV
 
-The minimum supported Rust version for unkey_sdk is `1.60.0`.
+The minimum supported Rust version for unkey_sdk is `1.63.0`.
 
 ## License
 

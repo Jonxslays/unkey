@@ -40,23 +40,43 @@ pub struct VerifyKeyResponse {
     /// e.g. ratelimited, no more remaining, expired, key not found.
     pub valid: bool,
 
-    /// The optional owner of this key.
+    /// The owner id for this key, if any.
     #[serde(rename = "ownerId")]
     pub owner_id: Option<String>,
 
-    /// The optional dynamic mapping of values to associate with
-    /// this key.
+    /// The dynamic mapping of values associated with this key, if any.
     pub meta: Option<Value>,
 
-    /// The number of verifications to allow this key before it
-    /// becomes invalidated.
+    /// The number of verifications before this key becomes invalidated, if
+    /// any limit was set on the key.
     pub remaining: Option<usize>,
+
+    /// The unix epoch in ms when this key expires, if it does.
+    pub expires: Option<usize>,
+
+    /// The state of the ratelimit set on this key, if any.
+    pub ratelimit: Option<RateLimitState>,
+}
+
+/// A snapshot of the ratelimit status for a key.
+#[derive(Debug, Clone, Deserialize)]
+pub struct RateLimitState {
+    /// The number of burstable requests allowed.
+    pub limit: usize,
+
+    /// The remaining requests in this burst window.
+    pub remaining: usize,
+
+    /// The unix timestamp in ms until the next window.
+    pub reset: usize,
 }
 
 /// Different rate limit types implemented by unkey.
 #[derive(Debug, Clone, Serialize, Deserialize, Eq, PartialEq)]
 pub enum RatelimitType {
-    /// Quick because each edge location maintains its own ratelimit.
+    /// Quick because each edge location maintains its own ratelimit,
+    /// meaning users can theoretically exceed the ratelimit if
+    /// their requests go through different locations.
     #[serde(rename = "fast")]
     Fast,
 
@@ -204,7 +224,7 @@ impl CreateKeyRequest {
 
     /// Sets the owner id for the new key.
     ///
-    /// # Arguments:
+    /// # Arguments
     /// - `owner_id`: The owner id to set.
     ///
     /// # Returns
@@ -225,7 +245,7 @@ impl CreateKeyRequest {
 
     /// Sets the byte length for the new key.
     ///
-    /// # Arguments:
+    /// # Arguments
     /// - `byte_length`: The byte length to set.
     ///
     /// # Returns
@@ -246,7 +266,7 @@ impl CreateKeyRequest {
 
     /// Sets the prefix for the new key.
     ///
-    /// # Arguments:
+    /// # Arguments
     /// - `prefix`: The prefix to set.
     ///
     /// # Returns
@@ -267,7 +287,7 @@ impl CreateKeyRequest {
 
     /// Sets the name for the new key.
     ///
-    /// # Arguments:
+    /// # Arguments
     /// - `name`: The name to set.
     ///
     /// # Returns
@@ -288,7 +308,7 @@ impl CreateKeyRequest {
 
     /// Sets the dynamic meta mapping for the new key.
     ///
-    /// # Arguments:
+    /// # Arguments
     /// - `meta`: The meta to set.
     ///
     /// # Returns
@@ -347,7 +367,7 @@ impl CreateKeyRequest {
 
     /// Sets the remaining uses for the new key.
     ///
-    /// # Arguments:
+    /// # Arguments
     /// - `remaining`: The remaining uses to set.
     ///
     /// # Returns
@@ -368,7 +388,7 @@ impl CreateKeyRequest {
 
     /// Sets the ratelimit for the new key.
     ///
-    /// # Arguments:
+    /// # Arguments
     /// - `ratelimit`: The ratelimit uses to set.
     ///
     /// # Returns
@@ -404,6 +424,6 @@ pub struct CreateKeyResponse {
     #[serde(rename = "keyId")]
     pub key_id: String,
 
-    /// The newly created api secret key.
+    /// The newly created api key.
     pub key: String,
 }

@@ -85,4 +85,3 @@ pub enum Response<T> {
     #[serde(untagged)]
     Ok(T),
 }
-

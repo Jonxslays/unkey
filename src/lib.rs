@@ -11,10 +11,7 @@ use types::{ErrorCode, HttpResult, Response};
 
 lazy_static::lazy_static! {
     /// An environment variable that can be set to include debug output.
-    pub static ref UNKEY_DEBUG: bool = match option_env!("UNKEY_DEBUG") {
-        Some(_) => true,
-        None => false,
-    };
+    pub static ref UNKEY_DEBUG: bool = option_env!("UNKEY_DEBUG").is_some();
 }
 
 /// Creates a new Err variant of [`Response`].

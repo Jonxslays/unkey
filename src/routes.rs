@@ -204,7 +204,7 @@ impl CompiledRoute {
         let mut query = self
             .params
             .iter()
-            .map(|(k, v)| format!("{}={}", k, v))
+            .map(|(k, v)| format!("{k}={v}"))
             .collect::<Vec<String>>()
             .join("&");
 

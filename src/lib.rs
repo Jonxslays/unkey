@@ -9,6 +9,14 @@ pub use client::Client;
 use serde::Deserialize;
 use types::{ErrorCode, HttpResult, Response};
 
+lazy_static::lazy_static! {
+    /// An environment variable that can be set to include debug output.
+    pub static ref UNKEY_DEBUG: bool = match option_env!("UNKEY_DEBUG") {
+        Some(_) => true,
+        None => false,
+    };
+}
+
 /// Creates a new Err variant of [`Response`].
 ///
 /// # Arguments
@@ -31,17 +39,22 @@ macro_rules! response_error {
 /// # Returns
 /// - [`Response<T>`]: The response or an error.
 pub async fn unwind_response<T: for<'a> Deserialize<'a>>(response: HttpResult) -> Response<T> {
-    if let Err(e) = response {
-        return response_error!(ErrorCode::Unknown, e);
-    }
-
     let data = match response {
-        Ok(r) => r.json::<Response<T>>().await,
-        Err(e) => return response_error!(ErrorCode::Unknown, e),
+        Err(e) => Err(e),
+        Ok(r) => r.text().await,
     };
 
     match data {
-        Ok(data) => data,
         Err(e) => response_error!(ErrorCode::Unknown, e),
+        Ok(text) => {
+            if *UNKEY_DEBUG {
+                println!("[DEBUG]: {text}");
+            }
+
+            match serde_json::from_str::<Response<T>>(&text) {
+                Err(e) => response_error!(ErrorCode::Unknown, e),
+                Ok(r) => r,
+            }
+        }
     }
 }

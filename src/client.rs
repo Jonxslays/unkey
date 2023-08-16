@@ -1,6 +1,6 @@
 use crate::{
-    models::{CreateKeyRequest, CreateKeyResponse, VerifyKeyResponse},
-    services::{HttpService, KeyService},
+    models::{CreateKeyRequest, CreateKeyResponse, VerifyKeyResponse, ListKeysRequest, ListKeysResponse},
+    services::{HttpService, KeyService, ApiService},
     types::Response,
 };
 
@@ -15,6 +15,8 @@ pub struct Client {
 
     /// The key service handling key related serialization and deserialization.
     keys: KeyService,
+
+    api: ApiService,
 }
 
 impl Client {
@@ -35,8 +37,9 @@ impl Client {
     pub fn new(key: &str) -> Self {
         let http = HttpService::new(key);
         let keys = KeyService::new();
+        let api = ApiService::new();
 
-        Self { http, keys }
+        Self { http, keys, api }
     }
 
     /// Creates a new client with a different base url than the production
@@ -59,8 +62,9 @@ impl Client {
     pub fn with_url(key: &str, url: &str) -> Self {
         let http = HttpService::with_url(key, url);
         let keys = KeyService::new();
+        let api = ApiService::new();
 
-        Self { http, keys }
+        Self { http, keys, api }
     }
 
     /// Updates the root api key for the client.
@@ -148,4 +152,10 @@ impl Client {
     pub async fn create_key(&self, key: CreateKeyRequest) -> Response<CreateKeyResponse> {
         self.keys.create_key(&self.http, key).await
     }
+
+
+    pub async fn list_keys(&self, request: ListKeysRequest) -> Response<ListKeysResponse>{
+        self.api.list_keys(&self.http, request).await
+    }
+
 }

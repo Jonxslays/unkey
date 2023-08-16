@@ -1,6 +1,8 @@
 use crate::{
-    models::{CreateKeyRequest, CreateKeyResponse, VerifyKeyResponse, ListKeysRequest, ListKeysResponse},
-    services::{HttpService, KeyService, ApiService},
+    models::{
+        CreateKeyRequest, CreateKeyResponse, ListKeysRequest, ListKeysResponse, VerifyKeyResponse,
+    },
+    services::{ApiService, HttpService, KeyService},
     types::Response,
 };
 
@@ -153,9 +155,7 @@ impl Client {
         self.keys.create_key(&self.http, key).await
     }
 
-
-    pub async fn list_keys(&self, request: ListKeysRequest) -> Response<ListKeysResponse>{
+    pub async fn list_keys(&self, request: ListKeysRequest) -> Response<ListKeysResponse> {
         self.api.list_keys(&self.http, request).await
     }
-
 }

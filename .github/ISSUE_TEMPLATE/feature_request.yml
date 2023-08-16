@@ -5,7 +5,7 @@ labels: ["enhancement"]
 body:
   - type: textarea
     attributes:
-      label: Would you like to have a new feature? Please describe
+      label: Please describe your feature request
       description: A clear and concise description of what the feature is.
       placeholder: Ex. Whenever I try to do (xyz) then [...]
     validations:

@@ -1,5 +1,6 @@
 mod client;
 
+pub mod logging;
 pub mod models;
 pub mod routes;
 pub mod services;
@@ -8,11 +9,6 @@ pub mod types;
 pub use client::Client;
 use serde::Deserialize;
 use types::{ErrorCode, HttpResult, Response};
-
-lazy_static::lazy_static! {
-    /// An environment variable that can be set to include debug output.
-    pub static ref UNKEY_DEBUG: bool = option_env!("UNKEY_DEBUG").is_some();
-}
 
 /// Creates a new Err variant of [`Response`].
 ///
@@ -44,9 +40,7 @@ pub async fn unwind_response<T: for<'a> Deserialize<'a>>(response: HttpResult) -
     match data {
         Err(e) => response_error!(ErrorCode::Unknown, e),
         Ok(text) => {
-            if *UNKEY_DEBUG {
-                println!("[DEBUG]: {text}");
-            }
+            crate::log!(logging::Log::Debug, format!("INCOMING: {text}"));
 
             match serde_json::from_str::<Response<T>>(&text) {
                 Err(e) => response_error!(ErrorCode::Unknown, e),

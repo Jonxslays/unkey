@@ -112,8 +112,8 @@ impl Client {
     /// let key = "test_abc123";
     ///
     /// match c.verify_key(key).await {
-    ///     Response::Ok(key) => println!("{:?}", key),
-    ///     Response::Err(err) => println!("{:?}", err),
+    ///     Response::Ok(v) => println!("{:?}", v),
+    ///     Response::Err(e) => println!("{:?}", e),
     /// }
     /// # }
     /// ```

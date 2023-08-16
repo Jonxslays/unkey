@@ -1,7 +1,7 @@
 use reqwest::header::{HeaderMap, HeaderValue};
 use serde::Serialize;
 
-use crate::{routes::CompiledRoute, types::HttpResult};
+use crate::{logging::Log, routes::CompiledRoute, types::HttpResult};
 
 // TODO: implement versioning at some point
 static BASE_API_URL: &str = "https://api.unkey.dev/v1";
@@ -166,18 +166,22 @@ impl HttpService {
     /// let res = s.fetch::<CreateKeyRequest>(c, None).await;
     /// # }
     /// ```
-    pub async fn fetch<T: Serialize>(
-        &self,
-        route: CompiledRoute,
-        payload: Option<T>,
-    ) -> HttpResult {
-        let url = self.url.clone() + &route.uri + &route.build_query();
+    pub async fn fetch<T>(&self, route: CompiledRoute, payload: Option<T>) -> HttpResult
+    where
+        T: std::fmt::Debug + Serialize,
+    {
+        let query = route.build_query();
+        let endpoint = route.uri.clone() + &query;
+        crate::log!(Log::Info, format!("OUTGOING: {} {endpoint}", &route.method));
+
+        let url = self.url.clone() + &endpoint;
         let mut req = self
             .client
             .request(route.method, url)
             .headers(self.headers.clone());
 
         if let Some(p) = payload {
+            crate::log!(Log::Debug, format!("PAYLOAD : {p:?}"));
             req = req.json(&p);
         }
 

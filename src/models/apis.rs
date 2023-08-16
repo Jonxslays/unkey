@@ -1,6 +1,8 @@
 use crate::models::Ratelimit;
-use serde::Serialize;
+use serde::{Serialize, Deserialize};
 use serde_json::Value;
+
+use super::RatelimitType;
 
 #[derive(Debug, Clone, Serialize)]
 pub struct ListKeysRequest {
@@ -15,7 +17,7 @@ pub struct ListKeysRequest {
     pub offset: Option<usize>,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListKeysResponse {
     pub keys: Vec<ApiKey>,
 
@@ -23,7 +25,7 @@ pub struct ListKeysResponse {
 }
 
 // Individual key object returned in the response
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ApiKey {
     pub id: String,
 
@@ -47,5 +49,28 @@ pub struct ApiKey {
 
     pub remaining: Option<usize>,
 
-    pub ratelimit: Option<Ratelimit>,
+    pub ratelimit: Option<mRatelimit>,
+}
+
+/// Ratelimit copied for debugging
+
+/// A ratelimit imposed on an api key.
+#[derive(Debug, Clone, Serialize, Deserialize, Eq, PartialEq)]
+pub struct mRatelimit {
+    /// The type for this ratelimit.
+    /// 
+    /// Change this to RatelimitType and the code will error
+    #[serde(rename = "type")]
+    pub ratelimit_type: String,
+
+    /// The rate at which the ratelimit refills, per interval.
+    #[serde(rename = "refillRate")]
+    pub refill_rate: usize,
+
+    // /// The interval at which to refill, in milliseconds.
+    #[serde(rename = "refillInterval")]
+    pub refill_interval: usize,
+
+    /// Total number of burstable requests.
+    pub limit: usize,
 }

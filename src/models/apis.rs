@@ -15,6 +15,39 @@ pub struct ListKeysRequest {
     pub offset: Option<usize>,
 }
 
+impl ListKeysRequest {
+
+    #[must_use]
+    pub fn new<T: Into<String>>(api_id: T) -> Self {
+        Self{
+            api_id: api_id.into(),
+            owner_id: None,
+            limit: None,
+            offset: None,
+        }
+    }
+
+    #[must_use]
+    pub fn set_limit(mut self, limit: usize) -> Self {
+        self.limit = Some(limit);
+        self
+    }
+
+    #[must_use]
+    pub fn set_offset(mut self, offset: usize) -> Self {
+        self.offset = Some(offset);
+        self
+    }
+
+    #[must_use]
+    pub fn set_owner_id<T: Into<String>>(mut self, owner_id: T) -> Self {
+        self.owner_id = Some(owner_id.into());
+        self
+    }
+
+
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ListKeysResponse {
     pub keys: Vec<ApiKey>,

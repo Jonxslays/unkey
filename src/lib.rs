@@ -43,10 +43,7 @@ pub async fn unwind_response<T: for<'a> Deserialize<'a>>(response: HttpResult) -
             crate::log!(logging::Log::Debug, format!("INCOMING: {text}"));
 
             match serde_json::from_str::<Response<T>>(&text) {
-                Err(e) => {
-                    println!("{:?}", e);
-                    response_error!(ErrorCode::Unknown, e)
-                },
+                Err(e) => response_error!(ErrorCode::Unknown, e),
                 Ok(r) => r,
             }
         }

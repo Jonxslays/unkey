@@ -18,7 +18,8 @@ pub struct Client {
     /// The key service handling key related serialization and deserialization.
     keys: KeyService,
 
-    api: ApiService,
+    /// The key service handling key related requests.
+    apis: ApiService,
 }
 
 impl Client {
@@ -39,9 +40,9 @@ impl Client {
     pub fn new(key: &str) -> Self {
         let http = HttpService::new(key);
         let keys = KeyService::new();
-        let api = ApiService::new();
+        let apis = ApiService::new();
 
-        Self { http, keys, api }
+        Self { http, keys, apis }
     }
 
     /// Creates a new client with a different base url than the production
@@ -64,9 +65,9 @@ impl Client {
     pub fn with_url(key: &str, url: &str) -> Self {
         let http = HttpService::with_url(key, url);
         let keys = KeyService::new();
-        let api = ApiService::new();
+        let apis = ApiService::new();
 
-        Self { http, keys, api }
+        Self { http, keys, apis }
     }
 
     /// Updates the root api key for the client.
@@ -155,7 +156,30 @@ impl Client {
         self.keys.create_key(&self.http, key).await
     }
 
-    pub async fn list_keys(&self, request: ListKeysRequest) -> Response<ListKeysResponse> {
-        self.api.list_keys(&self.http, request).await
+    /// Lists all api keys.
+    ///
+    /// # Arguments
+    /// - `req`: The [`ListKeysRequest`] to send.
+    ///
+    /// # Returns
+    /// - [`Response<ListKeysResponse>`]: A result containing the [`ListKeysResponse`], or an [`HttpError`].
+    ///
+    /// # Example
+    /// ```no_run
+    /// # async fn list() {
+    /// # use unkey_sdk::Client;
+    /// # use unkey_sdk::models::ListKeysRequest;
+    /// # use unkey_sdk::types::Response;
+    /// let c = Client::new("abc123");
+    /// let req = ListKeysRequest::new("api_id").set_limit(25);
+    ///
+    /// match c.list_keys(req).await {
+    ///     Response::Ok(keys) => println!("{:?}", keys),
+    ///     Response::Error(err) => println!("{:?}", err),
+    /// }
+    /// # }
+    /// ```
+    pub async fn list_keys(&self, req: ListKeysRequest) -> Response<ListKeysResponse> {
+        self.apis.list_keys(&self.http, req).await
     }
 }

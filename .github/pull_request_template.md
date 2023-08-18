@@ -2,7 +2,7 @@
 
 <!-- A small summary of the requested changes -->
 
-## Checklist (Check all the boxes which are applicable)
+## Checklist
 
 <!--
 - [x] Correct
@@ -14,7 +14,7 @@
 - [ ] I have run `cargo clippy` in pedantic mode and refactored.
 - [ ] I have included documentation for any new structs or methods.
 - [ ] I have updated tests for any code I addded/changed/deleted.
-- [ ] I have updated the CHANGELOG to include my changes. 
+- [ ] I have updated the CHANGELOG to include my changes.
 - [ ] This PR does not contain plagiarized content.
 
 ## Related Issues

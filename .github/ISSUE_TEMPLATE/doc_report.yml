@@ -5,14 +5,7 @@ labels: ["documentation"]
 body:
   - type: textarea
     attributes:
-      label: Category of documentation update
-      description: |
-        What category does this change fall under. For example typo, new category addition, rephrasing, fixing broken links etc.
+      label: Describe your proposed change
+      description: A detailed description of the change you would like to see.
     validations:
       required: true
-  - type: textarea
-    attributes:
-      label: Describe your proposed change
-      description: Please describe the change & need of change with as much detail as possible.
-    validations:
-      required: false

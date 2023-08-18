@@ -1,6 +1,6 @@
 use crate::{
     models::{ListKeysRequest, ListKeysResponse},
-    routes::{self},
+    routes,
     services::HttpService,
     types::Response,
     unwind_response,
@@ -36,7 +36,8 @@ impl ApiService {
     /// - `request`: The [`ListKeysRequest`] to send.
     ///
     /// # Returns
-    /// - [`Response<ListKeysResponse`]: A result containing the [`ListKeysRepsonse`], or an [`HttpError`].
+    /// - [`Response<ListKeysResponse`]: A result containing the
+    ///     [`ListKeysResponse`], or an [`HttpError`].
     pub async fn list_keys(
         &self,
         http: &HttpService,
@@ -47,9 +48,11 @@ impl ApiService {
             .uri_insert(&request.api_id)
             .query_insert("limit", &request.limit.unwrap_or(100).to_string())
             .query_insert("offset", &request.offset.unwrap_or(0).to_string());
+
         if let Some(owner) = &request.owner_id {
             route.query_insert("ownerId", owner);
         }
+
         // We lie to the compiler about T here because there is no payload
         // TODO: improve DX here, maybe a macro?
         let response = http.fetch::<usize>(route, None).await;

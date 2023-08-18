@@ -18,7 +18,7 @@ pub struct Client {
     /// The key service handling key related serialization and deserialization.
     keys: KeyService,
 
-    /// The key service handling key related requests.
+    /// The api service handling api related requests.
     apis: ApiService,
 }
 

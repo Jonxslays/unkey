@@ -24,10 +24,10 @@ impl ListKeysRequest {
     /// Creates a new list keys request.
     ///
     /// # Arguments
-    /// - - `api_id`: The id of the api to list keys for.
+    /// - `api_id`: The id of the api to list keys for.
     ///
     /// # Returns
-    /// - - [`ListKeysResponse`]: The paginated list of api
+    /// - [`ListKeysResponse`]: The paginated list of api
     ///
     /// # Example
     /// ```
@@ -73,7 +73,7 @@ impl ListKeysRequest {
     /// Sets the pagination offset for the request.
     ///
     /// # Arguments
-    /// - `offset`: - `offset`: The pagination offset to set, defaults to 0.
+    /// - `offset`: The pagination offset to set, defaults to 0.
     ///
     /// # Returns
     /// - [`Self`]: for chained calls.
@@ -132,11 +132,11 @@ pub struct ApiKey {
     #[serde(rename = "apiId")]
     pub api_id: String,
 
-    /// The keys prefix.
+    /// The id of the workspace this key belongs to.
     #[serde(rename = "workspaceId")]
     pub workspace_id: String,
 
-    /// The starting characters of the key
+    /// The keys prefix.
     pub start: String,
 
     /// The owner id of the key, if one was set.

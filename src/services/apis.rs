@@ -9,7 +9,7 @@ use crate::{
 #[allow(unused_imports)]
 use crate::types::HttpError;
 
-/// The service used for handling api related requests.
+/// The service that handles api related requests.
 #[derive(Debug, Clone)]
 pub struct ApiService;
 
@@ -36,7 +36,7 @@ impl ApiService {
     /// - `request`: The [`ListKeysRequest`] to send.
     ///
     /// # Returns
-    /// - [`Response<ListKeysResponse`]: A result containing the [`ListKeysRequest`], or an [`HttpError`].
+    /// - [`Response<ListKeysResponse`]: A result containing the [`ListKeysRepsonse`], or an [`HttpError`].
     pub async fn list_keys(
         &self,
         http: &HttpService,

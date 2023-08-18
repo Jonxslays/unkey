@@ -2,32 +2,32 @@ use crate::models::Ratelimit;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-/// An outgoing list keys request.
+/// An outgoing paginated list keys request.
 #[derive(Debug, Clone, Serialize)]
 pub struct ListKeysRequest {
-    /// The api id whose keys to list.
+    /// The id of the api to list keys for.
     #[serde(rename = "apiId")]
     pub api_id: String,
 
-    /// If provided, this will only return keys where the `ownerId` matches.
+    /// The optional owner id used to filter keys by owner.
     #[serde(rename = "ownerId")]
     pub owner_id: Option<String>,
 
-    /// Limit the number of returned keys, the maximum is 100.
+    /// The optional number of keys to return, up to 100.
     pub limit: Option<usize>,
 
-    /// An offset for pagination.
+    /// The pagination offset.
     pub offset: Option<usize>,
 }
 
 impl ListKeysRequest {
-    /// Creates a new request for listing keys.
+    /// Creates a new list keys request.
     ///
     /// # Arguments
-    /// - `api_id`: The api id to whose keys to list.
+    /// - - `api_id`: The id of the api to list keys for.
     ///
     /// # Returns
-    /// - [`KeysListResponse`]: List of `KeysListResponse`.
+    /// - - [`ListKeysResponse`]: The paginated list of api
     ///
     /// # Example
     /// ```
@@ -49,9 +49,10 @@ impl ListKeysRequest {
         }
     }
 
-    /// Sets limit for the keys list request.
+    /// Sets the limit for the request.
+    ///
     /// # Arguments
-    /// - `limit`: The limit to set. Default 100.
+    /// - `limit`: - `limit`: The limit to set, defaults to 100.
     ///
     /// # Returns
     /// - [`Self`]: for chained calls.
@@ -69,9 +70,10 @@ impl ListKeysRequest {
         self
     }
 
-    /// Sets offset for the keys list request.
+    /// Sets the pagination offset for the request.
+    ///
     /// # Arguments
-    /// - `offset`: The limit to set for pagination. Default 0.
+    /// - `offset`: - `offset`: The pagination offset to set, defaults to 0.
     ///
     /// # Returns
     /// - [`Self`]: for chained calls.
@@ -89,7 +91,7 @@ impl ListKeysRequest {
         self
     }
 
-    /// Sets owner id for the keys list request. Returns keys where the owner id matches.
+    /// Sets the owner id for filtering the listed keys by owner.
     /// # Arguments
     /// - `owner_id`: The owner id to set.
     ///
@@ -110,50 +112,52 @@ impl ListKeysRequest {
     }
 }
 
-/// An incoming list keys response
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// An incoming paginated list keys response.
+#[derive(Debug, Clone, Deserialize)]
 pub struct ListKeysResponse {
-    /// The list of API keys.
+    /// The total number of api keys.
     pub keys: Vec<ApiKey>,
 
     /// The total number of API keys present.
     pub total: usize,
 }
 
-// Individual key object returned in the response
+/// An individual api key, as the unkey api sees it.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ApiKey {
-    /// The id of the API key.
+    /// The unique id of this key.
     pub id: String,
 
-    /// The id of the API this key belongs to.
+    /// The id of the api this key belongs to.
     #[serde(rename = "apiId")]
     pub api_id: String,
 
-    /// The id of the workspace this key belongs to.
+    /// The keys prefix.
     #[serde(rename = "workspaceId")]
     pub workspace_id: String,
 
     /// The starting characters of the key
     pub start: String,
 
-    /// The optional owner id of the key.
+    /// The owner id of the key, if one was set.
     #[serde(rename = "ownerId")]
     pub owner_id: Option<String>,
 
-    /// Any optional metadata associated with the key.
+    /// The dynamic metadata associated with the key, if any.
     pub meta: Option<Value>,
 
-    /// The key creation time in ms.
+    /// The keys creation time in ms since the unix epoch.
     #[serde(rename = "createdAt")]
     pub created_at: usize,
 
-    /// The key expiry time in ms.
+    /// The unix epoch in ms when this key expires, if it does.
     pub expires: Option<usize>,
 
-    /// The number of key invocations remaining.
+    /// The number of uses remaining for this key, if any.
+    ///
+    /// *Note*: If `None`, the key has unlimited uses remaining.
     pub remaining: Option<usize>,
 
-    /// The optional rate limit set to the key.
+    /// The ratelimit imposed on this key, if any.
     pub ratelimit: Option<Ratelimit>,
 }

@@ -175,7 +175,7 @@ impl Client {
     ///
     /// match c.list_keys(req).await {
     ///     Response::Ok(keys) => println!("{:?}", keys),
-    ///     Response::Error(err) => println!("{:?}", err),
+    ///     Response::Err(err) => println!("{:?}", err),
     /// }
     /// # }
     /// ```

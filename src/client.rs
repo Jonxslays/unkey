@@ -15,7 +15,7 @@ pub struct Client {
     /// The internal http service handling requests.
     http: HttpService,
 
-    /// The key service handling key related serialization and deserialization.
+    /// The key service handling key related requests.
     keys: KeyService,
 
     /// The api service handling api related requests.

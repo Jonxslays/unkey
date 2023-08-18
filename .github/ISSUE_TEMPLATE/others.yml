@@ -1,5 +1,5 @@
 name: Other
-description: Use this for any other issues.
+description: Issues that don't fall into another category.
 title: "[other]"
 labels: ["random"]
 body:
@@ -10,13 +10,13 @@ body:
     id: issuedescription
     attributes:
       label: What would you like to share?
-      description: Provide a clear and concise explanation of your issue.
+      description: A clear and concise explanation of your issue.
     validations:
       required: true
   - type: textarea
     id: extrainfo
     attributes:
-      label: Additional information
-      description: Is there anything else we should know about this issue?
+      label: Additional context
+      description: Any additional context surrounding this issue.
     validations:
       required: false

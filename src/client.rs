@@ -12,7 +12,7 @@ use crate::types::HttpError;
 /// The client used to make requests to the unkey api.
 #[derive(Debug, Clone)]
 pub struct Client {
-    /// The internal http service handling requests.
+    /// The internal http sending and receiving requests.
     http: HttpService,
 
     /// The key service handling key related requests.
@@ -156,7 +156,7 @@ impl Client {
         self.keys.create_key(&self.http, key).await
     }
 
-    /// Lists all api keys.
+    /// Retrieves a paginated list of api keys.
     ///
     /// # Arguments
     /// - `req`: The [`ListKeysRequest`] to send.

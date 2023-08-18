@@ -1,30 +1,22 @@
-## Related Issues
+## Summary
 
-This is associated with the following issues:
+<!-- A small summary of the requested changes -->
 
-<!--Type in all related/resolved issues through this pull request ex : #1 -->
+## Checklist
 
-## Changes proposed
-
-Here comes all the changes proposed through this PR
-
-<!-- Write down all the changes made-->
-
-## Checklist (Check all the boxes which are applicable)
-
-- [ ] My code follows the code style of this project.
-- [ ] My change requires a change to the documentation.
-  - [ ] If yes, I have updated the documentation accordingly.
-- [ ] All new and existing tests passed.
-- [ ] This PR does not contain plagiarized content.
-- [ ] The title of my pull request is a short description of the requested changes.
-
-<!-- Check all the boxes which are applicable to check the box correct follow the following conventions-->
 <!--
-[x] - Correct
-[X] - Correct
+- [x] Correct
+- [X] Correct
 -->
 
-## Screenshots
+- [ ] I have run `cargo test` and all tests pass.
+- [ ] I have run `cargo fmt` and the code is formatted.
+- [ ] I have run `cargo clippy` in pedantic mode and refactored.
+- [ ] I have included documentation for any new structs or methods.
+- [ ] I have updated tests for any code I addded/changed/deleted.
+- [ ] I have updated the CHANGELOG to include my changes.
+- [ ] This PR does not contain plagiarized content.
 
-<!-- Any screenshots to support your changes -->
+## Related Issues
+
+<!-- e.g. `Fixes #1` or `Closes #5` -->

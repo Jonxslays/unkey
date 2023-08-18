@@ -27,7 +27,7 @@ impl ListKeysRequest {
     /// - `api_id`: The id of the api to list keys for.
     ///
     /// # Returns
-    /// - [`ListKeysResponse`]: The paginated list of api
+    /// - [`ListKeysResponse`]: The paginated list of api keys.
     ///
     /// # Example
     /// ```
@@ -52,7 +52,7 @@ impl ListKeysRequest {
     /// Sets the limit for the request.
     ///
     /// # Arguments
-    /// - `limit`: - `limit`: The limit to set, defaults to 100.
+    /// - `limit`: The limit to set, defaults to 100.
     ///
     /// # Returns
     /// - [`Self`]: for chained calls.
@@ -92,6 +92,7 @@ impl ListKeysRequest {
     }
 
     /// Sets the owner id for filtering the listed keys by owner.
+    ///
     /// # Arguments
     /// - `owner_id`: The owner id to set.
     ///
@@ -115,10 +116,10 @@ impl ListKeysRequest {
 /// An incoming paginated list keys response.
 #[derive(Debug, Clone, Deserialize)]
 pub struct ListKeysResponse {
-    /// The total number of api keys.
+    /// The api keys included in this page.
     pub keys: Vec<ApiKey>,
 
-    /// The total number of API keys present.
+    /// The total number of api keys.
     pub total: usize,
 }
 

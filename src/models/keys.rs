@@ -3,6 +3,9 @@ use std::time::SystemTime;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
+use super::Ratelimit;
+use super::RatelimitState;
+
 /// An outgoing verify key request.
 #[derive(Debug, Clone, Serialize)]
 pub struct VerifyKeyRequest {
@@ -17,7 +20,7 @@ impl VerifyKeyRequest {
     /// - `key`: The api key to verify.
     ///
     /// # Returns
-    /// - [`Self`]: The verification request.
+    /// The verify key request.
     ///
     /// # Example
     /// ```
@@ -34,6 +37,7 @@ impl VerifyKeyRequest {
 
 /// An incoming verify key response.
 #[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct VerifyKeyResponse {
     /// Whether or not the key is valid for any reason.
     ///
@@ -41,7 +45,6 @@ pub struct VerifyKeyResponse {
     pub valid: bool,
 
     /// The owner id for this key, if any.
-    #[serde(rename = "ownerId")]
     pub owner_id: Option<String>,
 
     /// The dynamic mapping of values associated with this key, if any.
@@ -55,113 +58,20 @@ pub struct VerifyKeyResponse {
     pub expires: Option<usize>,
 
     /// The state of the ratelimit set on this key, if any.
-    pub ratelimit: Option<RateLimitState>,
-}
-
-/// A snapshot of the ratelimit status for a key.
-#[derive(Debug, Clone, Deserialize)]
-pub struct RateLimitState {
-    /// The number of burstable requests allowed.
-    pub limit: usize,
-
-    /// The remaining requests in this burst window.
-    pub remaining: usize,
-
-    /// The unix timestamp in ms until the next window.
-    pub reset: usize,
-}
-
-/// Different rate limit types implemented by unkey.
-#[derive(Debug, Clone, Serialize, Deserialize, Eq, PartialEq)]
-pub enum RatelimitType {
-    /// Quick because each edge location maintains its own ratelimit,
-    /// meaning users can theoretically exceed the ratelimit if
-    /// their requests go through different locations.
-    #[serde(rename = "fast")]
-    Fast,
-
-    /// All ratelimit operations go through a single service,
-    /// meaning consistent ratelimits.
-    #[serde(rename = "consistent")]
-    Consistent,
-}
-
-/// A ratelimit imposed on an api key.
-#[derive(Debug, Clone, Serialize, Deserialize, Eq, PartialEq)]
-pub struct Ratelimit {
-    /// The type for this ratelimit.
-    #[serde(rename = "type")]
-    pub ratelimit_type: RatelimitType,
-
-    /// The rate at which the ratelimit refills, per interval.
-    #[serde(rename = "refillRate")]
-    pub refill_rate: usize,
-
-    /// The interval at which to refill, in milliseconds.
-    #[serde(rename = "refillInterval")]
-    pub refill_interval: usize,
-
-    /// Total number of burstable requests.
-    pub limit: usize,
-}
-
-impl Ratelimit {
-    /// Creates a new ratelimit.
-    ///
-    /// # Arguments
-    /// - `ratelimit_type`: The type for this ratelimit.
-    /// - `refill_rate`: The rate at which the ratelimit refills, per interval.
-    /// - `refill_interval`: The interval at which to refill, in milliseconds.
-    /// - `limit`: Total number of burstable requests.
-    ///
-    /// # Returns
-    /// - [`Self`]: The requested ratelimit.
-    ///
-    /// # Example
-    /// ```
-    /// # use unkey_sdk::models::Ratelimit;
-    /// # use unkey_sdk::models::RatelimitType;
-    /// let r = Ratelimit::new(
-    ///     RatelimitType::Fast,
-    ///     10,
-    ///     10000,
-    ///     100,
-    /// );
-    ///
-    /// assert_eq!(r.ratelimit_type, RatelimitType::Fast);
-    /// assert_eq!(r.refill_rate, 10);
-    /// assert_eq!(r.refill_interval, 10000);
-    /// assert_eq!(r.limit, 100);
-    /// ```
-    #[must_use]
-    pub fn new(
-        ratelimit_type: RatelimitType,
-        refill_rate: usize,
-        refill_interval: usize,
-        limit: usize,
-    ) -> Self {
-        Self {
-            ratelimit_type,
-            refill_rate,
-            refill_interval,
-            limit,
-        }
-    }
+    pub ratelimit: Option<RatelimitState>,
 }
 
 /// An outgoing create key request.
 #[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct CreateKeyRequest {
     /// The api id to create this key for.
-    #[serde(rename = "apiId")]
     pub api_id: String,
 
     /// The optional owner id for the key.
-    #[serde(rename = "ownerId")]
     pub owner_id: Option<String>,
 
     /// The optional byte length for the key, defaults to 16.
-    #[serde(rename = "byteLength")]
     pub byte_length: Option<usize>,
 
     /// The optional prefix for the key.
@@ -190,7 +100,7 @@ impl CreateKeyRequest {
     /// - `api_id`: The api id to create this key for.
     ///
     /// # Returns
-    /// - [`Self`]: The new create key request.
+    /// The new create key request.
     ///
     /// # Example
     /// ```
@@ -228,7 +138,7 @@ impl CreateKeyRequest {
     /// - `owner_id`: The owner id to set.
     ///
     /// # Returns
-    /// - [`Self`]: for chained calls.
+    /// Self for chained calls.
     ///
     /// # Example
     /// ```
@@ -249,7 +159,7 @@ impl CreateKeyRequest {
     /// - `byte_length`: The byte length to set.
     ///
     /// # Returns
-    /// - [`Self`]: for chained calls.
+    /// Self for chained calls.
     ///
     /// # Example
     /// ```
@@ -270,7 +180,7 @@ impl CreateKeyRequest {
     /// - `prefix`: The prefix to set.
     ///
     /// # Returns
-    /// - [`Self`]: for chained calls.
+    /// Self for chained calls.
     ///
     /// # Example
     /// ```
@@ -291,7 +201,7 @@ impl CreateKeyRequest {
     /// - `name`: The name to set.
     ///
     /// # Returns
-    /// - [`Self`]: for chained calls.
+    /// Self for chained calls.
     ///
     /// # Example
     /// ```
@@ -312,7 +222,7 @@ impl CreateKeyRequest {
     /// - `meta`: The meta to set.
     ///
     /// # Returns
-    /// - [`Self`]: for chained calls.
+    /// Self for chained calls.
     ///
     /// # Example
     /// ```
@@ -335,7 +245,7 @@ impl CreateKeyRequest {
     /// expire at.
     ///
     /// # Returns
-    /// - [`Self`]: for chained calls.
+    /// Self for chained calls.
     ///
     /// # Example
     /// ```
@@ -371,7 +281,7 @@ impl CreateKeyRequest {
     /// - `remaining`: The remaining uses to set.
     ///
     /// # Returns
-    /// - [`Self`]: for chained calls.
+    /// Self for chained calls.
     ///
     /// # Example
     /// ```
@@ -392,7 +302,7 @@ impl CreateKeyRequest {
     /// - `ratelimit`: The ratelimit uses to set.
     ///
     /// # Returns
-    /// - [`Self`]: for chained calls.
+    /// Self for chained calls.
     ///
     /// # Example
     /// ```
@@ -419,11 +329,48 @@ impl CreateKeyRequest {
 
 /// An incoming create key response.
 #[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct CreateKeyResponse {
-    /// The unique id for this key.
-    #[serde(rename = "keyId")]
+    /// The unique id of this key.
     pub key_id: String,
 
     /// The newly created api key.
     pub key: String,
+}
+
+/// An individual api key, as the unkey api sees it.
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ApiKey {
+    /// The unique id of this key.
+    pub id: String,
+
+    /// The id of the api this key belongs to.
+    pub api_id: String,
+
+    /// The id of the workspace this key belongs to.
+    pub workspace_id: String,
+
+    /// The keys prefix.
+    pub start: String,
+
+    /// The owner id of the key, if one was set.
+    pub owner_id: Option<String>,
+
+    /// The dynamic metadata associated with the key, if any.
+    pub meta: Option<Value>,
+
+    /// The keys creation time in ms since the unix epoch.
+    pub created_at: usize,
+
+    /// The unix epoch in ms when this key expires, if it does.
+    pub expires: Option<usize>,
+
+    /// The number of uses remaining for this key, if any.
+    ///
+    /// *Note*: If `None`, the key has unlimited uses remaining.
+    pub remaining: Option<usize>,
+
+    /// The ratelimit imposed on this key, if any.
+    pub ratelimit: Option<Ratelimit>,
 }

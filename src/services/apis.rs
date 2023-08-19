@@ -1,10 +1,10 @@
-use crate::{
-    models::{ListKeysRequest, ListKeysResponse},
-    routes,
-    services::HttpService,
-    types::Response,
-    unwind_response,
-};
+use crate::routes;
+use crate::unwind_response;
+
+use crate::models::ListKeysRequest;
+use crate::models::ListKeysResponse;
+use crate::services::HttpService;
+use crate::types::Response;
 
 #[allow(unused_imports)]
 use crate::types::HttpError;
@@ -13,43 +13,27 @@ use crate::types::HttpError;
 #[derive(Debug, Clone)]
 pub struct ApiService;
 
-impl Default for ApiService {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 impl ApiService {
-    /// Creates a new api service.
-    ///
-    /// # Returns
-    /// - [`Self`]: The new service.
-    #[must_use]
-    pub fn new() -> Self {
-        Self
-    }
-
-    /// Lists all api keys.
+    /// Retrieves a paginated list of keys for an api.
     ///
     /// # Arguments
-    /// - `http`: The [`HttpService`] to use for the request.
-    /// - `request`: The [`ListKeysRequest`] to send.
+    /// - `http`: The http service to use for the request.
+    /// - `req`: The request to send.
     ///
     /// # Returns
-    /// - [`Response<ListKeysResponse`]: A result containing the
-    ///     [`ListKeysResponse`], or an [`HttpError`].
+    /// A result containing the response, or an [`HttpError`].
     pub async fn list_keys(
         &self,
         http: &HttpService,
-        request: ListKeysRequest,
+        req: ListKeysRequest,
     ) -> Response<ListKeysResponse> {
         let mut route = routes::LIST_KEYS.compile();
         route
-            .uri_insert(&request.api_id)
-            .query_insert("limit", &request.limit.unwrap_or(100).to_string())
-            .query_insert("offset", &request.offset.unwrap_or(0).to_string());
+            .uri_insert(&req.api_id)
+            .query_insert("limit", &req.limit.unwrap_or(100).to_string())
+            .query_insert("offset", &req.offset.unwrap_or(0).to_string());
 
-        if let Some(owner) = &request.owner_id {
+        if let Some(owner) = &req.owner_id {
             route.query_insert("ownerId", owner);
         }
 

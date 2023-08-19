@@ -49,7 +49,7 @@ impl Route {
     /// - `uri`: The routes uri.
     ///
     /// # Returns
-    /// - [`Self`]: The new route.
+    /// The new route.
     ///
     /// # Example
     /// ```
@@ -68,7 +68,7 @@ impl Route {
     /// Compiles the properties of this static route into a new object.
     ///
     /// # Returns
-    /// - [`CompiledRoute`]: The compiled route.
+    /// The compiled route.
     ///
     /// # Example
     /// ```
@@ -106,7 +106,7 @@ impl CompiledRoute {
     /// - `route`: The static [`Route`] this one will extend.
     ///
     /// # Returns
-    /// - [`Self`]: The new route.
+    /// Self The new route.
     ///
     /// # Example
     /// ```
@@ -136,7 +136,7 @@ impl CompiledRoute {
     /// - `param`: The param to insert.
     ///
     /// # Returns
-    /// - [`Self`]: for chained calls.
+    /// Self for chained calls.
     ///
     /// # Example
     /// ```
@@ -163,7 +163,7 @@ impl CompiledRoute {
     /// - `param`: The param value to insert.
     ///
     /// # Returns
-    /// - [`Self`]: for chained calls.
+    /// Self for chained calls.
     ///
     /// # Example
     /// ```
@@ -186,7 +186,7 @@ impl CompiledRoute {
     /// Builds the query string for this route, i.e. `?a=b&c=d`.
     ///
     /// # Returns
-    /// - [`String`]: The formatted query string.
+    /// The formatted query string.
     ///
     /// # Example
     /// ```

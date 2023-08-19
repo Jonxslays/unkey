@@ -1,7 +1,11 @@
 use reqwest::header::{HeaderMap, HeaderValue};
 use serde::Serialize;
 
-use crate::{logging::Log, routes::CompiledRoute, types::HttpResult};
+use crate::{
+    logging::{self, Log},
+    routes::CompiledRoute,
+    types::HttpResult,
+};
 
 // TODO: implement versioning at some point
 static BASE_API_URL: &str = "https://api.unkey.dev/v1";
@@ -172,7 +176,7 @@ impl HttpService {
     {
         let query = route.build_query();
         let endpoint = route.uri.clone() + &query;
-        crate::log!(Log::Info, format!("OUTGOING: {} {endpoint}", &route.method));
+        logging::log!(Log::Info, format!("OUTGOING: {} {endpoint}", &route.method));
 
         let url = self.url.clone() + &endpoint;
         let mut req = self
@@ -181,7 +185,7 @@ impl HttpService {
             .headers(self.headers.clone());
 
         if let Some(p) = payload {
-            crate::log!(Log::Debug, format!("PAYLOAD : {p:?}"));
+            logging::log!(Log::Debug, format!("PAYLOAD : {p:?}"));
             req = req.json(&p);
         }
 

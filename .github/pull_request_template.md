@@ -15,7 +15,6 @@
 - [ ] I have included documentation for any new structs or methods.
 - [ ] I have updated tests for any code I addded/changed/deleted.
 - [ ] I have updated the CHANGELOG to include my changes.
-- [ ] This PR does not contain plagiarized content.
 
 ## Related Issues
 

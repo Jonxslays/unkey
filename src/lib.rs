@@ -1,6 +1,6 @@
 mod client;
+mod logging;
 
-pub mod logging;
 pub mod models;
 pub mod routes;
 pub mod services;
@@ -17,7 +17,7 @@ use types::{ErrorCode, HttpResult, Response};
 /// - `$err`: The error (must have `to_string()` impl).
 ///
 /// # Returns
-/// - [`Response::Err`]: The error.
+/// The error variant of response.
 macro_rules! response_error {
     ($code:expr, $err:expr) => {
         crate::types::Response::Err(crate::types::HttpError::new($code, $err.to_string()))
@@ -27,12 +27,12 @@ macro_rules! response_error {
 /// Unwinds the http result into a [`Response<T>`].
 ///
 /// # Arguments
-/// - `response`: The [`HttpResult`] from the request.
+/// - `result`: The http result from the request.
 ///
 /// # Returns
-/// - [`Response<T>`]: The response or an error.
-pub async fn unwind_response<T: for<'a> Deserialize<'a>>(response: HttpResult) -> Response<T> {
-    let data = match response {
+/// A result containing the response or an error.
+pub(crate) async fn unwind_response<T: for<'a> Deserialize<'a>>(result: HttpResult) -> Response<T> {
+    let data = match result {
         Err(e) => Err(e),
         Ok(r) => r.text().await,
     };
@@ -40,7 +40,7 @@ pub async fn unwind_response<T: for<'a> Deserialize<'a>>(response: HttpResult) -
     match data {
         Err(e) => response_error!(ErrorCode::Unknown, e),
         Ok(text) => {
-            crate::log!(logging::Log::Debug, format!("INCOMING: {text}"));
+            logging::log!(logging::Log::Debug, format!("INCOMING: {text}"));
 
             match serde_json::from_str::<Response<T>>(&text) {
                 Err(e) => response_error!(ErrorCode::Unknown, e),

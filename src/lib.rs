@@ -79,8 +79,14 @@ pub(crate) async fn wrap_empty_response(result: HttpResult) -> Wrapped<()> {
             logging::debug!(format!("INCOMING: {text}"));
 
             match serde_json::from_str::<Wrapped<()>>(&text) {
-                Err(_) => Wrapped::Ok(()), // Is this really the only way?
                 Ok(r) => r,
+                Err(e) => match text.contains("error") {
+                    // If the text contains error and we failed to deserialize
+                    // it means the error struct is misaligned with the api
+                    true => response_error!(ErrorCode::Unknown, e),
+                    // Otherwise it was successful
+                    false => Wrapped::Ok(()),
+                },
             }
         }
     }

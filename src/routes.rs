@@ -5,24 +5,27 @@ use reqwest::Method;
 ////////////////////////////////////////////////////////////////////////////////
 
 /// The create key endpoint `POST /keys`
-pub static CREATE_KEY: Route = Route::new(Method::POST, "/keys");
+pub(crate) static CREATE_KEY: Route = Route::new(Method::POST, "/keys");
 
 /// The verify key endpoint `POST /keys/verify`
-pub static VERIFY_KEY: Route = Route::new(Method::POST, "/keys/verify");
+pub(crate) static VERIFY_KEY: Route = Route::new(Method::POST, "/keys/verify");
 
 /// The delete key endpoint `DELETE /keys/{id}`
-pub static DELETE_KEY: Route = Route::new(Method::DELETE, "/keys/{}");
+#[allow(unused)] // Temporary until we implement this method
+pub(crate) static DELETE_KEY: Route = Route::new(Method::DELETE, "/keys/{}");
 
 /// The update key endpoint `PUT /keys/{id}`
-pub static UPDATE_KEY: Route = Route::new(Method::PUT, "/keys/{}");
+#[allow(unused)] // Temporary until we implement this method
+pub(crate) static UPDATE_KEY: Route = Route::new(Method::PUT, "/keys/{}");
 
 ////////////////////////////////////////////////////////////////////////////////
 
 /// The get api endpoint `GET /apis/{id}`
-pub static GET_API: Route = Route::new(Method::GET, "/apis/{}");
+#[allow(unused)] // Temporary until we implement this method
+pub(crate) static GET_API: Route = Route::new(Method::GET, "/apis/{}");
 
 /// The list keys endpoint `GET /apis/{id}/keys`
-pub static LIST_KEYS: Route = Route::new(Method::GET, "/apis/{}/keys");
+pub(crate) static LIST_KEYS: Route = Route::new(Method::GET, "/apis/{}/keys");
 
 ////////////////////////////////////////////////////////////////////////////////
 // END ROUTES
@@ -30,7 +33,7 @@ pub static LIST_KEYS: Route = Route::new(Method::GET, "/apis/{}/keys");
 
 /// A static route mapping to an unkey api endpoint.
 #[derive(Debug, Clone)]
-pub struct Route {
+pub(crate) struct Route {
     /// The http method for the route.
     pub method: Method,
 
@@ -50,16 +53,6 @@ impl Route {
     ///
     /// # Returns
     /// The new route.
-    ///
-    /// # Example
-    /// ```
-    /// # use unkey_sdk::routes::Route;
-    /// # use reqwest::Method;
-    /// let r = Route::new(Method::GET, "/keys/owo");
-    ///
-    /// assert_eq!(r.method, Method::GET);
-    /// assert_eq!(r.uri, "/keys/owo");
-    /// ```
     #[must_use]
     pub const fn new(method: Method, uri: &'static str) -> Self {
         Self { method, uri }
@@ -69,17 +62,6 @@ impl Route {
     ///
     /// # Returns
     /// The compiled route.
-    ///
-    /// # Example
-    /// ```
-    /// # use unkey_sdk::routes::Route;
-    /// # use reqwest::Method;
-    /// let r = Route::new(Method::GET, "/apis/woot").compile();
-    ///
-    /// assert_eq!(r.params, vec![]);
-    /// assert_eq!(r.method, Method::GET);
-    /// assert_eq!(r.uri, String::from("/apis/woot"));
-    /// ```
     #[must_use]
     pub fn compile(&self) -> CompiledRoute {
         CompiledRoute::new(self)
@@ -88,7 +70,7 @@ impl Route {
 
 /// A dynamic route that can be used directly for an outgoing request.
 #[derive(Debug, Clone)]
-pub struct CompiledRoute {
+pub(crate) struct CompiledRoute {
     /// The routes uri.
     pub uri: String,
 
@@ -107,19 +89,6 @@ impl CompiledRoute {
     ///
     /// # Returns
     /// Self The new route.
-    ///
-    /// # Example
-    /// ```
-    /// # use unkey_sdk::routes::CompiledRoute;
-    /// # use unkey_sdk::routes::Route;
-    /// # use reqwest::Method;
-    /// let r = Route::new(Method::GET, "/apis/hi");
-    /// let c = CompiledRoute::new(&r);
-    ///
-    /// assert_eq!(c.params, vec![]);
-    /// assert_eq!(c.method, Method::GET);
-    /// assert_eq!(c.uri, String::from("/apis/hi"));
-    /// ```
     #[must_use]
     #[rustfmt::skip]
     pub fn new(route: &Route) -> Self {
@@ -137,20 +106,6 @@ impl CompiledRoute {
     ///
     /// # Returns
     /// Self for chained calls.
-    ///
-    /// # Example
-    /// ```
-    /// # use unkey_sdk::routes::CompiledRoute;
-    /// # use unkey_sdk::routes::Route;
-    /// # use reqwest::Method;
-    /// let r = Route::new(Method::GET, "/apis/{}/keys/{}");
-    /// let mut c = CompiledRoute::new(&r);
-    /// c.uri_insert("5").uri_insert("1");
-    ///
-    /// assert_eq!(c.params, vec![]);
-    /// assert_eq!(c.method, Method::GET);
-    /// assert_eq!(c.uri, String::from("/apis/5/keys/1"));
-    /// ```
     pub fn uri_insert<T: Into<String>>(&mut self, param: T) -> &mut Self {
         self.uri = self.uri.replacen("{}", &param.into(), 1);
         self
@@ -164,20 +119,6 @@ impl CompiledRoute {
     ///
     /// # Returns
     /// Self for chained calls.
-    ///
-    /// # Example
-    /// ```
-    /// # use unkey_sdk::routes::CompiledRoute;
-    /// # use unkey_sdk::routes::Route;
-    /// # use reqwest::Method;
-    /// let r = Route::new(Method::GET, "/apis/milk");
-    /// let mut c = CompiledRoute::new(&r);
-    /// c.query_insert("test", "value");
-    ///
-    /// assert_eq!(c.params, vec![(String::from("test"), String::from("value"))]);
-    /// assert_eq!(c.method, Method::GET);
-    /// assert_eq!(c.uri, String::from("/apis/milk"));
-    /// ```
     pub fn query_insert<T: Into<String>>(&mut self, name: T, value: T) -> &mut Self {
         self.params.push((name.into(), value.into()));
         self
@@ -187,18 +128,6 @@ impl CompiledRoute {
     ///
     /// # Returns
     /// The formatted query string.
-    ///
-    /// # Example
-    /// ```
-    /// # use unkey_sdk::routes::CompiledRoute;
-    /// # use unkey_sdk::routes::Route;
-    /// # use reqwest::Method;
-    /// let r = Route::new(Method::GET, "/apis/milk");
-    /// let mut c = CompiledRoute::new(&r);
-    /// c.query_insert("test", "value").query_insert("js", "bad");
-    ///
-    /// assert_eq!(c.build_query(), String::from("?test=value&js=bad"));
-    /// ```
     #[must_use]
     pub fn build_query(&self) -> String {
         let mut query = self
@@ -213,5 +142,73 @@ impl CompiledRoute {
         }
 
         query
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use crate::routes::CompiledRoute;
+    use crate::routes::Route;
+    use reqwest::Method;
+
+    #[test]
+    fn route_new() {
+        let r = Route::new(Method::GET, "/keys/owo");
+
+        assert_eq!(r.method, Method::GET);
+        assert_eq!(r.uri, "/keys/owo");
+    }
+
+    #[test]
+    fn route_compile() {
+        let r = Route::new(Method::GET, "/apis/woot").compile();
+
+        assert_eq!(r.params, vec![]);
+        assert_eq!(r.method, Method::GET);
+        assert_eq!(r.uri, String::from("/apis/woot"));
+    }
+
+    #[test]
+    fn compiled_route_new() {
+        let r = Route::new(Method::GET, "/apis/hi");
+        let c = CompiledRoute::new(&r);
+
+        assert_eq!(c.params, vec![]);
+        assert_eq!(c.method, Method::GET);
+        assert_eq!(c.uri, String::from("/apis/hi"));
+    }
+
+    #[test]
+    fn compiled_route_uri_insert() {
+        let r = Route::new(Method::GET, "/apis/{}/keys/{}");
+        let mut c = CompiledRoute::new(&r);
+        c.uri_insert("5").uri_insert("1");
+
+        assert_eq!(c.params, vec![]);
+        assert_eq!(c.method, Method::GET);
+        assert_eq!(c.uri, String::from("/apis/5/keys/1"));
+    }
+
+    #[test]
+    fn compiled_route_query_insert() {
+        let r = Route::new(Method::GET, "/apis/milk");
+        let mut c = CompiledRoute::new(&r);
+        c.query_insert("test", "value");
+
+        assert_eq!(c.method, Method::GET);
+        assert_eq!(c.uri, String::from("/apis/milk"));
+        assert_eq!(
+            c.params,
+            vec![(String::from("test"), String::from("value"))]
+        );
+    }
+
+    #[test]
+    fn compiled_route_build_query() {
+        let r = Route::new(Method::GET, "/apis/milk");
+        let mut c = CompiledRoute::new(&r);
+        c.query_insert("test", "value").query_insert("js", "bad");
+
+        assert_eq!(c.build_query(), String::from("?test=value&js=bad"));
     }
 }

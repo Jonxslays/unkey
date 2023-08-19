@@ -1,14 +1,15 @@
 mod client;
 mod logging;
-
 pub mod models;
-pub mod routes;
-pub mod services;
-pub mod types;
+mod routes;
+mod services;
+
+use serde::Deserialize;
 
 pub use client::Client;
-use serde::Deserialize;
-use types::{ErrorCode, HttpResult, Response};
+use models::ErrorCode;
+use models::HttpResult;
+use models::Wrapped;
 
 /// Creates a new Err variant of [`Response`].
 ///
@@ -17,10 +18,10 @@ use types::{ErrorCode, HttpResult, Response};
 /// - `$err`: The error (must have `to_string()` impl).
 ///
 /// # Returns
-/// The error variant of response.
+/// The wrapped error.
 macro_rules! response_error {
     ($code:expr, $err:expr) => {
-        crate::types::Response::Err(crate::types::HttpError::new($code, $err.to_string()))
+        crate::models::Wrapped::Err(crate::models::HttpError::new($code, $err.to_string()))
     };
 }
 
@@ -30,8 +31,11 @@ macro_rules! response_error {
 /// - `result`: The http result from the request.
 ///
 /// # Returns
-/// A result containing the response or an error.
-pub(crate) async fn unwind_response<T: for<'a> Deserialize<'a>>(result: HttpResult) -> Response<T> {
+/// The wrapped response or an error.
+pub(crate) async fn unwind_response<T>(result: HttpResult) -> Wrapped<T>
+where
+    T: for<'a> Deserialize<'a>,
+{
     let data = match result {
         Ok(r) => r.text().await,
         Err(e) => {
@@ -45,7 +49,7 @@ pub(crate) async fn unwind_response<T: for<'a> Deserialize<'a>>(result: HttpResu
         Ok(text) => {
             logging::debug!(format!("INCOMING: {text}"));
 
-            match serde_json::from_str::<Response<T>>(&text) {
+            match serde_json::from_str::<Wrapped<T>>(&text) {
                 Err(e) => response_error!(ErrorCode::Unknown, e),
                 Ok(r) => r,
             }

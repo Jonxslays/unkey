@@ -4,13 +4,13 @@ use crate::models::ListKeysRequest;
 use crate::models::ListKeysResponse;
 use crate::models::VerifyKeyRequest;
 use crate::models::VerifyKeyResponse;
+use crate::models::Wrapped;
 use crate::services::ApiService;
 use crate::services::HttpService;
 use crate::services::KeyService;
-use crate::types::Response;
 
 #[allow(unused_imports)]
-use crate::types::HttpError;
+use crate::models::HttpError;
 
 /// The client used to make requests to the unkey api.
 #[derive(Debug, Clone)]
@@ -109,24 +109,24 @@ impl Client {
     /// - `req`: The verify key request to send.
     ///
     /// # Returns
-    /// A result containing the response, or an [`HttpError`].
+    /// A wrapper containing the response, or an [`HttpError`].
     ///
     /// # Example
     /// ```no_run
     /// # async fn verify() {
     /// # use unkey_sdk::Client;
     /// # use unkey_sdk::models::VerifyKeyRequest;
-    /// # use unkey_sdk::types::Response;
+    /// # use unkey_sdk::models::Wrapped;
     /// let c = Client::new("abc123");
     /// let req = VerifyKeyRequest::new("test_KEYABC");
     ///
     /// match c.verify_key(req).await {
-    ///     Response::Ok(res) => println!("{:?}", res),
-    ///     Response::Err(err) => println!("{:?}", err),
+    ///     Wrapped::Ok(res) => println!("{:?}", res),
+    ///     Wrapped::Err(err) => println!("{:?}", err),
     /// }
     /// # }
     /// ```
-    pub async fn verify_key(&self, req: VerifyKeyRequest) -> Response<VerifyKeyResponse> {
+    pub async fn verify_key(&self, req: VerifyKeyRequest) -> Wrapped<VerifyKeyResponse> {
         self.keys.verify_key(&self.http, req).await
     }
 
@@ -136,24 +136,24 @@ impl Client {
     /// - `req`: The create key request to send.
     ///
     /// # Returns
-    /// A result containing the response, or an [`HttpError`].
+    /// A wrapper containing the response, or an [`HttpError`].
     ///
     /// # Example
     /// ```no_run
     /// # async fn create() {
     /// # use unkey_sdk::Client;
     /// # use unkey_sdk::models::CreateKeyRequest;
-    /// # use unkey_sdk::types::Response;
+    /// # use unkey_sdk::models::Wrapped;
     /// let c = Client::new("abc123");
     /// let req = CreateKeyRequest::new("api_CCC").set_remaining(100);
     ///
     /// match c.create_key(req).await {
-    ///     Response::Ok(res) => println!("{:?}", res),
-    ///     Response::Err(err) => println!("{:?}", err),
+    ///     Wrapped::Ok(res) => println!("{:?}", res),
+    ///     Wrapped::Err(err) => println!("{:?}", err),
     /// }
     /// # }
     /// ```
-    pub async fn create_key(&self, req: CreateKeyRequest) -> Response<CreateKeyResponse> {
+    pub async fn create_key(&self, req: CreateKeyRequest) -> Wrapped<CreateKeyResponse> {
         self.keys.create_key(&self.http, req).await
     }
 
@@ -163,24 +163,24 @@ impl Client {
     /// - `req`: The list keys request to send.
     ///
     /// # Returns
-    /// A result containing the response, or an [`HttpError`].
+    /// A wrapper containing the response, or an [`HttpError`].
     ///
     /// # Example
     /// ```no_run
     /// # async fn list() {
     /// # use unkey_sdk::Client;
     /// # use unkey_sdk::models::ListKeysRequest;
-    /// # use unkey_sdk::types::Response;
+    /// # use unkey_sdk::models::Wrapped;
     /// let c = Client::new("abc123");
     /// let req = ListKeysRequest::new("api_id").set_limit(25);
     ///
     /// match c.list_keys(req).await {
-    ///     Response::Ok(res) => println!("{:?}", res),
-    ///     Response::Err(err) => println!("{:?}", err),
+    ///     Wrapped::Ok(res) => println!("{:?}", res),
+    ///     Wrapped::Err(err) => println!("{:?}", err),
     /// }
     /// # }
     /// ```
-    pub async fn list_keys(&self, req: ListKeysRequest) -> Response<ListKeysResponse> {
+    pub async fn list_keys(&self, req: ListKeysRequest) -> Wrapped<ListKeysResponse> {
         self.apis.list_keys(&self.http, req).await
     }
 }

@@ -3,15 +3,15 @@ use crate::unwind_response;
 
 use crate::models::ListKeysRequest;
 use crate::models::ListKeysResponse;
+use crate::models::Wrapped;
 use crate::services::HttpService;
-use crate::types::Response;
 
 #[allow(unused_imports)]
-use crate::types::HttpError;
+use crate::models::HttpError;
 
 /// The service that handles api related requests.
 #[derive(Debug, Clone)]
-pub struct ApiService;
+pub(crate) struct ApiService;
 
 impl ApiService {
     /// Retrieves a paginated list of keys for an api.
@@ -21,12 +21,12 @@ impl ApiService {
     /// - `req`: The request to send.
     ///
     /// # Returns
-    /// A result containing the response, or an [`HttpError`].
+    /// A wrapper around the response, or an [`HttpError`].
     pub async fn list_keys(
         &self,
         http: &HttpService,
         req: ListKeysRequest,
-    ) -> Response<ListKeysResponse> {
+    ) -> Wrapped<ListKeysResponse> {
         let mut route = routes::LIST_KEYS.compile();
         route
             .uri_insert(&req.api_id)

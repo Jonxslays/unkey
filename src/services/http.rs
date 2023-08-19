@@ -2,8 +2,8 @@ use reqwest::header::{HeaderMap, HeaderValue};
 use serde::Serialize;
 
 use crate::logging;
+use crate::models::HttpResult;
 use crate::routes::CompiledRoute;
-use crate::types::HttpResult;
 
 // TODO: implement versioning at some point
 /// The unkey api production base url.
@@ -12,7 +12,7 @@ static BASE_API_URL: &str = "https://api.unkey.dev/v1";
 /// The http service used for handling requests.
 #[allow(clippy::module_name_repetitions)]
 #[derive(Debug, Clone)]
-pub struct HttpService {
+pub(crate) struct HttpService {
     /// The base url to use for requests.
     url: String,
 
@@ -31,12 +31,6 @@ impl HttpService {
     ///
     /// # Returns
     /// The new http service.
-    ///
-    /// # Example
-    /// ```
-    /// # use unkey_sdk::services::HttpService;
-    /// let s = HttpService::new("unkey_abds");
-    /// ```
     #[must_use]
     #[rustfmt::skip]
     pub fn new(key: &str) -> Self {
@@ -56,12 +50,6 @@ impl HttpService {
     ///
     /// # Returns
     /// The new http service.
-    ///
-    /// # Example
-    /// ```
-    /// # use unkey_sdk::services::HttpService;
-    /// let s = HttpService::with_url("unkey_abds", "http://localhost:3000");
-    /// ```
     #[must_use]
     #[rustfmt::skip]
     pub fn with_url(key: &str, url: &str) -> Self {
@@ -108,13 +96,6 @@ impl HttpService {
     ///
     /// # Arguments
     /// - `key`: The new root api key to use.
-    ///
-    /// # Example
-    /// ```
-    /// # use unkey_sdk::services::HttpService;
-    /// let mut s = HttpService::new("unkey_ghj");
-    /// s.set_key("unkey_abc");
-    /// ```
     pub fn set_key(&mut self, key: &str) {
         let header = HeaderValue::from_str(key);
 
@@ -130,13 +111,6 @@ impl HttpService {
     ///
     /// # Arguments
     /// - `url`: The new api base url to use.
-    ///
-    /// # Example
-    /// ```
-    /// # use unkey_sdk::services::HttpService;
-    /// let mut s = HttpService::new("unkey_ghj");
-    /// s.set_url("http://localhost:4000");
-    /// ```
     pub fn set_url(&mut self, url: &str) {
         self.url = url.to_string();
     }
@@ -152,22 +126,6 @@ impl HttpService {
     ///
     /// # Errors
     /// The reqwest error encountered during the request.
-    ///
-    /// # Example
-    /// ```no_run
-    /// # use unkey_sdk::services::HttpService;
-    /// # use unkey_sdk::routes::Route;
-    /// # use unkey_sdk::routes::CompiledRoute;
-    /// # use unkey_sdk::models::CreateKeyRequest;
-    /// # use reqwest::Method;
-    /// # async fn f() {
-    /// let r = Route::new(Method::GET, "/death/destroyer/worlds");
-    /// let c = CompiledRoute::new(&r);
-    /// let s = HttpService::new("unkey_ghj");
-    ///
-    /// let res = s.fetch::<CreateKeyRequest>(c, None).await;
-    /// # }
-    /// ```
     pub async fn fetch<T>(&self, route: CompiledRoute, payload: Option<T>) -> HttpResult
     where
         T: std::fmt::Debug + Serialize,

@@ -34,6 +34,7 @@ pub enum ErrorCode {
 }
 
 /// An http error representation.
+#[allow(clippy::module_name_repetitions)]
 #[derive(Debug, Clone, Deserialize)]
 pub struct HttpError {
     /// The error code for the error.
@@ -55,22 +56,25 @@ impl HttpError {
     ///
     /// # Example
     /// ```
-    /// # use unkey_sdk::types::HttpError;
-    /// # use unkey_sdk::types::ErrorCode;
-    /// let e = HttpError::new(ErrorCode::Unknown, String::from("err"));
+    /// # use unkey_sdk::models::HttpError;
+    /// # use unkey_sdk::models::ErrorCode;
+    /// let e = HttpError {
+    ///     code: ErrorCode::Unknown,
+    ///     message: String::from("err")
+    /// };
     ///
     /// assert_eq!(e.code, ErrorCode::Unknown);
     /// assert_eq!(e.message, String::from("err"));
     /// ```
     #[must_use]
-    pub fn new(code: ErrorCode, message: String) -> Self {
+    pub(crate) fn new(code: ErrorCode, message: String) -> Self {
         Self { code, message }
     }
 }
 
-/// A generic response type the client returns.
+/// A wrapper around the response type or an error.
 #[derive(Deserialize, Debug, Clone)]
-pub enum Response<T> {
+pub enum Wrapped<T> {
     /// The error value.
     #[serde(rename = "error")]
     Err(HttpError),

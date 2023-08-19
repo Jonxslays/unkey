@@ -13,14 +13,12 @@ documentation = "https://docs.rs/unkey"
 keywords = ["unkey-sdk", "unkey", "unkeyed", "api"]
 categories = ["api-bindings", "asynchronous"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [lib]
 name = "unkey"
 
 [dependencies]
 lazy_static = "1.4.0"
-serde = { version = "1", features = ["derive"] }
+serde = { version = "=1.0.171", features = ["derive"] }
 serde_json = "1"
 
 [dependencies.reqwest]

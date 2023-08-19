@@ -24,7 +24,7 @@ jobs:
         run: cargo fmt -- --check
 
       - name: Run clippy check
-        run: cargo clippy -- -W clippy::pedantic
+        run: cargo clippy -- -W clippy::pedantic -D warnings
 
   docs-build:
     name: Docs build

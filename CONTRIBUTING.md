@@ -1,10 +1,8 @@
 ## Contributing
 
-First off, thank you for considering contributing to `unkey_sdk`. It's people like you that make it such a great tool.
+First off, thank you for considering contributing to `unkey`.
 
-Please read the [Code of Conduct](CODE_OF_CONDUCT.md) before contributing.
-
-**Note**: Please get your contributions approved by the maintainers of [unkey_sdk](https://github.com/jonxslays/unkey_sdk) or the official [unkey](https://github.com/unkeyed/unkey/) maintainers before you start working on them. This will help avoid any conflicts and also help you understand if the contribution is in line with the project goals. You can do this by opening an issue with appropriate label and describing your contribution in detail.
+Please take some time to read the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ### You have found a bug
 
@@ -36,7 +34,7 @@ Please follow the semantic commit messages pattern similar to the one mentioned 
 
 ### Pull Requests
 
-Each pull request should have its own branch named `issue/<issue>-description`, e.g. `issue/5-update-docs`.
+Each pull request should have its own branch named `issue/<issue>/description`, e.g. `issue/5/update-docs`.
 
 ### Anything Else
 

@@ -7,6 +7,7 @@
 - Add `KeyService` for key related requests.
 - Add `create_key` method.
 - Add `verify_key` method.
+- Add `revoke_key` method.
 - Add `list_keys` method.
 - Add various models supporting api service.
 - Add various models supporting key service.

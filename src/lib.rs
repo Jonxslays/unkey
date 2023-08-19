@@ -25,14 +25,14 @@ macro_rules! response_error {
     };
 }
 
-/// Unwinds the http result into a [`Response<T>`].
+/// Wraps the http result.
 ///
 /// # Arguments
 /// - `result`: The http result from the request.
 ///
 /// # Returns
 /// The wrapped response or an error.
-pub(crate) async fn unwind_response<T>(result: HttpResult) -> Wrapped<T>
+pub(crate) async fn wrap_response<T>(result: HttpResult) -> Wrapped<T>
 where
     T: for<'a> Deserialize<'a>,
 {
@@ -56,3 +56,14 @@ where
         }
     }
 }
+
+macro_rules! fetch {
+    ($http:expr, $route:ident) => {
+        $http.fetch($route, None::<u8>)
+    };
+    ($http:expr, $route:ident, $payload:expr) => {
+        $http.fetch($route, Some($payload))
+    };
+}
+
+pub(crate) use fetch;

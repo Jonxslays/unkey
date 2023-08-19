@@ -1,5 +1,6 @@
+use crate::fetch;
 use crate::routes;
-use crate::unwind_response;
+use crate::wrap_response;
 
 use crate::models::CreateKeyRequest;
 use crate::models::CreateKeyResponse;
@@ -30,9 +31,8 @@ impl KeyService {
         req: CreateKeyRequest,
     ) -> Wrapped<CreateKeyResponse> {
         let route = routes::CREATE_KEY.compile();
-        let response = http.fetch(route, Some(req)).await;
 
-        unwind_response(response).await
+        wrap_response(fetch!(http, route, req).await).await
     }
 
     /// Verifies an existing api key.
@@ -49,8 +49,7 @@ impl KeyService {
         req: VerifyKeyRequest,
     ) -> Wrapped<VerifyKeyResponse> {
         let route = routes::VERIFY_KEY.compile();
-        let response = http.fetch(route, Some(req)).await;
 
-        unwind_response(response).await
+        wrap_response(fetch!(http, route, req).await).await
     }
 }

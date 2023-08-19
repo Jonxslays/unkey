@@ -15,7 +15,7 @@ lazy_static::lazy_static! {
 }
 
 #[derive(Eq, PartialEq, PartialOrd)]
-pub enum Log {
+pub(crate) enum Log {
     None,
     Error,
     Info,
@@ -62,4 +62,25 @@ macro_rules! log {
     };
 }
 
+macro_rules! debug {
+    ($message:expr) => {
+        $crate::logging::log!($crate::logging::Log::Debug, $message)
+    };
+}
+
+macro_rules! info {
+    ($message:expr) => {
+        $crate::logging::log!($crate::logging::Log::Info, $message)
+    };
+}
+
+macro_rules! error {
+    ($message:expr) => {
+        $crate::logging::log!($crate::logging::Log::Error, $message)
+    };
+}
+
+pub(crate) use debug;
+pub(crate) use error;
+pub(crate) use info;
 pub(crate) use log;

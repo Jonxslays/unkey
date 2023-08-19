@@ -33,14 +33,17 @@ macro_rules! response_error {
 /// A result containing the response or an error.
 pub(crate) async fn unwind_response<T: for<'a> Deserialize<'a>>(result: HttpResult) -> Response<T> {
     let data = match result {
-        Err(e) => Err(e),
         Ok(r) => r.text().await,
+        Err(e) => {
+            logging::error!(format!("HTTP request failed: {}", e.to_string()));
+            Err(e)
+        }
     };
 
     match data {
         Err(e) => response_error!(ErrorCode::Unknown, e),
         Ok(text) => {
-            logging::log!(logging::Log::Debug, format!("INCOMING: {text}"));
+            logging::debug!(format!("INCOMING: {text}"));
 
             match serde_json::from_str::<Response<T>>(&text) {
                 Err(e) => response_error!(ErrorCode::Unknown, e),

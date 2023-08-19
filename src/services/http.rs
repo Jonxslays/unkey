@@ -1,13 +1,12 @@
 use reqwest::header::{HeaderMap, HeaderValue};
 use serde::Serialize;
 
-use crate::{
-    logging::{self, Log},
-    routes::CompiledRoute,
-    types::HttpResult,
-};
+use crate::logging;
+use crate::routes::CompiledRoute;
+use crate::types::HttpResult;
 
 // TODO: implement versioning at some point
+/// The unkey api production base url.
 static BASE_API_URL: &str = "https://api.unkey.dev/v1";
 
 /// The http service used for handling requests.
@@ -31,7 +30,7 @@ impl HttpService {
     /// - `key`: The root api key to use.
     ///
     /// # Returns
-    /// - [`Self`]: The new http service.
+    /// The new http service.
     ///
     /// # Example
     /// ```
@@ -56,7 +55,7 @@ impl HttpService {
     /// - `url`: The base url to use.
     ///
     /// # Returns
-    /// - [`Self`]: The new http service.
+    /// The new http service.
     ///
     /// # Example
     /// ```
@@ -73,14 +72,13 @@ impl HttpService {
         Self { url, client, headers }
     }
 
-    /// Generates the headers the client will use.
+    /// Generates the headers to send with requests.
     ///
     /// # Arguments
     /// - `key`: The root api key to use.
     ///
     /// # Returns
-    /// - [`HeaderMap`]: The header map to use.
-    ///
+    /// The header map to use.
     fn generate_headers(key: &str) -> HeaderMap {
         let mut headers = HeaderMap::with_capacity(3);
         let key = format!("Bearer {key}");
@@ -128,7 +126,7 @@ impl HttpService {
         }
     }
 
-    /// Sets the url the client will send requests to.
+    /// Sets the base url to use for the api.
     ///
     /// # Arguments
     /// - `url`: The new api base url to use.
@@ -143,17 +141,17 @@ impl HttpService {
         self.url = url.to_string();
     }
 
-    /// Makes the http request.
+    /// Sends the http request.
     ///
     /// # Arguments
-    /// - `route`: The [`CompiledRoute`] to fetch.
+    /// - `route`: The compiled route to fetch.
     /// - `payload`: The optional json payload.
     ///
     /// # Returns
-    /// - [`HttpResult`]: The result of the http request.
+    /// The result of the http request.
     ///
     /// # Errors
-    /// - [`reqwest::Error`]: The error encountered during the request.
+    /// The reqwest error encountered during the request.
     ///
     /// # Example
     /// ```no_run
@@ -176,7 +174,7 @@ impl HttpService {
     {
         let query = route.build_query();
         let endpoint = route.uri.clone() + &query;
-        logging::log!(Log::Info, format!("OUTGOING: {} {endpoint}", &route.method));
+        logging::info!(format!("OUTGOING: {} {endpoint}", &route.method));
 
         let url = self.url.clone() + &endpoint;
         let mut req = self
@@ -185,7 +183,7 @@ impl HttpService {
             .headers(self.headers.clone());
 
         if let Some(p) = payload {
-            logging::log!(Log::Debug, format!("PAYLOAD : {p:?}"));
+            logging::debug!(format!("PAYLOAD : {p:?}"));
             req = req.json(&p);
         }
 

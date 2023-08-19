@@ -2,6 +2,7 @@ use crate::models::CreateKeyRequest;
 use crate::models::CreateKeyResponse;
 use crate::models::ListKeysRequest;
 use crate::models::ListKeysResponse;
+use crate::models::RevokeKeyRequest;
 use crate::models::VerifyKeyRequest;
 use crate::models::VerifyKeyResponse;
 use crate::models::Wrapped;
@@ -182,5 +183,32 @@ impl Client {
     /// ```
     pub async fn list_keys(&self, req: ListKeysRequest) -> Wrapped<ListKeysResponse> {
         self.apis.list_keys(&self.http, req).await
+    }
+
+    /// Revokes an existing api key.
+    ///
+    /// # Arguments
+    /// - `req`: The revoke key request to send.
+    ///
+    /// # Returns
+    /// A wrapper containing the empty response, or an [`HttpError`].
+    ///
+    /// # Example
+    /// ```no_run
+    /// # async fn revoke() {
+    /// # use unkey::Client;
+    /// # use unkey::models::RevokeKeyRequest;
+    /// # use unkey::models::Wrapped;
+    /// let c = Client::new("abc123");
+    /// let req = RevokeKeyRequest::new("test_123");
+    ///
+    /// match c.revoke_key(req).await {
+    ///     Wrapped::Ok(_) => println!("Success!"), // Nothing on success
+    ///     Wrapped::Err(err) => println!("{:?}", err),
+    /// }
+    /// # }
+    /// ```
+    pub async fn revoke_key(&self, req: RevokeKeyRequest) -> Wrapped<()> {
+        self.keys.revoke_key(&self.http, req).await
     }
 }

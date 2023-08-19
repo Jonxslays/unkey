@@ -57,6 +57,45 @@ where
     }
 }
 
+/// Wraps the http result for an empty return value.
+///
+/// # Arguments
+/// - `result`: The http result from the request.
+///
+/// # Returns
+/// The wrapped response or an error.
+pub(crate) async fn wrap_empty_response(result: HttpResult) -> Wrapped<()> {
+    let data = match result {
+        Ok(r) => r.text().await,
+        Err(e) => {
+            logging::error!(format!("HTTP request failed: {}", e.to_string()));
+            Err(e)
+        }
+    };
+
+    match data {
+        Err(e) => response_error!(ErrorCode::Unknown, e),
+        Ok(text) => {
+            logging::debug!(format!("INCOMING: {text}"));
+
+            match serde_json::from_str::<Wrapped<()>>(&text) {
+                Ok(r) => r,
+                Err(e) => {
+                    if text.contains("error") {
+                        // If the text contains error and we failed to deserialize
+                        // it means the error struct is misaligned with the api
+                        response_error!(ErrorCode::Unknown, e)
+                    } else {
+                        // Otherwise it was successful even though we are in Err
+                        // due to serde failing to deserialize a unit type
+                        Wrapped::Ok(())
+                    }
+                }
+            }
+        }
+    }
+}
+
 macro_rules! fetch {
     ($http:expr, $route:ident) => {
         $http.fetch($route, None::<u8>)

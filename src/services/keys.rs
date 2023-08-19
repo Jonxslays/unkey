@@ -1,13 +1,14 @@
 use crate::fetch;
-use crate::routes;
-use crate::wrap_response;
-
 use crate::models::CreateKeyRequest;
 use crate::models::CreateKeyResponse;
+use crate::models::RevokeKeyRequest;
 use crate::models::VerifyKeyRequest;
 use crate::models::VerifyKeyResponse;
 use crate::models::Wrapped;
+use crate::routes;
 use crate::services::HttpService;
+use crate::wrap_empty_response;
+use crate::wrap_response;
 
 #[allow(unused_imports)]
 use crate::models::HttpError;
@@ -51,5 +52,20 @@ impl KeyService {
         let route = routes::VERIFY_KEY.compile();
 
         wrap_response(fetch!(http, route, req).await).await
+    }
+
+    /// Revokes an existing api key.
+    ///
+    /// # Arguments
+    /// - `http`: The http service to use for the request.
+    /// - `req`: The request to send.
+    ///
+    /// # Returns
+    /// A wrapper around an empty response, or an [`HttpError`].
+    pub async fn revoke_key(&self, http: &HttpService, req: RevokeKeyRequest) -> Wrapped<()> {
+        let mut route = routes::REVOKE_KEY.compile();
+        route.uri_insert(&req.key_id);
+
+        wrap_empty_response(fetch!(http, route, req).await).await
     }
 }

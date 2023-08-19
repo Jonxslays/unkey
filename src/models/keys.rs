@@ -376,3 +376,34 @@ pub struct ApiKey {
     /// The ratelimit imposed on this key, if any.
     pub ratelimit: Option<Ratelimit>,
 }
+
+/// An outgoing revoke key request.
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct RevokeKeyRequest {
+    /// The unique id of the key to revoke.
+    pub key_id: String,
+}
+
+impl RevokeKeyRequest {
+    /// Creates a new revoke key request.
+    ///
+    /// # Arguments
+    /// - `key_id`: The id of the key to revoke.
+    ///
+    /// # Returns
+    /// The revoke key request.
+    ///
+    /// # Example
+    /// ```
+    /// # use unkey::models::RevokeKeyRequest;
+    /// let r = RevokeKeyRequest::new("test_ABC123");
+    ///
+    /// assert_eq!(r.key_id, String::from("test_ABC123"));
+    /// ```
+    #[must_use]
+    #[rustfmt::skip]
+    pub fn new<T: Into<String>>(key_id: T) -> Self {
+        Self { key_id: key_id.into() }
+    }
+}

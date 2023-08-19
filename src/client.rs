@@ -36,7 +36,7 @@ impl Client {
     ///
     /// # Example
     /// ```
-    /// # use unkey_sdk::Client;
+    /// # use unkey::Client;
     /// let c = Client::new("unkey_ghj");
     /// ```
     #[must_use]
@@ -61,7 +61,7 @@ impl Client {
     ///
     /// # Example
     /// ```
-    /// # use unkey_sdk::Client;
+    /// # use unkey::Client;
     /// let c = Client::with_url("unkey_ghj", "http://localhost:3000");
     /// ```
     #[must_use]
@@ -80,7 +80,7 @@ impl Client {
     ///
     /// # Example
     /// ```
-    /// # use unkey_sdk::Client;
+    /// # use unkey::Client;
     /// let mut c = Client::new("unkey_ghj");
     /// c.set_key("unkey_abc");
     /// ```
@@ -95,7 +95,7 @@ impl Client {
     ///
     /// # Example
     /// ```
-    /// # use unkey_sdk::Client;
+    /// # use unkey::Client;
     /// let mut c = Client::new("unkey_ghj");
     /// c.set_url("http://localhost:6969");
     /// ```
@@ -114,9 +114,9 @@ impl Client {
     /// # Example
     /// ```no_run
     /// # async fn verify() {
-    /// # use unkey_sdk::Client;
-    /// # use unkey_sdk::models::VerifyKeyRequest;
-    /// # use unkey_sdk::models::Wrapped;
+    /// # use unkey::Client;
+    /// # use unkey::models::VerifyKeyRequest;
+    /// # use unkey::models::Wrapped;
     /// let c = Client::new("abc123");
     /// let req = VerifyKeyRequest::new("test_KEYABC");
     ///
@@ -141,9 +141,9 @@ impl Client {
     /// # Example
     /// ```no_run
     /// # async fn create() {
-    /// # use unkey_sdk::Client;
-    /// # use unkey_sdk::models::CreateKeyRequest;
-    /// # use unkey_sdk::models::Wrapped;
+    /// # use unkey::Client;
+    /// # use unkey::models::CreateKeyRequest;
+    /// # use unkey::models::Wrapped;
     /// let c = Client::new("abc123");
     /// let req = CreateKeyRequest::new("api_CCC").set_remaining(100);
     ///
@@ -168,9 +168,9 @@ impl Client {
     /// # Example
     /// ```no_run
     /// # async fn list() {
-    /// # use unkey_sdk::Client;
-    /// # use unkey_sdk::models::ListKeysRequest;
-    /// # use unkey_sdk::models::Wrapped;
+    /// # use unkey::Client;
+    /// # use unkey::models::ListKeysRequest;
+    /// # use unkey::models::Wrapped;
     /// let c = Client::new("abc123");
     /// let req = ListKeysRequest::new("api_id").set_limit(25);
     ///

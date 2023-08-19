@@ -61,8 +61,8 @@ impl Ratelimit {
     ///
     /// # Example
     /// ```
-    /// # use unkey_sdk::models::Ratelimit;
-    /// # use unkey_sdk::models::RatelimitType;
+    /// # use unkey::models::Ratelimit;
+    /// # use unkey::models::RatelimitType;
     /// let r = Ratelimit::new(
     ///     RatelimitType::Fast,
     ///     10,

@@ -30,7 +30,7 @@ impl ListKeysRequest {
     ///
     /// # Example
     /// ```
-    /// # use unkey_sdk::models::ListKeysRequest;
+    /// # use unkey::models::ListKeysRequest;
     /// let r = ListKeysRequest::new("test");
     ///
     /// assert_eq!(r.api_id, String::from("test"));
@@ -58,7 +58,7 @@ impl ListKeysRequest {
     ///
     /// # Example
     /// ```
-    /// # use unkey_sdk::models::ListKeysRequest;
+    /// # use unkey::models::ListKeysRequest;
     /// let r = ListKeysRequest::new("test").set_limit(50);
     ///
     /// assert_eq!(r.limit.unwrap(), 50);
@@ -79,7 +79,7 @@ impl ListKeysRequest {
     ///
     /// # Example
     /// ```
-    /// # use unkey_sdk::models::ListKeysRequest;
+    /// # use unkey::models::ListKeysRequest;
     /// let r = ListKeysRequest::new("test").set_offset(4);
     ///
     /// assert_eq!(r.offset.unwrap(), 4);
@@ -100,7 +100,7 @@ impl ListKeysRequest {
     ///
     /// # Example
     /// ```
-    /// # use unkey_sdk::models::ListKeysRequest;
+    /// # use unkey::models::ListKeysRequest;
     /// let r = ListKeysRequest::new("test").set_owner_id("WilfredAlmeida");
     ///
     /// assert_eq!(r.owner_id.unwrap(), String::from("WilfredAlmeida"));

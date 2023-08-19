@@ -56,8 +56,8 @@ impl HttpError {
     ///
     /// # Example
     /// ```
-    /// # use unkey_sdk::models::HttpError;
-    /// # use unkey_sdk::models::ErrorCode;
+    /// # use unkey::models::HttpError;
+    /// # use unkey::models::ErrorCode;
     /// let e = HttpError {
     ///     code: ErrorCode::Unknown,
     ///     message: String::from("err")

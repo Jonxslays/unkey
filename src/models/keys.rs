@@ -24,7 +24,7 @@ impl VerifyKeyRequest {
     ///
     /// # Example
     /// ```
-    /// # use unkey_sdk::models::VerifyKeyRequest;
+    /// # use unkey::models::VerifyKeyRequest;
     /// let r = VerifyKeyRequest::new("test");
     ///
     /// assert_eq!(r.key, String::from("test"));
@@ -104,7 +104,7 @@ impl CreateKeyRequest {
     ///
     /// # Example
     /// ```
-    /// # use unkey_sdk::models::CreateKeyRequest;
+    /// # use unkey::models::CreateKeyRequest;
     /// let r = CreateKeyRequest::new("test");
     ///
     /// assert_eq!(r.api_id, String::from("test"));
@@ -142,7 +142,7 @@ impl CreateKeyRequest {
     ///
     /// # Example
     /// ```
-    /// # use unkey_sdk::models::CreateKeyRequest;
+    /// # use unkey::models::CreateKeyRequest;
     /// let r = CreateKeyRequest::new("test").set_owner_id("jonxslays");
     ///
     /// assert_eq!(r.owner_id.unwrap(), String::from("jonxslays"));
@@ -163,7 +163,7 @@ impl CreateKeyRequest {
     ///
     /// # Example
     /// ```
-    /// # use unkey_sdk::models::CreateKeyRequest;
+    /// # use unkey::models::CreateKeyRequest;
     /// let r = CreateKeyRequest::new("test").set_byte_length(32);
     ///
     /// assert_eq!(r.byte_length.unwrap(), 32);
@@ -184,7 +184,7 @@ impl CreateKeyRequest {
     ///
     /// # Example
     /// ```
-    /// # use unkey_sdk::models::CreateKeyRequest;
+    /// # use unkey::models::CreateKeyRequest;
     /// let r = CreateKeyRequest::new("test").set_prefix("dev");
     ///
     /// assert_eq!(r.prefix.unwrap(), String::from("dev"));
@@ -205,7 +205,7 @@ impl CreateKeyRequest {
     ///
     /// # Example
     /// ```
-    /// # use unkey_sdk::models::CreateKeyRequest;
+    /// # use unkey::models::CreateKeyRequest;
     /// let r = CreateKeyRequest::new("test").set_name("example_key");
     ///
     /// assert_eq!(r.name.unwrap(), String::from("example_key"));
@@ -226,7 +226,7 @@ impl CreateKeyRequest {
     ///
     /// # Example
     /// ```
-    /// # use unkey_sdk::models::CreateKeyRequest;
+    /// # use unkey::models::CreateKeyRequest;
     /// # use serde_json::json;
     /// let r = CreateKeyRequest::new("test").set_meta(json!({"test": 1}));
     ///
@@ -249,7 +249,7 @@ impl CreateKeyRequest {
     ///
     /// # Example
     /// ```
-    /// # use unkey_sdk::models::CreateKeyRequest;
+    /// # use unkey::models::CreateKeyRequest;
     /// # use std::time::SystemTime;
     /// let now = SystemTime::now()
     ///    .duration_since(std::time::UNIX_EPOCH)
@@ -287,7 +287,7 @@ impl CreateKeyRequest {
     ///
     /// # Example
     /// ```
-    /// # use unkey_sdk::models::CreateKeyRequest;
+    /// # use unkey::models::CreateKeyRequest;
     /// let r = CreateKeyRequest::new("test").set_remaining(100);
     ///
     /// assert_eq!(r.remaining.unwrap(), 100);
@@ -308,9 +308,9 @@ impl CreateKeyRequest {
     ///
     /// # Example
     /// ```
-    /// # use unkey_sdk::models::CreateKeyRequest;
-    /// # use unkey_sdk::models::Ratelimit;
-    /// # use unkey_sdk::models::RatelimitType;
+    /// # use unkey::models::CreateKeyRequest;
+    /// # use unkey::models::Ratelimit;
+    /// # use unkey::models::RatelimitType;
     /// let ratelimit = Ratelimit::new(
     ///     RatelimitType::Fast,
     ///     10,

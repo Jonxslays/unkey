@@ -1,10 +1,12 @@
-use crate::{
-    models::{CreateKeyRequest, CreateKeyResponse, VerifyKeyRequest, VerifyKeyResponse},
-    routes,
-    services::HttpService,
-    types::Response,
-    unwind_response,
-};
+use crate::routes;
+use crate::unwind_response;
+
+use crate::models::CreateKeyRequest;
+use crate::models::CreateKeyResponse;
+use crate::models::VerifyKeyRequest;
+use crate::models::VerifyKeyResponse;
+use crate::services::HttpService;
+use crate::types::Response;
 
 #[allow(unused_imports)]
 use crate::types::HttpError;
@@ -13,38 +15,22 @@ use crate::types::HttpError;
 #[derive(Debug, Clone)]
 pub struct KeyService;
 
-impl Default for KeyService {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 impl KeyService {
-    /// Creates a new key service.
-    ///
-    /// # Returns
-    /// - [`Self`]: The new service.
-    #[must_use]
-    pub fn new() -> Self {
-        Self
-    }
-
     /// Creates a new api key.
     ///
     /// # Arguments
-    /// - `http`: The [`HttpService`] to use for the request.
-    /// - `key`: The [`CreateKeyRequest`] to send.
+    /// - `http`: The http service to use for the request.
+    /// - `req`: The request to send.
     ///
     /// # Returns
-    /// - [`Response<CreateKeyResponse>`]: A result containing
-    ///     the [`CreateKeyResponse`], or an [`HttpError`].
+    /// A result containing the response, or an [`HttpError`].
     pub async fn create_key(
         &self,
         http: &HttpService,
-        key: CreateKeyRequest,
+        req: CreateKeyRequest,
     ) -> Response<CreateKeyResponse> {
         let route = routes::CREATE_KEY.compile();
-        let response = http.fetch(route, Some(key)).await;
+        let response = http.fetch(route, Some(req)).await;
 
         unwind_response(response).await
     }
@@ -52,16 +38,18 @@ impl KeyService {
     /// Verifies an existing api key.
     ///
     /// # Arguments
-    /// - `http`: The [`HttpService`] to use for the request.
-    /// - `key`: The key to verify.
+    /// - `http`: The http service to use for the request.
+    /// - `req`: The request to send.
     ///
     /// # Returns
-    /// - [`Response<VerifyKeyResponse>`]: A result containing
-    ///     the [`VerifyKeyResponse`], or a [`HttpError`].
-    pub async fn verify_key(&self, http: &HttpService, key: &str) -> Response<VerifyKeyResponse> {
+    /// A result containing the response, or an [`HttpError`].
+    pub async fn verify_key(
+        &self,
+        http: &HttpService,
+        req: VerifyKeyRequest,
+    ) -> Response<VerifyKeyResponse> {
         let route = routes::VERIFY_KEY.compile();
-        let payload = VerifyKeyRequest::new(key);
-        let response = http.fetch(route, Some(payload)).await;
+        let response = http.fetch(route, Some(req)).await;
 
         unwind_response(response).await
     }

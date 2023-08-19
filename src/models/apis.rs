@@ -1,16 +1,15 @@
-use crate::models::Ratelimit;
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
+
+use super::ApiKey;
 
 /// An outgoing paginated list keys request.
 #[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct ListKeysRequest {
     /// The id of the api to list keys for.
-    #[serde(rename = "apiId")]
     pub api_id: String,
 
     /// The optional owner id used to filter keys by owner.
-    #[serde(rename = "ownerId")]
     pub owner_id: Option<String>,
 
     /// The optional number of keys to return, up to 100.
@@ -27,7 +26,7 @@ impl ListKeysRequest {
     /// - `api_id`: The id of the api to list keys for.
     ///
     /// # Returns
-    /// - [`ListKeysResponse`]: The paginated list of api keys.
+    /// The new list keys request.
     ///
     /// # Example
     /// ```
@@ -55,7 +54,7 @@ impl ListKeysRequest {
     /// - `limit`: The limit to set, defaults to 100.
     ///
     /// # Returns
-    /// - [`Self`]: for chained calls.
+    /// Self for chained calls.
     ///
     /// # Example
     /// ```
@@ -76,7 +75,7 @@ impl ListKeysRequest {
     /// - `offset`: The pagination offset to set, defaults to 0.
     ///
     /// # Returns
-    /// - [`Self`]: for chained calls.
+    /// Self for chained calls.
     ///
     /// # Example
     /// ```
@@ -97,7 +96,7 @@ impl ListKeysRequest {
     /// - `owner_id`: The owner id to set.
     ///
     /// # Returns
-    /// - [`Self`]: for chained calls.
+    /// Self for chained calls.
     ///
     /// # Example
     /// ```
@@ -121,44 +120,4 @@ pub struct ListKeysResponse {
 
     /// The total number of api keys.
     pub total: usize,
-}
-
-/// An individual api key, as the unkey api sees it.
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ApiKey {
-    /// The unique id of this key.
-    pub id: String,
-
-    /// The id of the api this key belongs to.
-    #[serde(rename = "apiId")]
-    pub api_id: String,
-
-    /// The id of the workspace this key belongs to.
-    #[serde(rename = "workspaceId")]
-    pub workspace_id: String,
-
-    /// The keys prefix.
-    pub start: String,
-
-    /// The owner id of the key, if one was set.
-    #[serde(rename = "ownerId")]
-    pub owner_id: Option<String>,
-
-    /// The dynamic metadata associated with the key, if any.
-    pub meta: Option<Value>,
-
-    /// The keys creation time in ms since the unix epoch.
-    #[serde(rename = "createdAt")]
-    pub created_at: usize,
-
-    /// The unix epoch in ms when this key expires, if it does.
-    pub expires: Option<usize>,
-
-    /// The number of uses remaining for this key, if any.
-    ///
-    /// *Note*: If `None`, the key has unlimited uses remaining.
-    pub remaining: Option<usize>,
-
-    /// The ratelimit imposed on this key, if any.
-    pub ratelimit: Option<Ratelimit>,
 }

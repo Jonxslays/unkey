@@ -1,48 +1,42 @@
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
 /// A low level http result representation.
-pub type HttpResult = Result<reqwest::Response, reqwest::Error>;
+pub(crate) type HttpResult = Result<reqwest::Response, reqwest::Error>;
 
 /// An error code returned by the unkey api.
-#[derive(Debug, Clone, Serialize, Deserialize, Eq, PartialEq)]
+#[derive(Debug, Clone, Deserialize, Eq, PartialEq)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum ErrorCode {
     /// Resource not found.
-    #[serde(rename = "NOT_FOUND")]
     NotFound,
 
     /// Request forbidden.
-    #[serde(rename = "FORBIDDEN")]
     Forbidden,
 
     /// Bad request payload.
-    #[serde(rename = "BAD_REQUEST")]
     BadRequest,
 
     /// You are ratelimited.
-    #[serde(rename = "RATELIMITED")]
     Ratelimited,
 
     /// Not authorized for resource.
-    #[serde(rename = "UNAUTHORIZED")]
     Unauthorized,
 
     /// You have exceeded your usage.
-    #[serde(rename = "USAGE_EXCEEDED")]
     UsageExceeded,
 
     /// An internal server error occurred with the api.
-    #[serde(rename = "INTERNAL_SERVER_ERROR")]
     InternalServerError,
 
     /// Reserved for unknown interactions.
-    #[serde(rename = "UNKNOWN")]
+    #[serde(other)]
     Unknown,
 }
 
 /// An http error representation.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct HttpError {
-    /// The [`ErrorCode`] for the error.
+    /// The error code for the error.
     pub code: ErrorCode,
 
     /// The error message.
@@ -57,7 +51,7 @@ impl HttpError {
     /// - `message`: The error message.
     ///
     /// # Returns
-    /// - [`Self`]: The new http error.
+    /// The new http error.
     ///
     /// # Example
     /// ```

@@ -1,5 +1,6 @@
+use crate::fetch;
 use crate::routes;
-use crate::unwind_response;
+use crate::wrap_response;
 
 use crate::models::ListKeysRequest;
 use crate::models::ListKeysResponse;
@@ -37,10 +38,6 @@ impl ApiService {
             route.query_insert("ownerId", owner);
         }
 
-        // We lie to the compiler about T here because there is no payload
-        // TODO: improve DX here, maybe a macro?
-        let response = http.fetch::<usize>(route, None).await;
-
-        unwind_response(response).await
+        wrap_response(fetch!(http, route).await).await
     }
 }

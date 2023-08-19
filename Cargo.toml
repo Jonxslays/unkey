@@ -1,22 +1,22 @@
 [package]
-name = "unkey_sdk"
-description = "An asynchronous SDK for the Unkey API."
+name = "unkey"
+description = "An asynchronous Rust SDK for the Unkey API."
 version = "0.1.0"
 edition = "2021"
 authors = ["Jonxslays"]
 readme = "README.md"
 license = "MIT"
 rust-version = "1.63.0"
-homepage = "https://github.com/Jonxslays/unkey_sdk"
-repository = "https://github.com/Jonxslays/unkey_sdk"
-documentation = "https://docs.rs/unkey_sdk"
+homepage = "https://github.com/Jonxslays/unkey"
+repository = "https://github.com/Jonxslays/unkey"
+documentation = "https://docs.rs/unkey"
 keywords = ["unkey-sdk", "unkey", "unkeyed", "api"]
 categories = ["api-bindings", "asynchronous"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [lib]
-name = "unkey_sdk"
+name = "unkey"
 
 [dependencies]
 lazy_static = "1.4.0"

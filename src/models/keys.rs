@@ -3,8 +3,8 @@ use std::time::SystemTime;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use super::RatelimitState;
 use super::Ratelimit;
+use super::RatelimitState;
 
 /// An outgoing verify key request.
 #[derive(Debug, Clone, Serialize)]

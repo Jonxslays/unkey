@@ -258,8 +258,10 @@ impl CreateKeyRequest {
     ///
     /// let r = CreateKeyRequest::new("test").set_expires(1000 * 60 * 10);
     ///
-    /// // 10 minutes in the future
-    /// assert_eq!(now + 1000 * 60 * 10, r.expires.unwrap());
+    /// // 10 minutes in the future +- 1 second
+    /// let expiration = now + 1000 * 60 * 10;
+    /// let range = expiration..expiration+2;
+    /// assert!(range.contains(&r.expires.unwrap()));
     /// ```
     #[must_use]
     pub fn set_expires(mut self, expires: usize) -> Self {

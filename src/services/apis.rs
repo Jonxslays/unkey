@@ -42,6 +42,14 @@ impl ApiService {
         wrap_response(fetch!(http, route).await).await
     }
 
+    /// Retrieves api information.
+    /// 
+    /// # Arguments
+    /// - `http`: The http service to use for the request.
+    /// - `req`: The request to send.
+    ///
+    /// # Returns
+    /// A wrapper around the response, or an [`HttpError`].
     pub async fn get_api(&self, http: &HttpService, req: GetApiRequest,) -> Wrapped<GetApiResponse> {
         let mut route = routes::GET_API.compile();
         route.uri_insert(&req.api_id);

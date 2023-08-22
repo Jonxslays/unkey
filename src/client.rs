@@ -214,6 +214,29 @@ impl Client {
         self.keys.revoke_key(&self.http, req).await
     }
 
+    /// Retrieves api information.
+    /// 
+    /// # Arguments
+    /// - `req`: The get api information request to send.
+    /// 
+    /// # Returns
+    /// A wrapper containing the response, or an [`HttpError`].
+    /// 
+    /// # Example
+    /// ```no_run
+    /// # async fn get() {
+    /// # use unkey::Client;
+    /// # use unkey::models::GetApiRequest;
+    /// # use unkey::models::Wrapped;
+    /// let c = Client::new("abc123");
+    /// let req = GetApiRequest::new("api_id");
+    /// 
+    /// match c.get_api(req).await {
+    ///     Wrapped::Ok(res) => println!("{:?}", res),
+    ///     Wrapped::Err(err) => println!("{:?}", err),
+    /// }
+    /// # }
+    /// ````
     pub async fn get_api(&self, req: GetApiRequest) -> Wrapped<GetApiResponse> {
         self.apis.get_api(&self.http, req).await
     }

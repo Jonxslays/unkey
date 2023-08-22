@@ -1,5 +1,7 @@
 use crate::models::CreateKeyRequest;
 use crate::models::CreateKeyResponse;
+use crate::models::GetApiRequest;
+use crate::models::GetApiResponse;
 use crate::models::ListKeysRequest;
 use crate::models::ListKeysResponse;
 use crate::models::RevokeKeyRequest;
@@ -210,5 +212,9 @@ impl Client {
     /// ```
     pub async fn revoke_key(&self, req: RevokeKeyRequest) -> Wrapped<()> {
         self.keys.revoke_key(&self.http, req).await
+    }
+
+    pub async fn get_api(&self, req: GetApiRequest) -> Wrapped<GetApiResponse> {
+        self.apis.get_api(&self.http, req).await
     }
 }

@@ -121,3 +121,30 @@ pub struct ListKeysResponse {
     /// The total number of api keys.
     pub total: usize,
 }
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GetApiRequest {
+    pub api_id: String,
+}
+
+impl GetApiRequest {
+    #[must_use]
+    pub fn new<T: Into<String>>(api_id: T) -> Self {
+        Self {
+            api_id: api_id.into()
+        }
+    }
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct GetApiResponse {
+
+    #[serde(rename="id")]
+    pub api_id: String,
+
+    pub name: String,
+
+    #[serde(rename="workspaceId")]
+    pub workspace_id: String,
+}

@@ -1,4 +1,6 @@
 use crate::fetch;
+use crate::models::GetApiRequest;
+use crate::models::GetApiResponse;
 use crate::models::ListKeysRequest;
 use crate::models::ListKeysResponse;
 use crate::models::Wrapped;
@@ -36,6 +38,13 @@ impl ApiService {
         if let Some(owner) = &req.owner_id {
             route.query_insert("ownerId", owner);
         }
+
+        wrap_response(fetch!(http, route).await).await
+    }
+
+    pub async fn get_api(&self, http: &HttpService, req: GetApiRequest,) -> Wrapped<GetApiResponse> {
+        let mut route = routes::GET_API.compile();
+        route.uri_insert(&req.api_id);
 
         wrap_response(fetch!(http, route).await).await
     }

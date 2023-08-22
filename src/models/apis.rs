@@ -149,7 +149,7 @@ impl GetApiRequest {
     #[must_use]
     pub fn new<T: Into<String>>(api_id: T) -> Self {
         Self {
-            api_id: api_id.into()
+            api_id: api_id.into(),
         }
     }
 }
@@ -157,15 +157,14 @@ impl GetApiRequest {
 /// An incoming api information response.
 #[derive(Debug, Clone, Deserialize)]
 pub struct GetApiResponse {
-
     /// The id of the api.
-    #[serde(rename="id")]
+    #[serde(rename = "id")]
     pub api_id: String,
 
     /// The name of the api.
     pub name: String,
 
     /// The workspace id of the api.
-    #[serde(rename="workspaceId")]
+    #[serde(rename = "workspaceId")]
     pub workspace_id: String,
 }

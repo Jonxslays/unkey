@@ -11,3 +11,4 @@
 - Add `list_keys` method.
 - Add various models supporting api service.
 - Add various models supporting key service.
+- Add `get_api` method.

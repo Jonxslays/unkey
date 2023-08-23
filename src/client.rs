@@ -214,10 +214,10 @@ impl Client {
         self.keys.revoke_key(&self.http, req).await
     }
 
-    /// Retrieves api information.
+    /// Retrieves information for the given api id.
     ///
     /// # Arguments
-    /// - `req`: The get api information request to send.
+    /// - `req`: The get api request to send.
     ///
     /// # Returns
     /// A wrapper containing the response, or an [`HttpError`].

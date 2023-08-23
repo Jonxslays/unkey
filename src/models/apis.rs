@@ -129,7 +129,7 @@ pub struct GetApiRequest {
     pub api_id: String,
 }
 
-/// An outgoing get api information request.
+/// An outgoing get api request.
 impl GetApiRequest {
     /// Creates a new get api request.
     ///
@@ -137,7 +137,7 @@ impl GetApiRequest {
     /// - `api_id`: The id of the api to get api information for.
     ///
     /// # Returns
-    /// The new get api information request.
+    /// The new get api request.
     ///
     /// # Example
     /// ```
@@ -154,7 +154,7 @@ impl GetApiRequest {
     }
 }
 
-/// An incoming api information response.
+/// An incoming get api response.
 #[derive(Debug, Clone, Deserialize)]
 pub struct GetApiResponse {
     /// The id of the api.

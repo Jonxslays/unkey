@@ -121,3 +121,50 @@ pub struct ListKeysResponse {
     /// The total number of api keys.
     pub total: usize,
 }
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GetApiRequest {
+    /// The id of the api to get information for.
+    pub api_id: String,
+}
+
+/// An outgoing get api request.
+impl GetApiRequest {
+    /// Creates a new get api request.
+    ///
+    /// # Arguments
+    /// - `api_id`: The id of the api to get api information for.
+    ///
+    /// # Returns
+    /// The new get api request.
+    ///
+    /// # Example
+    /// ```
+    /// # use unkey::models::GetApiRequest;
+    /// let r = GetApiRequest::new("test");
+    ///
+    /// assert_eq!(r.api_id, String::from("test"));
+    /// ```
+    #[must_use]
+    pub fn new<T: Into<String>>(api_id: T) -> Self {
+        Self {
+            api_id: api_id.into(),
+        }
+    }
+}
+
+/// An incoming get api response.
+#[derive(Debug, Clone, Deserialize)]
+pub struct GetApiResponse {
+    /// The id of the api.
+    #[serde(rename = "id")]
+    pub api_id: String,
+
+    /// The name of the api.
+    pub name: String,
+
+    /// The workspace id of the api.
+    #[serde(rename = "workspaceId")]
+    pub workspace_id: String,
+}

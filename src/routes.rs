@@ -20,7 +20,6 @@ pub(crate) static UPDATE_KEY: Route = Route::new(Method::PUT, "/keys/{}");
 ////////////////////////////////////////////////////////////////////////////////
 
 /// The get api endpoint `GET /apis/{id}`
-#[allow(unused)] // Temporary until we implement this method
 pub(crate) static GET_API: Route = Route::new(Method::GET, "/apis/{}");
 
 /// The list keys endpoint `GET /apis/{id}/keys`

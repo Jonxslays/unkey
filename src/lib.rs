@@ -11,6 +11,16 @@ use models::ErrorCode;
 use models::HttpResult;
 use models::Wrapped;
 
+/// Represents the potential absence of a value beyond `None`.
+#[derive(Debug, Clone)]
+pub(crate) enum Undefined<T> {
+    /// The value is present.
+    Some(T),
+
+    /// The value is not present.
+    None,
+}
+
 /// Creates a new Err variant of [`Response`].
 ///
 /// # Arguments

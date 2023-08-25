@@ -5,6 +5,7 @@ use serde_json::Value;
 
 use super::Ratelimit;
 use super::RatelimitState;
+use crate::Undefined;
 
 /// An outgoing verify key request.
 #[derive(Debug, Clone, Serialize)]
@@ -405,5 +406,38 @@ impl RevokeKeyRequest {
     #[rustfmt::skip]
     pub fn new<T: Into<String>>(key_id: T) -> Self {
         Self { key_id: key_id.into() }
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct UpdateKeyRequest {
+    /// The id of the key to update.
+    pub key_id: String,
+
+    /// The optional new owner id for the key.
+    pub owner_id: Undefined<Option<String>>,
+
+    /// The optional new name for the key.
+    pub name: Option<String>,
+
+    /// The optional new dynamic meta mapping for the key.
+    pub meta: Option<Value>,
+
+    /// The optional new unix epoch in ms when the key should expire.
+    pub expires: Option<usize>,
+
+    /// The optional new number of uses remaining to set for the key.
+    pub remaining: Option<usize>,
+
+    /// The optional new ratelimit to set for the key.
+    pub ratelimit: Option<Ratelimit>,
+}
+
+impl Serialize for UpdateKeyRequest {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        todo!()
     }
 }

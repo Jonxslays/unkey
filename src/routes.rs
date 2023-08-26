@@ -14,7 +14,6 @@ pub(crate) static VERIFY_KEY: Route = Route::new(Method::POST, "/keys/verify");
 pub(crate) static REVOKE_KEY: Route = Route::new(Method::DELETE, "/keys/{}");
 
 /// The update key endpoint `PUT /keys/{id}`
-#[allow(unused)] // Temporary until we implement this method
 pub(crate) static UPDATE_KEY: Route = Route::new(Method::PUT, "/keys/{}");
 
 ////////////////////////////////////////////////////////////////////////////////

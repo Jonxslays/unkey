@@ -5,6 +5,7 @@ use crate::models::GetApiResponse;
 use crate::models::ListKeysRequest;
 use crate::models::ListKeysResponse;
 use crate::models::RevokeKeyRequest;
+use crate::models::UpdateKeyRequest;
 use crate::models::VerifyKeyRequest;
 use crate::models::VerifyKeyResponse;
 use crate::models::Wrapped;
@@ -239,5 +240,32 @@ impl Client {
     /// ````
     pub async fn get_api(&self, req: GetApiRequest) -> Wrapped<GetApiResponse> {
         self.apis.get_api(&self.http, req).await
+    }
+
+    /// Retrieves information for the given api id.
+    ///
+    /// # Arguments
+    /// - `req`: The get api request to send.
+    ///
+    /// # Returns
+    /// A wrapper containing the response, or an [`HttpError`].
+    ///
+    /// # Example
+    /// ```no_run
+    /// # async fn get() {
+    /// # use unkey::Client;
+    /// # use unkey::models::UpdateKeyRequest;
+    /// # use unkey::models::Wrapped;
+    /// let c = Client::new("abc123");
+    /// let req = UpdateKeyRequest::new("api_id").set_remaining(Some(100));
+    ///
+    /// match c.update_key(req).await {
+    ///     Wrapped::Ok(res) => println!("{:?}", res),
+    ///     Wrapped::Err(err) => println!("{:?}", err),
+    /// }
+    /// # }
+    /// ````
+    pub async fn update_key(&self, req: UpdateKeyRequest) -> Wrapped<()> {
+        self.keys.update_key(&self.http, req).await
     }
 }

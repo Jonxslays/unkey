@@ -5,6 +5,7 @@ use serde_json::Value;
 
 use super::Ratelimit;
 use super::RatelimitState;
+use crate::undefined::UndefinedOr;
 
 /// An outgoing verify key request.
 #[derive(Debug, Clone, Serialize)]
@@ -405,5 +406,299 @@ impl RevokeKeyRequest {
     #[rustfmt::skip]
     pub fn new<T: Into<String>>(key_id: T) -> Self {
         Self { key_id: key_id.into() }
+    }
+}
+
+/// An outgoing update key request.
+///
+/// ## Note
+/// All optional values are initialized to the [`UndefinedOr::Undefined`] state.
+/// Upon calling the `set_x` method, you may set the value to `Some(_)` or
+/// `None`. Setting the value to `None` indicates you would like to remove any
+/// value that is currently set for that field on the key.
+///
+/// e.g. The key you are updating currently has a ratelimit and you call
+/// `set_ratelimit(None)` on the update key request. The key will no longer
+/// have a ratelimit.
+#[derive(Debug, Default, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct UpdateKeyRequest {
+    /// The id of the key to update.
+    pub key_id: String,
+
+    /// The optional new owner id for the key.
+    #[serde(skip_serializing_if = "UndefinedOr::is_undefined")]
+    pub owner_id: UndefinedOr<Option<String>>,
+
+    /// The optional new name for the key.
+    #[serde(skip_serializing_if = "UndefinedOr::is_undefined")]
+    pub name: UndefinedOr<Option<String>>,
+
+    /// The optional new dynamic meta mapping for the key.
+    #[serde(skip_serializing_if = "UndefinedOr::is_undefined")]
+    pub meta: UndefinedOr<Option<Value>>,
+
+    /// The optional new unix epoch in ms when the key should expire.
+    #[serde(skip_serializing_if = "UndefinedOr::is_undefined")]
+    pub expires: UndefinedOr<Option<usize>>,
+
+    /// The optional new number of uses remaining to set for the key.
+    #[serde(skip_serializing_if = "UndefinedOr::is_undefined")]
+    pub remaining: UndefinedOr<Option<usize>>,
+
+    /// The optional new ratelimit to set for the key.
+    #[serde(skip_serializing_if = "UndefinedOr::is_undefined")]
+    pub ratelimit: UndefinedOr<Option<Ratelimit>>,
+}
+
+impl UpdateKeyRequest {
+    /// Creates a new update key request.
+    ///
+    /// # Arguments
+    /// - `key_id`: The id of the key to update.
+    ///
+    /// # Returns
+    /// The new update key request.
+    ///
+    /// # Example
+    /// ```
+    /// # use unkey::models::UpdateKeyRequest;
+    /// # use unkey::undefined::UndefinedOr;
+    /// let r = UpdateKeyRequest::new("test_123");
+    ///
+    /// assert_eq!(r.key_id, String::from("test_123"));
+    /// assert_eq!(r.owner_id, UndefinedOr::Undefined);
+    /// assert_eq!(r.name, UndefinedOr::Undefined);
+    /// assert_eq!(r.meta, UndefinedOr::Undefined);
+    /// assert_eq!(r.expires, UndefinedOr::Undefined);
+    /// assert_eq!(r.remaining, UndefinedOr::Undefined);
+    /// assert_eq!(r.ratelimit, UndefinedOr::Undefined);
+    /// ```
+    #[must_use]
+    pub fn new<T: Into<String>>(key_id: T) -> Self {
+        Self {
+            key_id: key_id.into(),
+            ..Default::default()
+        }
+    }
+
+    /// Sets or unsets the owner id for the key.
+    ///
+    /// # Arguments
+    /// - `owner_id`: The owner id to set or unset.
+    ///
+    /// # Returns
+    /// Self for chained calls.
+    ///
+    /// # Example
+    /// ```
+    /// # use unkey::models::UpdateKeyRequest;
+    /// # use unkey::undefined::UndefinedOr;
+    /// let r = UpdateKeyRequest::new("test");
+    ///
+    /// assert_eq!(r.owner_id, UndefinedOr::Undefined);
+    /// assert_eq!(*r.owner_id, None);
+    ///
+    /// let r = r.set_owner_id(Some("jonxslays"));
+    ///
+    /// assert_eq!(r.owner_id, UndefinedOr::Value(Some(String::from("jonxslays"))));
+    /// assert_eq!(*r.owner_id, Some(String::from("jonxslays")));
+    ///
+    /// let r = r.set_owner_id(None);
+    ///
+    /// assert_eq!(r.owner_id, UndefinedOr::Null);
+    /// assert_eq!(*r.owner_id, None);
+    /// ```
+    #[must_use]
+    pub fn set_owner_id(mut self, owner_id: Option<&str>) -> Self {
+        self.owner_id = match owner_id {
+            Some(id) => Some(id.into()).into(),
+            None => None.into(),
+        };
+
+        self
+    }
+
+    /// Sets or unsets the name for the key.
+    ///
+    /// # Arguments
+    /// - `name`: The name to set or unset.
+    ///
+    /// # Returns
+    /// Self for chained calls.
+    ///
+    /// # Example
+    /// ```
+    /// # use unkey::models::UpdateKeyRequest;
+    /// # use unkey::undefined::UndefinedOr;
+    /// let r = UpdateKeyRequest::new("test");
+    ///
+    /// assert_eq!(r.name, UndefinedOr::Undefined);
+    /// assert_eq!(*r.name, None);
+    ///
+    /// let r = r.set_name(Some("test_key"));
+    ///
+    /// assert_eq!(r.name, UndefinedOr::Value(Some(String::from("test_key"))));
+    /// assert_eq!(*r.name, Some(String::from("test_key")));
+    ///
+    /// let r = r.set_name(None);
+    ///
+    /// assert_eq!(r.name, UndefinedOr::Null);
+    /// assert_eq!(*r.name, None);
+    /// ```
+    #[must_use]
+    pub fn set_name(mut self, name: Option<&str>) -> Self {
+        self.name = match name {
+            Some(n) => Some(n.into()).into(),
+            None => None.into(),
+        };
+
+        self
+    }
+
+    /// Sets or unsets the dynamic meta mapping for the key.
+    ///
+    /// # Arguments
+    /// - `meta`: The meta to set or unset.
+    ///
+    /// # Returns
+    /// Self for chained calls.
+    ///
+    /// # Example
+    /// ```
+    /// # use unkey::models::UpdateKeyRequest;
+    /// # use unkey::undefined::UndefinedOr;
+    /// # use serde_json::json;
+    /// let r = UpdateKeyRequest::new("test");
+    ///
+    /// assert_eq!(r.meta, UndefinedOr::Undefined);
+    /// assert_eq!(*r.meta, None);
+    ///
+    /// let r = r.set_meta(Some(json!({"test": 69})));
+    ///
+    /// assert_eq!(r.meta, UndefinedOr::Value(Some(json!({"test": 69}))));
+    /// assert_eq!(*r.meta, Some(json!({"test": 69})));
+    ///
+    /// let r = r.set_meta(None);
+    ///
+    /// assert_eq!(r.meta, UndefinedOr::Null);
+    /// assert_eq!(*r.meta, None);
+    /// ```
+    #[must_use]
+    pub fn set_meta(mut self, meta: Option<Value>) -> Self {
+        self.meta = match meta {
+            Some(m) => Some(m).into(),
+            None => None.into(),
+        };
+
+        self
+    }
+
+    /// Sets or unsets the unix epoch in ms indicating when this key expires.
+    ///
+    /// # Arguments
+    /// - `expires`: The expiration epoch to set or unset.
+    ///
+    /// # Returns
+    /// Self for chained calls.
+    ///
+    /// # Example
+    /// ```
+    /// # use unkey::models::UpdateKeyRequest;
+    /// # use unkey::undefined::UndefinedOr;
+    /// let r = UpdateKeyRequest::new("test");
+    ///
+    /// assert_eq!(r.expires, UndefinedOr::Undefined);
+    /// assert_eq!(*r.expires, None);
+    ///
+    /// let r = r.set_expires(Some(42));
+    ///
+    /// assert_eq!(r.expires, UndefinedOr::Value(Some(42)));
+    /// assert_eq!(*r.expires, Some(42));
+    ///
+    /// let r = r.set_expires(None);
+    ///
+    /// assert_eq!(r.expires, UndefinedOr::Null);
+    /// assert_eq!(*r.expires, None);
+    /// ```
+    #[must_use]
+    pub fn set_expires(mut self, expires: Option<usize>) -> Self {
+        self.expires = expires.into();
+        self
+    }
+
+    /// Sets or unsets the remaining uses for the key.
+    ///
+    /// # Arguments
+    /// - `remaining`: The number of remaining uses to set or unset.
+    ///
+    /// # Returns
+    /// Self for chained calls.
+    ///
+    /// # Example
+    /// ```
+    /// # use unkey::models::UpdateKeyRequest;
+    /// # use unkey::undefined::UndefinedOr;
+    /// let r = UpdateKeyRequest::new("test");
+    ///
+    /// assert_eq!(r.remaining, UndefinedOr::Undefined);
+    /// assert_eq!(*r.remaining, None);
+    ///
+    /// let r = r.set_remaining(Some(420));
+    ///
+    /// assert_eq!(r.remaining, UndefinedOr::Value(Some(420)));
+    /// assert_eq!(*r.remaining, Some(420));
+    ///
+    /// let r = r.set_remaining(None);
+    ///
+    /// assert_eq!(r.remaining, UndefinedOr::Null);
+    /// assert_eq!(*r.remaining, None);
+    /// ```
+    #[must_use]
+    pub fn set_remaining(mut self, remaining: Option<usize>) -> Self {
+        self.remaining = remaining.into();
+        self
+    }
+
+    /// Sets or unsets the ratelimit for the key.
+    ///
+    /// # Arguments
+    /// - `ratelimit`: The ratelimit to set or unset.
+    ///
+    /// # Returns
+    /// Self for chained calls.
+    ///
+    /// # Example
+    /// ```
+    /// # use unkey::models::UpdateKeyRequest;
+    /// # use unkey::models::Ratelimit;
+    /// # use unkey::models::RatelimitType;
+    /// # use unkey::undefined::UndefinedOr;
+    /// let r = UpdateKeyRequest::new("test");
+    ///
+    /// assert_eq!(r.ratelimit, UndefinedOr::Undefined);
+    /// assert_eq!(*r.ratelimit, None);
+    ///
+    /// let ratelimit = Ratelimit::new(
+    ///     RatelimitType::Fast,
+    ///     10,
+    ///     10000,
+    ///     100
+    /// );
+    ///
+    /// let r = r.set_ratelimit(Some(ratelimit.clone()));
+    ///
+    /// assert_eq!(r.ratelimit, UndefinedOr::Value(Some(ratelimit.clone())));
+    /// assert_eq!(*r.ratelimit, Some(ratelimit));
+    ///
+    /// let r = r.set_ratelimit(None);
+    ///
+    /// assert_eq!(r.ratelimit, UndefinedOr::Null);
+    /// assert_eq!(*r.ratelimit, None);
+    /// ```
+    #[must_use]
+    pub fn set_ratelimit(mut self, ratelimit: Option<Ratelimit>) -> Self {
+        self.ratelimit = ratelimit.into();
+        self
     }
 }

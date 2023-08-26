@@ -1,8 +1,11 @@
+#![doc = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/README.md"))]
+
 mod client;
 mod logging;
 pub mod models;
 mod routes;
 mod services;
+pub mod undefined;
 
 use serde::Deserialize;
 
@@ -96,6 +99,7 @@ pub(crate) async fn wrap_empty_response(result: HttpResult) -> Wrapped<()> {
     }
 }
 
+/// Fetchs the given route with the provided http service.
 macro_rules! fetch {
     ($http:expr, $route:ident) => {
         $http.fetch($route, None::<u8>)

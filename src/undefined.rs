@@ -57,10 +57,10 @@ impl<T: Serialize> Serialize for UndefinedOr<T> {
     }
 }
 
-impl<T> From<Option<T>> for UndefinedOr<T> {
+impl<T> From<Option<T>> for UndefinedOr<Option<T>> {
     fn from(value: Option<T>) -> Self {
         match value {
-            Some(v) => Self::Value(v),
+            Some(v) => Self::Value(Some(v)),
             None => Self::Null,
         }
     }

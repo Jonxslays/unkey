@@ -1,3 +1,5 @@
+#![allow(clippy::module_name_repetitions)]
+
 use serde::ser::Error;
 use serde::Serialize;
 use std::ops::Deref;
@@ -17,24 +19,15 @@ pub enum UndefinedOr<T> {
 
 impl<T> UndefinedOr<T> {
     pub fn is_some(&self) -> bool {
-        match self {
-            Self::Value(_) => true,
-            _ => false,
-        }
+        matches!(self, Self::Value(_))
     }
 
     pub fn is_undefined(&self) -> bool {
-        match self {
-            Self::Undefined => true,
-            _ => false,
-        }
+        matches!(self, Self::Undefined)
     }
 
     pub fn is_null(&self) -> bool {
-        match self {
-            Self::Null => true,
-            _ => false,
-        }
+        matches!(self, Self::Null)
     }
 }
 
@@ -71,9 +64,8 @@ impl<T> Deref for UndefinedOr<Option<T>> {
 
     fn deref(&self) -> &Self::Target {
         match self {
-            Self::Value(v) => &v,
-            Self::Null => &None::<T>,
-            Self::Undefined => &None::<T>,
+            Self::Value(v) => v,
+            _ => &None::<T>,
         }
     }
 }

@@ -8,7 +8,8 @@
 - Add `create_key` method.
 - Add `verify_key` method.
 - Add `revoke_key` method.
+- Add `update_key` method.
 - Add `list_keys` method.
+- Add `get_api` method.
 - Add various models supporting api service.
 - Add various models supporting key service.
-- Add `get_api` method.

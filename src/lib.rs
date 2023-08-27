@@ -5,7 +5,6 @@ mod logging;
 pub mod models;
 mod routes;
 mod services;
-pub mod undefined;
 
 use serde::Deserialize;
 

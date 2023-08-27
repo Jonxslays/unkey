@@ -1,5 +1,5 @@
 lazy_static::lazy_static! {
-    /// An evenironment variable containing the log level env var.
+    /// An environment variable containing the log level env var.
     pub(crate) static ref UNKEY_LOG: Log = match option_env!("UNKEY_LOG") {
         None => Log::None,
         Some(level) => match level {
@@ -14,6 +14,7 @@ lazy_static::lazy_static! {
     };
 }
 
+/// The different logging levels supported by the crate.
 #[derive(Eq, PartialEq, PartialOrd)]
 pub(crate) enum Log {
     None,
@@ -48,6 +49,7 @@ impl std::fmt::Display for Log {
     }
 }
 
+/// Logs the given message at the given level.
 macro_rules! log {
     ($level:expr, $message:expr) => {
         if *$crate::logging::UNKEY_LOG >= $level {
@@ -62,18 +64,21 @@ macro_rules! log {
     };
 }
 
+/// Logs the given message at the debug level.
 macro_rules! debug {
     ($message:expr) => {
         $crate::logging::log!($crate::logging::Log::Debug, $message)
     };
 }
 
+/// Logs the given message at the infomation level.
 macro_rules! info {
     ($message:expr) => {
         $crate::logging::log!($crate::logging::Log::Info, $message)
     };
 }
 
+/// Logs the given message at the error level.
 macro_rules! error {
     ($message:expr) => {
         $crate::logging::log!($crate::logging::Log::Error, $message)

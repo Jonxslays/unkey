@@ -14,7 +14,7 @@ Full documentation can be found at [https://docs.rs/unkey](https://docs.rs/unkey
 
 ## Setup
 
-Add the following to your `Cargo.toml` [dependencies]
+Add the following to your `Cargo.toml` dependencies array:
 
 ```toml
 unkey = "0.1"
@@ -24,12 +24,11 @@ unkey = "0.1"
 
 ### Verifying a key
 
-```rs
+```rust
 use unkey::models::{VerifyKeyRequest, Wrapped};
 use unkey::Client;
 
-#[tokio::main]
-async fn main() {
+async fn verify_key() {
     let c = Client::new("unkey_ABC");
     let req = VerifyKeyRequest::new("test_DEF");
 
@@ -42,12 +41,11 @@ async fn main() {
 
 ### Creating a key
 
-```rs
+```rust
 use unkey::models::{CreateKeyRequest, Wrapped};
 use unkey::Client;
 
-#[tokio::main]
-async fn main() {
+async fn create_key()-> Result<(), ()> {
     let c = Client::new("unkey_ABC");
     let req = CreateKeyRequest::new("api_123")
         .set_prefix("test")
@@ -59,17 +57,18 @@ async fn main() {
         Wrapped::Ok(res) => println!("{res:?}"),
         Wrapped::Err(err) => eprintln!("{err:?}"),
     }
+
+    Ok(())
 }
 ```
 
 ### Updating a key
 
-```rs
+```rust
 use unkey::models::{UpdateKeyRequest, Wrapped};
 use unkey::Client;
 
-#[tokio::main]
-async fn main() {
+async fn update_key() {
     let c = Client::new("unkey_ABC");
     let req = UpdateKeyRequest::new("key_XYZ")
         .set_name(Some("new_name")) // Update the keys name
@@ -84,12 +83,11 @@ async fn main() {
 
 ### Revoking a key
 
-```rs
+```rust
 use unkey::models::{RevokeKeyRequest, Wrapped};
 use unkey::Client;
 
-#[tokio::main]
-async fn main() {
+async fn revoke_key() {
     let c = Client::new("unkey_ABC");
     let req = RevokeKeyRequest::new("key_XYZ");
 
@@ -102,12 +100,11 @@ async fn main() {
 
 ### Listing api keys
 
-```rs
+```rust
 use unkey::models::{ListKeysRequest, Wrapped};
 use unkey::Client;
 
-#[tokio::main]
-async fn main() {
+async fn list_keys() {
     let c = Client::new("unkey_ABC");
     let req = ListKeysRequest::new("api_123");
 
@@ -120,12 +117,11 @@ async fn main() {
 
 ### Getting api information
 
-```rs
+```rust
 use unkey::models::{GetApiRequest, Wrapped};
 use unkey::Client;
 
-#[tokio::main]
-async fn main() {
+async fn get_api() {
     let c = Client::new("unkey_ABC");
     let req = GetApiRequest::new("api_123");
 

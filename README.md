@@ -45,7 +45,7 @@ async fn verify_key() {
 use unkey::models::{CreateKeyRequest, Wrapped};
 use unkey::Client;
 
-async fn create_key()-> Result<(), ()> {
+async fn create_key() {
     let c = Client::new("unkey_ABC");
     let req = CreateKeyRequest::new("api_123")
         .set_prefix("test")
@@ -57,8 +57,6 @@ async fn create_key()-> Result<(), ()> {
         Wrapped::Ok(res) => println!("{res:?}"),
         Wrapped::Err(err) => eprintln!("{err:?}"),
     }
-
-    Ok(())
 }
 ```
 

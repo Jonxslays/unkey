@@ -14,7 +14,7 @@ Full documentation can be found at [https://docs.rs/unkey](https://docs.rs/unkey
 
 ## Setup
 
-Add the following to your `Cargo.toml` [dependencies]
+Add the following to your `Cargo.toml` [dependencies] array:
 
 ```toml
 unkey = "0.1"
@@ -24,7 +24,7 @@ unkey = "0.1"
 
 ### Verifying a key
 
-```rs
+```rust
 use unkey::models::{VerifyKeyRequest, Wrapped};
 use unkey::Client;
 
@@ -42,7 +42,7 @@ async fn main() {
 
 ### Creating a key
 
-```rs
+```rust
 use unkey::models::{CreateKeyRequest, Wrapped};
 use unkey::Client;
 
@@ -64,7 +64,7 @@ async fn main() {
 
 ### Updating a key
 
-```rs
+```rust
 use unkey::models::{UpdateKeyRequest, Wrapped};
 use unkey::Client;
 
@@ -84,7 +84,7 @@ async fn main() {
 
 ### Revoking a key
 
-```rs
+```rust
 use unkey::models::{RevokeKeyRequest, Wrapped};
 use unkey::Client;
 
@@ -102,7 +102,7 @@ async fn main() {
 
 ### Listing api keys
 
-```rs
+```rust
 use unkey::models::{ListKeysRequest, Wrapped};
 use unkey::Client;
 
@@ -120,7 +120,7 @@ async fn main() {
 
 ### Getting api information
 
-```rs
+```rust
 use unkey::models::{GetApiRequest, Wrapped};
 use unkey::Client;
 

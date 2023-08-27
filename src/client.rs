@@ -19,7 +19,7 @@ use crate::models::HttpError;
 /// The client used to make requests to the unkey api.
 #[derive(Debug, Clone)]
 pub struct Client {
-    /// The internal http sending and receiving requests.
+    /// The internal http service sending and receiving requests.
     http: HttpService,
 
     /// The key service handling key related requests.
@@ -268,4 +268,22 @@ impl Client {
     pub async fn update_key(&self, req: UpdateKeyRequest) -> Wrapped<()> {
         self.keys.update_key(&self.http, req).await
     }
+}
+
+#[cfg(test)]
+mod test {
+    use crate::services::ApiService;
+    use crate::services::KeyService;
+    use crate::Client;
+
+    #[test]
+    fn new() {
+        let c = Client::new("");
+
+        assert_eq!(c.apis, ApiService);
+        assert_eq!(c.keys, KeyService);
+    }
+
+    // TODO: Write a custom API to run for integration tests with the client.
+    // It will be the clients base URL for testing requests.
 }

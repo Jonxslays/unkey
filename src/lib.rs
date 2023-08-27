@@ -110,3 +110,52 @@ macro_rules! fetch {
 }
 
 pub(crate) use fetch;
+
+#[cfg(test)]
+mod test {
+    use crate::models::ErrorCode;
+    use crate::models::HttpError;
+    use crate::models::Wrapped;
+
+    struct FakeHttp;
+
+    impl FakeHttp {
+        pub fn fetch(&self, route: u8, payload: Option<u8>) -> u8 {
+            let mut res = route;
+            if let Some(p) = payload {
+                res += p;
+            }
+
+            res
+        }
+    }
+
+    #[test]
+    fn reponse_error() {
+        let res: Wrapped<()> = response_error!(ErrorCode::NotFound, "not found!");
+
+        assert_eq!(
+            res,
+            Wrapped::Err(HttpError::new(
+                ErrorCode::NotFound,
+                String::from("not found!")
+            ))
+        );
+    }
+
+    #[test]
+    fn fetch_no_payload() {
+        let route = 69;
+        let res = fetch!(FakeHttp, route);
+
+        assert_eq!(res, 69);
+    }
+
+    #[test]
+    fn fetch_with_payload() {
+        let route = 69;
+        let res = fetch!(FakeHttp, route, 1);
+
+        assert_eq!(res, 70);
+    }
+}

@@ -15,7 +15,7 @@ use crate::wrap_response;
 use crate::models::HttpError;
 
 /// The service that handles key related requests.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub(crate) struct KeyService;
 
 impl KeyService {

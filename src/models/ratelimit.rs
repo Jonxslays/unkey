@@ -11,7 +11,7 @@ pub struct RatelimitState {
     /// The remaining requests in this burst window.
     pub remaining: usize,
 
-    /// The unix timestamp in ms until the next window.
+    /// The unix timestamp in ms when the next window starts.
     pub reset: usize,
 }
 

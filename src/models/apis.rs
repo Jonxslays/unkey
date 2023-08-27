@@ -122,6 +122,7 @@ pub struct ListKeysResponse {
     pub total: usize,
 }
 
+/// An outgoing get api request.
 #[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct GetApiRequest {
@@ -129,7 +130,6 @@ pub struct GetApiRequest {
     pub api_id: String,
 }
 
-/// An outgoing get api request.
 impl GetApiRequest {
     /// Creates a new get api request.
     ///

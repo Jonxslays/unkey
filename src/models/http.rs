@@ -35,7 +35,7 @@ pub enum ErrorCode {
 
 /// An http error representation.
 #[allow(clippy::module_name_repetitions)]
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Eq, PartialEq)]
 pub struct HttpError {
     /// The error code for the error.
     pub code: ErrorCode,
@@ -73,7 +73,7 @@ impl HttpError {
 }
 
 /// A wrapper around the response type or an error.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Eq, PartialEq)]
 pub enum Wrapped<T> {
     /// The error value.
     #[serde(rename = "error")]

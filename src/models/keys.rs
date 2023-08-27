@@ -428,27 +428,27 @@ pub struct UpdateKeyRequest {
 
     /// The optional new owner id for the key.
     #[serde(skip_serializing_if = "UndefinedOr::is_undefined")]
-    pub owner_id: UndefinedOr<Option<String>>,
+    pub owner_id: UndefinedOr<String>,
 
     /// The optional new name for the key.
     #[serde(skip_serializing_if = "UndefinedOr::is_undefined")]
-    pub name: UndefinedOr<Option<String>>,
+    pub name: UndefinedOr<String>,
 
     /// The optional new dynamic meta mapping for the key.
     #[serde(skip_serializing_if = "UndefinedOr::is_undefined")]
-    pub meta: UndefinedOr<Option<Value>>,
+    pub meta: UndefinedOr<Value>,
 
     /// The optional new unix epoch in ms when the key should expire.
     #[serde(skip_serializing_if = "UndefinedOr::is_undefined")]
-    pub expires: UndefinedOr<Option<usize>>,
+    pub expires: UndefinedOr<usize>,
 
     /// The optional new number of uses remaining to set for the key.
     #[serde(skip_serializing_if = "UndefinedOr::is_undefined")]
-    pub remaining: UndefinedOr<Option<usize>>,
+    pub remaining: UndefinedOr<usize>,
 
     /// The optional new ratelimit to set for the key.
     #[serde(skip_serializing_if = "UndefinedOr::is_undefined")]
-    pub ratelimit: UndefinedOr<Option<Ratelimit>>,
+    pub ratelimit: UndefinedOr<Ratelimit>,
 }
 
 impl UpdateKeyRequest {
@@ -497,17 +497,17 @@ impl UpdateKeyRequest {
     /// let r = UpdateKeyRequest::new("test");
     ///
     /// assert_eq!(r.owner_id, UndefinedOr::Undefined);
-    /// assert_eq!(*r.owner_id, None);
+    /// assert_eq!(r.owner_id.inner(), None);
     ///
     /// let r = r.set_owner_id(Some("jonxslays"));
     ///
-    /// assert_eq!(r.owner_id, UndefinedOr::Value(Some(String::from("jonxslays"))));
-    /// assert_eq!(*r.owner_id, Some(String::from("jonxslays")));
+    /// assert_eq!(r.owner_id, UndefinedOr::Value(String::from("jonxslays")));
+    /// assert_eq!(r.owner_id.inner(), Some(&String::from("jonxslays")));
     ///
     /// let r = r.set_owner_id(None);
     ///
     /// assert_eq!(r.owner_id, UndefinedOr::Null);
-    /// assert_eq!(*r.owner_id, None);
+    /// assert_eq!(r.owner_id.inner(), None);
     /// ```
     #[must_use]
     pub fn set_owner_id(mut self, owner_id: Option<&str>) -> Self {
@@ -534,17 +534,17 @@ impl UpdateKeyRequest {
     /// let r = UpdateKeyRequest::new("test");
     ///
     /// assert_eq!(r.name, UndefinedOr::Undefined);
-    /// assert_eq!(*r.name, None);
+    /// assert_eq!(r.name.inner(), None);
     ///
     /// let r = r.set_name(Some("test_key"));
     ///
-    /// assert_eq!(r.name, UndefinedOr::Value(Some(String::from("test_key"))));
-    /// assert_eq!(*r.name, Some(String::from("test_key")));
+    /// assert_eq!(r.name, UndefinedOr::Value(String::from("test_key")));
+    /// assert_eq!(r.name.inner(), Some(&String::from("test_key")));
     ///
     /// let r = r.set_name(None);
     ///
     /// assert_eq!(r.name, UndefinedOr::Null);
-    /// assert_eq!(*r.name, None);
+    /// assert_eq!(r.name.inner(), None);
     /// ```
     #[must_use]
     pub fn set_name(mut self, name: Option<&str>) -> Self {
@@ -572,17 +572,17 @@ impl UpdateKeyRequest {
     /// let r = UpdateKeyRequest::new("test");
     ///
     /// assert_eq!(r.meta, UndefinedOr::Undefined);
-    /// assert_eq!(*r.meta, None);
+    /// assert_eq!(r.meta.inner(), None);
     ///
     /// let r = r.set_meta(Some(json!({"test": 69})));
     ///
-    /// assert_eq!(r.meta, UndefinedOr::Value(Some(json!({"test": 69}))));
-    /// assert_eq!(*r.meta, Some(json!({"test": 69})));
+    /// assert_eq!(r.meta, UndefinedOr::Value(json!({"test": 69})));
+    /// assert_eq!(r.meta.inner(), Some(&json!({"test": 69})));
     ///
     /// let r = r.set_meta(None);
     ///
     /// assert_eq!(r.meta, UndefinedOr::Null);
-    /// assert_eq!(*r.meta, None);
+    /// assert_eq!(r.meta.inner(), None);
     /// ```
     #[must_use]
     pub fn set_meta(mut self, meta: Option<Value>) -> Self {
@@ -609,17 +609,17 @@ impl UpdateKeyRequest {
     /// let r = UpdateKeyRequest::new("test");
     ///
     /// assert_eq!(r.expires, UndefinedOr::Undefined);
-    /// assert_eq!(*r.expires, None);
+    /// assert_eq!(r.expires.inner(), None);
     ///
     /// let r = r.set_expires(Some(42));
     ///
-    /// assert_eq!(r.expires, UndefinedOr::Value(Some(42)));
-    /// assert_eq!(*r.expires, Some(42));
+    /// assert_eq!(r.expires, UndefinedOr::Value(42));
+    /// assert_eq!(r.expires.inner(), Some(&42));
     ///
     /// let r = r.set_expires(None);
     ///
     /// assert_eq!(r.expires, UndefinedOr::Null);
-    /// assert_eq!(*r.expires, None);
+    /// assert_eq!(r.expires.inner(), None);
     /// ```
     #[must_use]
     pub fn set_expires(mut self, expires: Option<usize>) -> Self {
@@ -642,17 +642,17 @@ impl UpdateKeyRequest {
     /// let r = UpdateKeyRequest::new("test");
     ///
     /// assert_eq!(r.remaining, UndefinedOr::Undefined);
-    /// assert_eq!(*r.remaining, None);
+    /// assert_eq!(r.remaining.inner(), None);
     ///
     /// let r = r.set_remaining(Some(420));
     ///
-    /// assert_eq!(r.remaining, UndefinedOr::Value(Some(420)));
-    /// assert_eq!(*r.remaining, Some(420));
+    /// assert_eq!(r.remaining, UndefinedOr::Value(420));
+    /// assert_eq!(r.remaining.inner(), Some(&420));
     ///
     /// let r = r.set_remaining(None);
     ///
     /// assert_eq!(r.remaining, UndefinedOr::Null);
-    /// assert_eq!(*r.remaining, None);
+    /// assert_eq!(r.remaining.inner(), None);
     /// ```
     #[must_use]
     pub fn set_remaining(mut self, remaining: Option<usize>) -> Self {
@@ -677,7 +677,7 @@ impl UpdateKeyRequest {
     /// let r = UpdateKeyRequest::new("test");
     ///
     /// assert_eq!(r.ratelimit, UndefinedOr::Undefined);
-    /// assert_eq!(*r.ratelimit, None);
+    /// assert_eq!(r.ratelimit.inner(), None);
     ///
     /// let ratelimit = Ratelimit::new(
     ///     RatelimitType::Fast,
@@ -688,13 +688,13 @@ impl UpdateKeyRequest {
     ///
     /// let r = r.set_ratelimit(Some(ratelimit.clone()));
     ///
-    /// assert_eq!(r.ratelimit, UndefinedOr::Value(Some(ratelimit.clone())));
-    /// assert_eq!(*r.ratelimit, Some(ratelimit));
+    /// assert_eq!(r.ratelimit, UndefinedOr::Value(ratelimit.clone()));
+    /// assert_eq!(r.ratelimit.inner(), Some(&ratelimit));
     ///
     /// let r = r.set_ratelimit(None);
     ///
     /// assert_eq!(r.ratelimit, UndefinedOr::Null);
-    /// assert_eq!(*r.ratelimit, None);
+    /// assert_eq!(r.ratelimit.inner(), None);
     /// ```
     #[must_use]
     pub fn set_ratelimit(mut self, ratelimit: Option<Ratelimit>) -> Self {

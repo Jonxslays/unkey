@@ -12,7 +12,7 @@ use crate::wrap_response;
 use crate::models::HttpError;
 
 /// The service that handles api related requests.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub(crate) struct ApiService;
 
 impl ApiService {

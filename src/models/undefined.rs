@@ -21,7 +21,7 @@ impl<T> UndefinedOr<T> {
     ///
     /// # Example
     /// ```
-    /// # use unkey::undefined::UndefinedOr;
+    /// # use unkey::models::UndefinedOr;
     /// let val = UndefinedOr::Value(0);
     ///
     /// assert!(val.is_some());
@@ -34,7 +34,7 @@ impl<T> UndefinedOr<T> {
     ///
     /// # Example
     /// ```
-    /// # use unkey::undefined::UndefinedOr;
+    /// # use unkey::models::UndefinedOr;
     /// let val = UndefinedOr::<u8>::Undefined;
     ///
     /// assert!(val.is_undefined());
@@ -47,7 +47,7 @@ impl<T> UndefinedOr<T> {
     ///
     /// # Example
     /// ```
-    /// # use unkey::undefined::UndefinedOr;
+    /// # use unkey::models::UndefinedOr;
     /// let val = UndefinedOr::<u8>::Null;
     ///
     /// assert!(val.is_null());
@@ -60,7 +60,7 @@ impl<T> UndefinedOr<T> {
     ///
     /// # Example
     /// ```
-    /// # use unkey::undefined::UndefinedOr;
+    /// # use unkey::models::UndefinedOr;
     /// let val = UndefinedOr::Value(420);
     ///
     /// assert_eq!(val.inner(), Some(&420));
@@ -113,7 +113,7 @@ impl<T> From<Option<T>> for UndefinedOr<T> {
 mod test {
     use serde::Serialize;
 
-    use crate::undefined::UndefinedOr;
+    use crate::models::UndefinedOr;
 
     #[derive(Serialize)]
     struct TestStruct {

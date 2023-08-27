@@ -5,7 +5,7 @@ use serde_json::Value;
 
 use super::Ratelimit;
 use super::RatelimitState;
-use crate::undefined::UndefinedOr;
+use super::UndefinedOr;
 
 /// An outgoing verify key request.
 #[derive(Debug, Clone, Serialize)]
@@ -463,7 +463,7 @@ impl UpdateKeyRequest {
     /// # Example
     /// ```
     /// # use unkey::models::UpdateKeyRequest;
-    /// # use unkey::undefined::UndefinedOr;
+    /// # use unkey::models::UndefinedOr;
     /// let r = UpdateKeyRequest::new("test_123");
     ///
     /// assert_eq!(r.key_id, String::from("test_123"));
@@ -493,7 +493,7 @@ impl UpdateKeyRequest {
     /// # Example
     /// ```
     /// # use unkey::models::UpdateKeyRequest;
-    /// # use unkey::undefined::UndefinedOr;
+    /// # use unkey::models::UndefinedOr;
     /// let r = UpdateKeyRequest::new("test");
     ///
     /// assert_eq!(r.owner_id, UndefinedOr::Undefined);
@@ -530,7 +530,7 @@ impl UpdateKeyRequest {
     /// # Example
     /// ```
     /// # use unkey::models::UpdateKeyRequest;
-    /// # use unkey::undefined::UndefinedOr;
+    /// # use unkey::models::UndefinedOr;
     /// let r = UpdateKeyRequest::new("test");
     ///
     /// assert_eq!(r.name, UndefinedOr::Undefined);
@@ -567,7 +567,7 @@ impl UpdateKeyRequest {
     /// # Example
     /// ```
     /// # use unkey::models::UpdateKeyRequest;
-    /// # use unkey::undefined::UndefinedOr;
+    /// # use unkey::models::UndefinedOr;
     /// # use serde_json::json;
     /// let r = UpdateKeyRequest::new("test");
     ///
@@ -605,7 +605,7 @@ impl UpdateKeyRequest {
     /// # Example
     /// ```
     /// # use unkey::models::UpdateKeyRequest;
-    /// # use unkey::undefined::UndefinedOr;
+    /// # use unkey::models::UndefinedOr;
     /// let r = UpdateKeyRequest::new("test");
     ///
     /// assert_eq!(r.expires, UndefinedOr::Undefined);
@@ -638,7 +638,7 @@ impl UpdateKeyRequest {
     /// # Example
     /// ```
     /// # use unkey::models::UpdateKeyRequest;
-    /// # use unkey::undefined::UndefinedOr;
+    /// # use unkey::models::UndefinedOr;
     /// let r = UpdateKeyRequest::new("test");
     ///
     /// assert_eq!(r.remaining, UndefinedOr::Undefined);
@@ -673,7 +673,7 @@ impl UpdateKeyRequest {
     /// # use unkey::models::UpdateKeyRequest;
     /// # use unkey::models::Ratelimit;
     /// # use unkey::models::RatelimitType;
-    /// # use unkey::undefined::UndefinedOr;
+    /// # use unkey::models::UndefinedOr;
     /// let r = UpdateKeyRequest::new("test");
     ///
     /// assert_eq!(r.ratelimit, UndefinedOr::Undefined);

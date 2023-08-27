@@ -17,7 +17,7 @@ pub enum UndefinedOr<T> {
 }
 
 impl<T> UndefinedOr<T> {
-    /// True if this variant is contains a T value.
+    /// True if this variant contains a T value.
     ///
     /// # Example
     /// ```
@@ -43,7 +43,7 @@ impl<T> UndefinedOr<T> {
         matches!(self, Self::Undefined)
     }
 
-    /// True if this variant is contains a null value.
+    /// True if this variant contains a null value.
     ///
     /// # Example
     /// ```

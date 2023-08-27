@@ -14,10 +14,18 @@ Full documentation can be found at [https://docs.rs/unkey](https://docs.rs/unkey
 
 ## Setup
 
+### Using `cargo`
+
+```bash
+$ cargo add unkey
+```
+
+### Manually
+
 Add the following to your `Cargo.toml` dependencies array:
 
 ```toml
-unkey = "0.1"
+unkey = "0.1" # I won't forget to update this™
 ```
 
 ## Examples

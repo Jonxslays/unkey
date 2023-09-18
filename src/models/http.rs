@@ -22,11 +22,17 @@ pub enum ErrorCode {
     /// Not authorized for resource.
     Unauthorized,
 
-    /// You have exceeded your usage.
-    UsageExceeded,
+    /// The key has exceeded its usage.
+    KeyUsageExceeded,
 
     /// An internal server error occurred with the api.
     InternalServerError,
+
+    // An invalid key type was used (shouldn't happen usually).
+    InvalidKeyType,
+
+    // The identifier is in use by another resource.
+    NotUnique,
 
     /// Reserved for unknown interactions.
     #[serde(other)]

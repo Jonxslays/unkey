@@ -1,3 +1,13 @@
+# v0.2.0 (Sep 2023)
+
+## Additions
+
+- Add `NotUnique` and `InvalidKeyType` variants to `ErrorCode` enum.
+
+## Changes
+
+- Rename `UsageExceeded` error code to `KeyUsageExceeded`.
+
 # v0.1.0 (Aug 2023)
 
 ## Additions

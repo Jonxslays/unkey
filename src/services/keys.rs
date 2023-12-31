@@ -5,6 +5,8 @@ use crate::models::CreateKeyResponse;
 use crate::models::GetKeyRequest;
 use crate::models::RevokeKeyRequest;
 use crate::models::UpdateKeyRequest;
+use crate::models::UpdateRemainingRequest;
+use crate::models::UpdateRemainingResponse;
 use crate::models::VerifyKeyRequest;
 use crate::models::VerifyKeyResponse;
 use crate::models::Wrapped;
@@ -85,17 +87,35 @@ impl KeyService {
         wrap_empty_response(fetch!(http, route, req).await).await
     }
 
-    /// Updates an existing api key.
+    /// Gets details about an api key.
     ///
     /// # Arguments
     /// - `http`: The http service to use for the request.
     /// - `req`: The request to send.
     ///
     /// # Returns
-    /// A wrapper around an empty response, or an [`HttpError`].
+    /// A wrapper around the response, or an [`HttpError`].
     pub async fn get_key(&self, http: &HttpService, req: GetKeyRequest) -> Wrapped<ApiKey> {
         let mut route = routes::GET_KEY.compile();
         route.query_insert("keyId", &req.key_id);
+
+        wrap_response(fetch!(http, route).await).await
+    }
+
+    /// Updates the remaining verifications for a key.
+    ///
+    /// # Arguments
+    /// - `http`: The http service to use for the request.
+    /// - `req`: The request to send.
+    ///
+    /// # Returns
+    /// A wrapper around the response, or an [`HttpError`].
+    pub async fn update_remaining(
+        &self,
+        http: &HttpService,
+        req: UpdateRemainingRequest,
+    ) -> Wrapped<UpdateRemainingResponse> {
+        let route = routes::UPDATE_REMAINING.compile();
 
         wrap_response(fetch!(http, route, req).await).await
     }

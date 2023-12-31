@@ -8,6 +8,8 @@ use crate::models::ListKeysRequest;
 use crate::models::ListKeysResponse;
 use crate::models::RevokeKeyRequest;
 use crate::models::UpdateKeyRequest;
+use crate::models::UpdateRemainingRequest;
+use crate::models::UpdateRemainingResponse;
 use crate::models::VerifyKeyRequest;
 use crate::models::VerifyKeyResponse;
 use crate::models::Wrapped;
@@ -274,7 +276,7 @@ impl Client {
     /// Retrieves information for the given api id.
     ///
     /// # Arguments
-    /// - `req`: The get api request to send.
+    /// - `req`: The get key request to send.
     ///
     /// # Returns
     /// A wrapper containing the response, or an [`HttpError`].
@@ -283,12 +285,12 @@ impl Client {
     /// ```no_run
     /// # async fn get() {
     /// # use unkey::Client;
-    /// # use unkey::models::UpdateKeyRequest;
+    /// # use unkey::models::GetKeyRequest;
     /// # use unkey::models::Wrapped;
     /// let c = Client::new("abc123");
-    /// let req = UpdateKeyRequest::new("api_id").set_remaining(Some(100));
+    /// let req = GetKeyRequest::new("api_id");
     ///
-    /// match c.update_key(req).await {
+    /// match c.get_key(req).await {
     ///     Wrapped::Ok(res) => println!("{:?}", res),
     ///     Wrapped::Err(err) => println!("{:?}", err),
     /// }
@@ -296,6 +298,37 @@ impl Client {
     /// ````
     pub async fn get_key(&self, req: GetKeyRequest) -> Wrapped<ApiKey> {
         self.keys.get_key(&self.http, req).await
+    }
+
+    /// Update the remaining verifications for a key.
+    ///
+    /// # Arguments
+    /// - `req`: The update remaining request to send.
+    ///
+    /// # Returns
+    /// A wrapper containing the response, or an [`HttpError`].
+    ///
+    /// # Example
+    /// ```no_run
+    /// # async fn get() {
+    /// # use unkey::Client;
+    /// # use unkey::models::UpdateRemainingRequest;
+    /// # use unkey::models::UpdateOp;
+    /// # use unkey::models::Wrapped;
+    /// let c = Client::new("abc123");
+    /// let req = UpdateRemainingRequest::new("api_id", Some(100), UpdateOp::Set);
+    ///
+    /// match c.update_remaining(req).await {
+    ///     Wrapped::Ok(res) => println!("{:?}", res),
+    ///     Wrapped::Err(err) => println!("{:?}", err),
+    /// }
+    /// # }
+    /// ````
+    pub async fn update_remaining(
+        &self,
+        req: UpdateRemainingRequest,
+    ) -> Wrapped<UpdateRemainingResponse> {
+        self.keys.update_remaining(&self.http, req).await
     }
 }
 

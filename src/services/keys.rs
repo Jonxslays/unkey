@@ -1,6 +1,8 @@
 use crate::fetch;
+use crate::models::ApiKey;
 use crate::models::CreateKeyRequest;
 use crate::models::CreateKeyResponse;
+use crate::models::GetKeyRequest;
 use crate::models::RevokeKeyRequest;
 use crate::models::UpdateKeyRequest;
 use crate::models::VerifyKeyRequest;
@@ -64,8 +66,7 @@ impl KeyService {
     /// # Returns
     /// A wrapper around an empty response, or an [`HttpError`].
     pub async fn revoke_key(&self, http: &HttpService, req: RevokeKeyRequest) -> Wrapped<()> {
-        let mut route = routes::REVOKE_KEY.compile();
-        route.uri_insert(&req.key_id);
+        let route = routes::REVOKE_KEY.compile();
 
         wrap_empty_response(fetch!(http, route, req).await).await
     }
@@ -79,9 +80,23 @@ impl KeyService {
     /// # Returns
     /// A wrapper around an empty response, or an [`HttpError`].
     pub async fn update_key(&self, http: &HttpService, req: UpdateKeyRequest) -> Wrapped<()> {
-        let mut route = routes::UPDATE_KEY.compile();
-        route.uri_insert(&req.key_id);
+        let route = routes::UPDATE_KEY.compile();
 
         wrap_empty_response(fetch!(http, route, req).await).await
+    }
+
+    /// Updates an existing api key.
+    ///
+    /// # Arguments
+    /// - `http`: The http service to use for the request.
+    /// - `req`: The request to send.
+    ///
+    /// # Returns
+    /// A wrapper around an empty response, or an [`HttpError`].
+    pub async fn get_key(&self, http: &HttpService, req: GetKeyRequest) -> Wrapped<ApiKey> {
+        let mut route = routes::GET_KEY.compile();
+        route.query_insert("keyId", &req.key_id);
+
+        wrap_response(fetch!(http, route, req).await).await
     }
 }

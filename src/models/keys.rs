@@ -9,9 +9,13 @@ use super::UndefinedOr;
 
 /// An outgoing verify key request.
 #[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct VerifyKeyRequest {
     /// The api key to verify.
     pub key: String,
+
+    /// The id of the api this key belongs to.
+    pub api_id: String,
 }
 
 impl VerifyKeyRequest {
@@ -19,6 +23,7 @@ impl VerifyKeyRequest {
     ///
     /// # Arguments
     /// - `key`: The api key to verify.
+    /// - `api_id`: The id of the api this key belongs to.
     ///
     /// # Returns
     /// The verify key request.
@@ -26,13 +31,17 @@ impl VerifyKeyRequest {
     /// # Example
     /// ```
     /// # use unkey::models::VerifyKeyRequest;
-    /// let r = VerifyKeyRequest::new("test");
+    /// let r = VerifyKeyRequest::new("test", "api_123");
     ///
     /// assert_eq!(r.key, String::from("test"));
+    /// assert_eq!(r.api_id, String::from("api_123"));
     /// ```
     #[must_use]
-    pub fn new<T: Into<String>>(key: T) -> Self {
-        Self { key: key.into() }
+    pub fn new<T: Into<String>>(key: T, api_id: T) -> Self {
+        Self {
+            key: key.into(),
+            api_id: api_id.into(),
+        }
     }
 }
 
@@ -44,6 +53,9 @@ pub struct VerifyKeyResponse {
     ///
     /// e.g. ratelimited, no more remaining, expired, key not found.
     pub valid: bool,
+
+    /// The keys unique id, if any.
+    pub key_id: Option<String>,
 
     /// The owner id for this key, if any.
     pub owner_id: Option<String>,
@@ -70,28 +82,36 @@ pub struct CreateKeyRequest {
     pub api_id: String,
 
     /// The optional owner id for the key.
-    pub owner_id: Option<String>,
+    #[serde(skip_serializing_if = "UndefinedOr::is_undefined")]
+    pub owner_id: UndefinedOr<String>,
 
     /// The optional byte length for the key, defaults to 16.
-    pub byte_length: Option<usize>,
+    #[serde(skip_serializing_if = "UndefinedOr::is_undefined")]
+    pub byte_length: UndefinedOr<usize>,
 
     /// The optional prefix for the key.
-    pub prefix: Option<String>,
+    #[serde(skip_serializing_if = "UndefinedOr::is_undefined")]
+    pub prefix: UndefinedOr<String>,
 
     /// The optional name for the key.
-    pub name: Option<String>,
+    #[serde(skip_serializing_if = "UndefinedOr::is_undefined")]
+    pub name: UndefinedOr<String>,
 
     /// The optional dynamic meta mapping for the key.
-    pub meta: Option<Value>,
+    #[serde(skip_serializing_if = "UndefinedOr::is_undefined")]
+    pub meta: UndefinedOr<Value>,
 
     /// The optional unix epoch in ms when the key should expire.
-    pub expires: Option<usize>,
+    #[serde(skip_serializing_if = "UndefinedOr::is_undefined")]
+    pub expires: UndefinedOr<usize>,
 
     /// The optional number of uses remaining to set for the key.
-    pub remaining: Option<usize>,
+    #[serde(skip_serializing_if = "UndefinedOr::is_undefined")]
+    pub remaining: UndefinedOr<usize>,
 
     /// The optional ratelimit to set for the key.
-    pub ratelimit: Option<Ratelimit>,
+    #[serde(skip_serializing_if = "UndefinedOr::is_undefined")]
+    pub ratelimit: UndefinedOr<Ratelimit>,
 }
 
 impl CreateKeyRequest {
@@ -106,30 +126,31 @@ impl CreateKeyRequest {
     /// # Example
     /// ```
     /// # use unkey::models::CreateKeyRequest;
+    /// # use unkey::models::UndefinedOr;
     /// let r = CreateKeyRequest::new("test");
     ///
     /// assert_eq!(r.api_id, String::from("test"));
-    /// assert_eq!(r.owner_id, None);
-    /// assert_eq!(r.byte_length, None);
-    /// assert_eq!(r.prefix, None);
-    /// assert_eq!(r.name, None);
-    /// assert_eq!(r.meta, None);
-    /// assert_eq!(r.expires, None);
-    /// assert_eq!(r.remaining, None);
-    /// assert_eq!(r.ratelimit, None);
+    /// assert_eq!(r.owner_id, UndefinedOr::Undefined);
+    /// assert_eq!(r.byte_length, UndefinedOr::Undefined);
+    /// assert_eq!(r.prefix, UndefinedOr::Undefined);
+    /// assert_eq!(r.name, UndefinedOr::Undefined);
+    /// assert_eq!(r.meta, UndefinedOr::Undefined);
+    /// assert_eq!(r.expires, UndefinedOr::Undefined);
+    /// assert_eq!(r.remaining, UndefinedOr::Undefined);
+    /// assert_eq!(r.ratelimit, UndefinedOr::Undefined);
     /// ```
     #[must_use]
     pub fn new<T: Into<String>>(api_id: T) -> Self {
         Self {
             api_id: api_id.into(),
-            owner_id: None,
-            byte_length: None,
-            prefix: None,
-            name: None,
-            meta: None,
-            expires: None,
-            remaining: None,
-            ratelimit: None,
+            owner_id: UndefinedOr::Undefined,
+            byte_length: UndefinedOr::Undefined,
+            prefix: UndefinedOr::Undefined,
+            name: UndefinedOr::Undefined,
+            meta: UndefinedOr::Undefined,
+            expires: UndefinedOr::Undefined,
+            remaining: UndefinedOr::Undefined,
+            ratelimit: UndefinedOr::Undefined,
         }
     }
 
@@ -146,11 +167,11 @@ impl CreateKeyRequest {
     /// # use unkey::models::CreateKeyRequest;
     /// let r = CreateKeyRequest::new("test").set_owner_id("jonxslays");
     ///
-    /// assert_eq!(r.owner_id.unwrap(), String::from("jonxslays"));
+    /// assert_eq!(r.owner_id.inner().unwrap(), &String::from("jonxslays"));
     /// ```
     #[must_use]
     pub fn set_owner_id<T: Into<String>>(mut self, owner_id: T) -> Self {
-        self.owner_id = Some(owner_id.into());
+        self.owner_id = UndefinedOr::Value(owner_id.into());
         self
     }
 
@@ -167,11 +188,11 @@ impl CreateKeyRequest {
     /// # use unkey::models::CreateKeyRequest;
     /// let r = CreateKeyRequest::new("test").set_byte_length(32);
     ///
-    /// assert_eq!(r.byte_length.unwrap(), 32);
+    /// assert_eq!(r.byte_length.inner().unwrap(), &32);
     /// ```
     #[must_use]
     pub fn set_byte_length(mut self, byte_length: usize) -> Self {
-        self.byte_length = Some(byte_length);
+        self.byte_length = UndefinedOr::Value(byte_length);
         self
     }
 
@@ -188,11 +209,11 @@ impl CreateKeyRequest {
     /// # use unkey::models::CreateKeyRequest;
     /// let r = CreateKeyRequest::new("test").set_prefix("dev");
     ///
-    /// assert_eq!(r.prefix.unwrap(), String::from("dev"));
+    /// assert_eq!(r.prefix.inner().unwrap(), &String::from("dev"));
     /// ```
     #[must_use]
     pub fn set_prefix<T: Into<String>>(mut self, prefix: T) -> Self {
-        self.prefix = Some(prefix.into());
+        self.prefix = UndefinedOr::Value(prefix.into());
         self
     }
 
@@ -209,11 +230,11 @@ impl CreateKeyRequest {
     /// # use unkey::models::CreateKeyRequest;
     /// let r = CreateKeyRequest::new("test").set_name("example_key");
     ///
-    /// assert_eq!(r.name.unwrap(), String::from("example_key"));
+    /// assert_eq!(r.name.inner().unwrap(), &String::from("example_key"));
     /// ```
     #[must_use]
     pub fn set_name<T: Into<String>>(mut self, name: T) -> Self {
-        self.name = Some(name.into());
+        self.name = UndefinedOr::Value(name.into());
         self
     }
 
@@ -231,11 +252,11 @@ impl CreateKeyRequest {
     /// # use serde_json::json;
     /// let r = CreateKeyRequest::new("test").set_meta(json!({"test": 1}));
     ///
-    /// assert_eq!(r.meta.unwrap(), json!({"test": 1}));
+    /// assert_eq!(r.meta.inner().unwrap(), &json!({"test": 1}));
     /// ```
     #[must_use]
     pub fn set_meta(mut self, meta: Value) -> Self {
-        self.meta = Some(meta);
+        self.meta = UndefinedOr::Value(meta);
         self
     }
 
@@ -262,7 +283,7 @@ impl CreateKeyRequest {
     /// // 10 minutes in the future +- 1 second
     /// let expiration = now + 1000 * 60 * 10;
     /// let range = expiration..expiration+2;
-    /// assert!(range.contains(&r.expires.unwrap()));
+    /// assert!(range.contains(r.expires.inner().unwrap()));
     /// ```
     #[must_use]
     pub fn set_expires(mut self, expires: usize) -> Self {
@@ -274,7 +295,7 @@ impl CreateKeyRequest {
             });
 
         let expires = duration.as_millis() as usize + expires;
-        self.expires = Some(expires);
+        self.expires = UndefinedOr::Value(expires);
         self
     }
 
@@ -291,11 +312,11 @@ impl CreateKeyRequest {
     /// # use unkey::models::CreateKeyRequest;
     /// let r = CreateKeyRequest::new("test").set_remaining(100);
     ///
-    /// assert_eq!(r.remaining.unwrap(), 100);
+    /// assert_eq!(r.remaining.inner().unwrap(), &100);
     /// ```
     #[must_use]
     pub fn set_remaining(mut self, remaining: usize) -> Self {
-        self.remaining = Some(remaining);
+        self.remaining = UndefinedOr::Value(remaining);
         self
     }
 
@@ -321,11 +342,11 @@ impl CreateKeyRequest {
     ///
     /// let r = CreateKeyRequest::new("test").set_ratelimit(ratelimit.clone());
     ///
-    /// assert_eq!(r.ratelimit.unwrap(), ratelimit);
+    /// assert_eq!(r.ratelimit.inner().unwrap(), &ratelimit);
     /// ```
     #[must_use]
     pub fn set_ratelimit(mut self, ratelimit: Ratelimit) -> Self {
-        self.ratelimit = Some(ratelimit);
+        self.ratelimit = UndefinedOr::Value(ratelimit);
         self
     }
 }
@@ -700,5 +721,36 @@ impl UpdateKeyRequest {
     pub fn set_ratelimit(mut self, ratelimit: Option<Ratelimit>) -> Self {
         self.ratelimit = ratelimit.into();
         self
+    }
+}
+
+/// An outgoing get key request.
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GetKeyRequest {
+    /// The unique id of the key to get.
+    pub key_id: String,
+}
+
+impl GetKeyRequest {
+    /// Creates a new get key request.
+    ///
+    /// # Arguments
+    /// - `key_id`: The id of the key to get.
+    ///
+    /// # Returns
+    /// The get key request.
+    ///
+    /// # Example
+    /// ```
+    /// # use unkey::models::GetKeyRequest;
+    /// let r = GetKeyRequest::new("test_ABC123");
+    ///
+    /// assert_eq!(r.key_id, String::from("test_ABC123"));
+    /// ```
+    #[must_use]
+    #[rustfmt::skip]
+    pub fn new<T: Into<String>>(key_id: T) -> Self {
+        Self { key_id: key_id.into() }
     }
 }

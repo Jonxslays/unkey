@@ -15,8 +15,8 @@ pub struct ListKeysRequest {
     /// The optional number of keys to return, up to 100.
     pub limit: Option<usize>,
 
-    /// The pagination offset.
-    pub offset: Option<usize>,
+    /// The pagination cursor indicating the last key that was returned.
+    pub cursor: Option<String>,
 }
 
 impl ListKeysRequest {
@@ -35,7 +35,7 @@ impl ListKeysRequest {
     ///
     /// assert_eq!(r.api_id, String::from("test"));
     /// assert_eq!(r.limit, None);
-    /// assert_eq!(r.offset, None);
+    /// assert_eq!(r.cursor, None);
     /// assert_eq!(r.owner_id, None);
     /// ```
     #[must_use]
@@ -44,14 +44,14 @@ impl ListKeysRequest {
             api_id: api_id.into(),
             owner_id: None,
             limit: None,
-            offset: None,
+            cursor: None,
         }
     }
 
     /// Sets the limit for the request.
     ///
     /// # Arguments
-    /// - `limit`: The limit to set, defaults to 100.
+    /// - `limit`: The limit to set.
     ///
     /// # Returns
     /// Self for chained calls.
@@ -72,7 +72,7 @@ impl ListKeysRequest {
     /// Sets the pagination offset for the request.
     ///
     /// # Arguments
-    /// - `offset`: The pagination offset to set, defaults to 0.
+    /// - `cursor`: The pagination offset cursor to set.
     ///
     /// # Returns
     /// Self for chained calls.
@@ -80,13 +80,13 @@ impl ListKeysRequest {
     /// # Example
     /// ```
     /// # use unkey::models::ListKeysRequest;
-    /// let r = ListKeysRequest::new("test").set_offset(4);
+    /// let r = ListKeysRequest::new("test").set_cursor("abcabc");
     ///
-    /// assert_eq!(r.offset.unwrap(), 4);
+    /// assert_eq!(r.cursor.unwrap(), String::from("abcabc"));
     /// ```
     #[must_use]
-    pub fn set_offset(mut self, offset: usize) -> Self {
-        self.offset = Some(offset);
+    pub fn set_cursor<T: Into<String>>(mut self, cursor: T) -> Self {
+        self.cursor = Some(cursor.into());
         self
     }
 
@@ -120,6 +120,9 @@ pub struct ListKeysResponse {
 
     /// The total number of api keys.
     pub total: usize,
+
+    /// The cursor indicating the last key that was returned.
+    pub cursor: Option<String>,
 }
 
 /// An outgoing get api request.

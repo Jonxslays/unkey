@@ -5,7 +5,22 @@ use serde_json::Value;
 
 use super::Ratelimit;
 use super::RatelimitState;
+use super::Refill;
 use super::UndefinedOr;
+
+/// An update operation that can be performed.
+#[derive(Debug, Clone, Serialize, Deserialize, Eq, PartialEq)]
+#[serde(rename_all = "lowercase")]
+pub enum UpdateOp {
+    /// Increment operation.
+    Increment,
+
+    /// Decrement operation.
+    Decrement,
+
+    /// Set operation.
+    Set,
+}
 
 /// An outgoing verify key request.
 #[derive(Debug, Clone, Serialize)]
@@ -72,6 +87,9 @@ pub struct VerifyKeyResponse {
 
     /// The state of the ratelimit set on this key, if any.
     pub ratelimit: Option<RatelimitState>,
+
+    /// The refill state of this key, if any.
+    pub refill: Option<Refill>,
 }
 
 /// An outgoing create key request.
@@ -112,6 +130,10 @@ pub struct CreateKeyRequest {
     /// The optional ratelimit to set for the key.
     #[serde(skip_serializing_if = "UndefinedOr::is_undefined")]
     pub ratelimit: UndefinedOr<Ratelimit>,
+
+    /// The keys refill state, if any.
+    #[serde(skip_serializing_if = "UndefinedOr::is_undefined")]
+    pub refill: UndefinedOr<Refill>,
 }
 
 impl CreateKeyRequest {
@@ -138,6 +160,7 @@ impl CreateKeyRequest {
     /// assert_eq!(r.expires, UndefinedOr::Undefined);
     /// assert_eq!(r.remaining, UndefinedOr::Undefined);
     /// assert_eq!(r.ratelimit, UndefinedOr::Undefined);
+    /// assert_eq!(r.refill, UndefinedOr::Undefined);
     /// ```
     #[must_use]
     pub fn new<T: Into<String>>(api_id: T) -> Self {
@@ -151,6 +174,7 @@ impl CreateKeyRequest {
             expires: UndefinedOr::Undefined,
             remaining: UndefinedOr::Undefined,
             ratelimit: UndefinedOr::Undefined,
+            refill: UndefinedOr::Undefined,
         }
     }
 
@@ -349,6 +373,31 @@ impl CreateKeyRequest {
         self.ratelimit = UndefinedOr::Value(ratelimit);
         self
     }
+
+    /// Sets the refill for the new key.
+    ///
+    /// # Arguments
+    /// - `refill`: The refill to set.
+    ///
+    /// # Returns
+    /// Self for chained calls.
+    ///
+    /// # Example
+    /// ```
+    /// # use unkey::models::CreateKeyRequest;
+    /// # use unkey::models::Refill;
+    /// # use unkey::models::RefillInterval;
+    /// let refill = Refill::new(100, RefillInterval::Daily);
+    ///
+    /// let r = CreateKeyRequest::new("test").set_refill(refill.clone());
+    ///
+    /// assert_eq!(r.refill.inner().unwrap(), &refill);
+    /// ```
+    #[must_use]
+    pub fn set_refill(mut self, refill: Refill) -> Self {
+        self.refill = UndefinedOr::Value(refill);
+        self
+    }
 }
 
 /// An incoming create key response.
@@ -397,6 +446,9 @@ pub struct ApiKey {
 
     /// The ratelimit imposed on this key, if any.
     pub ratelimit: Option<Ratelimit>,
+
+    /// The refill state of this key, if any.
+    pub refill: Option<Refill>,
 }
 
 /// An outgoing revoke key request.
@@ -470,6 +522,10 @@ pub struct UpdateKeyRequest {
     /// The optional new ratelimit to set for the key.
     #[serde(skip_serializing_if = "UndefinedOr::is_undefined")]
     pub ratelimit: UndefinedOr<Ratelimit>,
+
+    /// The optional new refill to set for the key.
+    #[serde(skip_serializing_if = "UndefinedOr::is_undefined")]
+    pub refill: UndefinedOr<Refill>,
 }
 
 impl UpdateKeyRequest {
@@ -494,6 +550,7 @@ impl UpdateKeyRequest {
     /// assert_eq!(r.expires, UndefinedOr::Undefined);
     /// assert_eq!(r.remaining, UndefinedOr::Undefined);
     /// assert_eq!(r.ratelimit, UndefinedOr::Undefined);
+    /// assert_eq!(r.refill, UndefinedOr::Undefined);
     /// ```
     #[must_use]
     pub fn new<T: Into<String>>(key_id: T) -> Self {
@@ -722,6 +779,43 @@ impl UpdateKeyRequest {
         self.ratelimit = ratelimit.into();
         self
     }
+
+    /// Sets or unsets the refill for the key.
+    ///
+    /// # Arguments
+    /// - `refill`: The refill to set or unset.
+    ///
+    /// # Returns
+    /// Self for chained calls.
+    ///
+    /// # Example
+    /// ```
+    /// # use unkey::models::UpdateKeyRequest;
+    /// # use unkey::models::Refill;
+    /// # use unkey::models::RefillInterval;
+    /// # use unkey::models::UndefinedOr;
+    /// let r = UpdateKeyRequest::new("test");
+    ///
+    /// assert_eq!(r.ratelimit, UndefinedOr::Undefined);
+    /// assert_eq!(r.ratelimit.inner(), None);
+    ///
+    /// let refill = Refill::new(100, RefillInterval::Daily);
+    ///
+    /// let r = r.set_refill(Some(refill.clone()));
+    ///
+    /// assert_eq!(r.refill, UndefinedOr::Value(refill.clone()));
+    /// assert_eq!(r.refill.inner(), Some(&refill));
+    ///
+    /// let r = r.set_refill(None);
+    ///
+    /// assert_eq!(r.refill, UndefinedOr::Null);
+    /// assert_eq!(r.refill.inner(), None);
+    /// ```
+    #[must_use]
+    pub fn set_refill(mut self, refill: Option<Refill>) -> Self {
+        self.refill = refill.into();
+        self
+    }
 }
 
 /// An outgoing get key request.
@@ -753,4 +847,53 @@ impl GetKeyRequest {
     pub fn new<T: Into<String>>(key_id: T) -> Self {
         Self { key_id: key_id.into() }
     }
+}
+
+/// An outgoing update remaining request.
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct UpdateRemainingRequest {
+    /// The unique id of the key to updating remaining for.
+    pub key_id: String,
+
+    /// The value to perform the operation on.
+    pub value: Option<usize>,
+
+    /// The update operation to perform.
+    pub op: UpdateOp,
+}
+
+impl UpdateRemainingRequest {
+    /// Creates a new update remaining request.
+    ///
+    /// # Arguments
+    /// - `key_id`: The id of the key to update remaining for.
+    /// - `value`: The value to perform the operation on.
+    /// - `op`: The update operation to perform.
+    ///
+    /// # Returns
+    /// The update remaining request.
+    ///
+    /// # Example
+    /// ```
+    /// # use unkey::models::UpdateRemainingRequest;
+    /// # use unkey::models::UpdateOp;
+    /// let r = UpdateRemainingRequest::new("test_ABC123", Some(100), UpdateOp::Set);
+    ///
+    /// assert_eq!(r.key_id, String::from("test_ABC123"));
+    /// assert_eq!(r.value.unwrap(), 100);
+    /// assert_eq!(r.op, UpdateOp::Set);
+    /// ```
+    #[must_use]
+    #[rustfmt::skip]
+    pub fn new<T: Into<String>>(key_id: T, value: Option<usize>, op: UpdateOp) -> Self {
+        Self { key_id: key_id.into(), value, op }
+    }
+}
+
+/// An outgoing update remaining request.
+#[derive(Debug, Clone, Deserialize)]
+pub struct UpdateRemainingResponse {
+    /// The number of remaining verifications for the key.
+    pub remaining: usize,
 }

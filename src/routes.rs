@@ -109,6 +109,7 @@ impl CompiledRoute {
     ///
     /// # Returns
     /// Self for chained calls.
+    #[allow(dead_code)] // Was used in the past, any may again in the future
     pub fn uri_insert<T: Into<String>>(&mut self, param: T) -> &mut Self {
         self.uri = self.uri.replacen("{}", &param.into(), 1);
         self

@@ -71,14 +71,16 @@ async fn create_key() {
 ### Updating a key
 
 ```rust
-use unkey::models::{UpdateKeyRequest, Wrapped};
+use unkey::models::{Refill, RefillInterval, UpdateKeyRequest, Wrapped};
 use unkey::Client;
 
 async fn update_key() {
     let c = Client::new("unkey_ABC");
     let req = UpdateKeyRequest::new("key_XYZ")
         .set_name(Some("new_name")) // Update the keys name
-        .set_ratelimit(None); // Remove any ratelimit on the key
+        .set_ratelimit(None) // Remove any ratelimit on the key
+        .set_expires(None) // Remove any expiration date
+        .set_refill(Some(Refill::new(100, RefillInterval::Daily)));
 
     match c.update_key(req).await {
         Wrapped::Ok(res) => println!("{res:?}"),
@@ -132,6 +134,40 @@ async fn get_api() {
     let req = GetApiRequest::new("api_123");
 
     match c.get_api(req).await {
+        Wrapped::Ok(res) => println!("{res:?}"),
+        Wrapped::Err(err) => eprintln!("{err:?}"),
+    }
+}
+```
+
+### Getting key details
+
+```rust
+use unkey::models::{GetKeyRequest, Wrapped};
+use unkey::Client;
+
+async fn get_key() {
+    let c = Client::new("unkey_ABC");
+    let req = GetKeyRequest::new("key_123");
+
+    match c.get_key(req).await {
+        Wrapped::Ok(res) => println!("{res:?}"),
+        Wrapped::Err(err) => eprintln!("{err:?}"),
+    }
+}
+```
+
+### Update remaining verifications
+
+```rust
+use unkey::models::{UpdateOp, UpdateRemainingRequest, Wrapped};
+use unkey::Client;
+
+async fn update_remaining() {
+    let c = Client::new("unkey_ABC");
+    let req = UpdateRemainingRequest::new("key_123", Some(100), UpdateOp::Set);
+
+    match c.update_remaining(req).await {
         Wrapped::Ok(res) => println!("{res:?}"),
         Wrapped::Err(err) => eprintln!("{err:?}"),
     }

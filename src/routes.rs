@@ -4,25 +4,31 @@ use reqwest::Method;
 // ROUTES
 ////////////////////////////////////////////////////////////////////////////////
 
-/// The create key endpoint `POST /keys`
-pub(crate) static CREATE_KEY: Route = Route::new(Method::POST, "/keys");
+/// The create key endpoint `POST /keys.createKey`
+pub(crate) static CREATE_KEY: Route = Route::new(Method::POST, "/keys.createKey");
 
-/// The verify key endpoint `POST /keys/verify`
-pub(crate) static VERIFY_KEY: Route = Route::new(Method::POST, "/keys/verify");
+/// The verify key endpoint `POST /keys.verifyKey`
+pub(crate) static VERIFY_KEY: Route = Route::new(Method::POST, "/keys.verifyKey");
 
-/// The delete key endpoint `DELETE /keys/{id}`
-pub(crate) static REVOKE_KEY: Route = Route::new(Method::DELETE, "/keys/{}");
+/// The delete key endpoint `POST /keys.deleteKey`
+pub(crate) static REVOKE_KEY: Route = Route::new(Method::POST, "/keys.deleteKey");
 
-/// The update key endpoint `PUT /keys/{id}`
-pub(crate) static UPDATE_KEY: Route = Route::new(Method::PUT, "/keys/{}");
+/// The update key endpoint `POST /keys.updateKey`
+pub(crate) static UPDATE_KEY: Route = Route::new(Method::POST, "/keys.updateKey");
+
+/// The get key endpoint `GET /keys.getKey`
+pub(crate) static GET_KEY: Route = Route::new(Method::GET, "/keys.getKey");
+
+/// The update remaining endpoint `POST /keys.updateRemaining`
+pub(crate) static UPDATE_REMAINING: Route = Route::new(Method::POST, "/keys.updateRemaining");
 
 ////////////////////////////////////////////////////////////////////////////////
 
-/// The get api endpoint `GET /apis/{id}`
-pub(crate) static GET_API: Route = Route::new(Method::GET, "/apis/{}");
+/// The get api endpoint `GET /apis.getApi`
+pub(crate) static GET_API: Route = Route::new(Method::GET, "/apis.getApi");
 
-/// The list keys endpoint `GET /apis/{id}/keys`
-pub(crate) static LIST_KEYS: Route = Route::new(Method::GET, "/apis/{}/keys");
+/// The list keys endpoint `GET /apis.listKeys`
+pub(crate) static LIST_KEYS: Route = Route::new(Method::GET, "/apis.listKeys");
 
 ////////////////////////////////////////////////////////////////////////////////
 // END ROUTES

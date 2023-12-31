@@ -25,7 +25,7 @@ $ cargo add unkey
 Add the following to your `Cargo.toml` dependencies array:
 
 ```toml
-unkey = "0.1" # I won't forget to update this™
+unkey = "0.3" # I won't forget to update this™
 ```
 
 ## Examples
@@ -38,7 +38,7 @@ use unkey::Client;
 
 async fn verify_key() {
     let c = Client::new("unkey_ABC");
-    let req = VerifyKeyRequest::new("test_DEF");
+    let req = VerifyKeyRequest::new("test_DEF", "api_JJJ");
 
     match c.verify_key(req).await {
         Wrapped::Ok(res) => println!("{res:?}"),

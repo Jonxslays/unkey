@@ -34,6 +34,9 @@ pub enum ErrorCode {
     // The identifier is in use by another resource.
     NotUnique,
 
+    // Another resource already uses this identifier.
+    Conflict,
+
     /// Reserved for unknown interactions.
     #[serde(other)]
     Unknown,

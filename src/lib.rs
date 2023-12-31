@@ -23,7 +23,7 @@ use models::Wrapped;
 /// The wrapped error.
 macro_rules! response_error {
     ($code:expr, $err:expr) => {
-        crate::models::Wrapped::Err(crate::models::HttpError::new($code, $err.to_string()))
+        $crate::models::Wrapped::Err($crate::models::HttpError::new($code, $err.to_string()))
     };
 }
 

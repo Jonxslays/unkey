@@ -31,12 +31,15 @@ impl ApiService {
     ) -> Wrapped<ListKeysResponse> {
         let mut route = routes::LIST_KEYS.compile();
         route
-            .uri_insert(&req.api_id)
-            .query_insert("limit", &req.limit.unwrap_or(100).to_string())
-            .query_insert("offset", &req.offset.unwrap_or(0).to_string());
+            .query_insert("apiId", &req.api_id)
+            .query_insert("limit", &req.limit.unwrap_or(100).to_string());
 
         if let Some(owner) = &req.owner_id {
             route.query_insert("ownerId", owner);
+        }
+
+        if let Some(cursor) = &req.cursor {
+            route.query_insert("cursor", cursor);
         }
 
         wrap_response(fetch!(http, route).await).await
@@ -52,7 +55,7 @@ impl ApiService {
     /// A wrapper around the response, or an [`HttpError`].
     pub async fn get_api(&self, http: &HttpService, req: GetApiRequest) -> Wrapped<GetApiResponse> {
         let mut route = routes::GET_API.compile();
-        route.uri_insert(&req.api_id);
+        route.query_insert("apiId", &req.api_id);
 
         wrap_response(fetch!(http, route).await).await
     }

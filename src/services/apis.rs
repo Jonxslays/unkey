@@ -3,10 +3,9 @@ use crate::models::GetApiRequest;
 use crate::models::GetApiResponse;
 use crate::models::ListKeysRequest;
 use crate::models::ListKeysResponse;
-use crate::models::Wrapped;
+use crate::parse_response;
 use crate::routes;
 use crate::services::HttpService;
-use crate::wrap_response;
 
 #[allow(unused_imports)]
 use crate::models::HttpError;
@@ -23,12 +22,15 @@ impl ApiService {
     /// - `req`: The request to send.
     ///
     /// # Returns
-    /// A wrapper around the response, or an [`HttpError`].
+    /// A [`Result`] containing the response, or an error.
+    ///
+    /// # Errors
+    /// The [`HttpError`], if one occurred.
     pub async fn list_keys(
         &self,
         http: &HttpService,
         req: ListKeysRequest,
-    ) -> Wrapped<ListKeysResponse> {
+    ) -> Result<ListKeysResponse, HttpError> {
         let mut route = routes::LIST_KEYS.compile();
         route
             .query_insert("apiId", &req.api_id)
@@ -42,7 +44,7 @@ impl ApiService {
             route.query_insert("cursor", cursor);
         }
 
-        wrap_response(fetch!(http, route).await).await
+        parse_response(fetch!(http, route).await).await
     }
 
     /// Retrieves api information.
@@ -52,11 +54,18 @@ impl ApiService {
     /// - `req`: The request to send.
     ///
     /// # Returns
-    /// A wrapper around the response, or an [`HttpError`].
-    pub async fn get_api(&self, http: &HttpService, req: GetApiRequest) -> Wrapped<GetApiResponse> {
+    /// A [`Result`] containing the response, or an error.
+    ///
+    /// # Errors
+    /// The [`HttpError`], if one occurred.
+    pub async fn get_api(
+        &self,
+        http: &HttpService,
+        req: GetApiRequest,
+    ) -> Result<GetApiResponse, HttpError> {
         let mut route = routes::GET_API.compile();
         route.query_insert("apiId", &req.api_id);
 
-        wrap_response(fetch!(http, route).await).await
+        parse_response(fetch!(http, route).await).await
     }
 }

@@ -84,7 +84,7 @@ impl HttpError {
 /// A wrapper around the response type or an error.
 #[derive(Deserialize, Debug, Clone, Eq, PartialEq)]
 #[must_use = "this `Wrapped` result may be an `Err` variant, which should be handled"]
-pub enum Wrapped<T> {
+pub(crate) enum Wrapped<T> {
     /// The error value.
     #[serde(rename = "error")]
     Err(HttpError),

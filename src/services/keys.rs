@@ -9,11 +9,10 @@ use crate::models::UpdateRemainingRequest;
 use crate::models::UpdateRemainingResponse;
 use crate::models::VerifyKeyRequest;
 use crate::models::VerifyKeyResponse;
-use crate::models::Wrapped;
+use crate::parse_empty_response;
+use crate::parse_response;
 use crate::routes;
 use crate::services::HttpService;
-use crate::wrap_empty_response;
-use crate::wrap_response;
 
 #[allow(unused_imports)]
 use crate::models::HttpError;
@@ -30,15 +29,18 @@ impl KeyService {
     /// - `req`: The request to send.
     ///
     /// # Returns
-    /// A wrapper around the response, or an [`HttpError`].
+    /// A [`Result`] containing the response, or an error.
+    ///
+    /// # Errors
+    /// The [`HttpError`], if one occurred.
     pub async fn create_key(
         &self,
         http: &HttpService,
         req: CreateKeyRequest,
-    ) -> Wrapped<CreateKeyResponse> {
+    ) -> Result<CreateKeyResponse, HttpError> {
         let route = routes::CREATE_KEY.compile();
 
-        wrap_response(fetch!(http, route, req).await).await
+        parse_response(fetch!(http, route, req).await).await
     }
 
     /// Verifies an existing api key.
@@ -48,15 +50,18 @@ impl KeyService {
     /// - `req`: The request to send.
     ///
     /// # Returns
-    /// A wrapper around the response, or an [`HttpError`].
+    /// A [`Result`] containing the response, or an error.
+    ///
+    /// # Errors
+    /// The [`HttpError`], if one occurred.
     pub async fn verify_key(
         &self,
         http: &HttpService,
         req: VerifyKeyRequest,
-    ) -> Wrapped<VerifyKeyResponse> {
+    ) -> Result<VerifyKeyResponse, HttpError> {
         let route = routes::VERIFY_KEY.compile();
 
-        wrap_response(fetch!(http, route, req).await).await
+        parse_response(fetch!(http, route, req).await).await
     }
 
     /// Revokes an existing api key.
@@ -66,11 +71,18 @@ impl KeyService {
     /// - `req`: The request to send.
     ///
     /// # Returns
-    /// A wrapper around an empty response, or an [`HttpError`].
-    pub async fn revoke_key(&self, http: &HttpService, req: RevokeKeyRequest) -> Wrapped<()> {
+    /// A [`Result`] containing the response, or an error.
+    ///
+    /// # Errors
+    /// The [`HttpError`], if one occurred.
+    pub async fn revoke_key(
+        &self,
+        http: &HttpService,
+        req: RevokeKeyRequest,
+    ) -> Result<(), HttpError> {
         let route = routes::REVOKE_KEY.compile();
 
-        wrap_empty_response(fetch!(http, route, req).await).await
+        parse_empty_response(fetch!(http, route, req).await).await
     }
 
     /// Updates an existing api key.
@@ -80,11 +92,18 @@ impl KeyService {
     /// - `req`: The request to send.
     ///
     /// # Returns
-    /// A wrapper around an empty response, or an [`HttpError`].
-    pub async fn update_key(&self, http: &HttpService, req: UpdateKeyRequest) -> Wrapped<()> {
+    /// A [`Result`] containing the response, or an error.
+    ///
+    /// # Errors
+    /// The [`HttpError`], if one occurred.
+    pub async fn update_key(
+        &self,
+        http: &HttpService,
+        req: UpdateKeyRequest,
+    ) -> Result<(), HttpError> {
         let route = routes::UPDATE_KEY.compile();
 
-        wrap_empty_response(fetch!(http, route, req).await).await
+        parse_empty_response(fetch!(http, route, req).await).await
     }
 
     /// Gets details about an api key.
@@ -94,12 +113,19 @@ impl KeyService {
     /// - `req`: The request to send.
     ///
     /// # Returns
-    /// A wrapper around the response, or an [`HttpError`].
-    pub async fn get_key(&self, http: &HttpService, req: GetKeyRequest) -> Wrapped<ApiKey> {
+    /// A [`Result`] containing the response, or an error.
+    ///
+    /// # Errors
+    /// The [`HttpError`], if one occurred.
+    pub async fn get_key(
+        &self,
+        http: &HttpService,
+        req: GetKeyRequest,
+    ) -> Result<ApiKey, HttpError> {
         let mut route = routes::GET_KEY.compile();
         route.query_insert("keyId", &req.key_id);
 
-        wrap_response(fetch!(http, route).await).await
+        parse_response(fetch!(http, route).await).await
     }
 
     /// Updates the remaining verifications for a key.
@@ -109,14 +135,17 @@ impl KeyService {
     /// - `req`: The request to send.
     ///
     /// # Returns
-    /// A wrapper around the response, or an [`HttpError`].
+    /// A [`Result`] containing the response, or an error.
+    ///
+    /// # Errors
+    /// The [`HttpError`], if one occurred.
     pub async fn update_remaining(
         &self,
         http: &HttpService,
         req: UpdateRemainingRequest,
-    ) -> Wrapped<UpdateRemainingResponse> {
+    ) -> Result<UpdateRemainingResponse, HttpError> {
         let route = routes::UPDATE_REMAINING.compile();
 
-        wrap_response(fetch!(http, route, req).await).await
+        parse_response(fetch!(http, route, req).await).await
     }
 }

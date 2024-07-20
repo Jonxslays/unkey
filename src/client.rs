@@ -136,7 +136,7 @@ impl Client {
     /// # }
     /// ```
     pub async fn verify_key(&self, req: VerifyKeyRequest) -> Result<VerifyKeyResponse, HttpError> {
-        self.keys.verify_key(&self.http, req).await.into()
+        self.keys.verify_key(&self.http, req).await
     }
 
     /// Creates a new api key.
@@ -165,7 +165,7 @@ impl Client {
     /// # }
     /// ```
     pub async fn create_key(&self, req: CreateKeyRequest) -> Result<CreateKeyResponse, HttpError> {
-        self.keys.create_key(&self.http, req).await.into()
+        self.keys.create_key(&self.http, req).await
     }
 
     /// Retrieves a paginated list of api keys.
@@ -194,7 +194,7 @@ impl Client {
     /// # }
     /// ```
     pub async fn list_keys(&self, req: ListKeysRequest) -> Result<ListKeysResponse, HttpError> {
-        self.apis.list_keys(&self.http, req).await.into()
+        self.apis.list_keys(&self.http, req).await
     }
 
     /// Revokes an existing api key.
@@ -223,7 +223,7 @@ impl Client {
     /// # }
     /// ```
     pub async fn revoke_key(&self, req: RevokeKeyRequest) -> Result<(), HttpError> {
-        self.keys.revoke_key(&self.http, req).await.into()
+        self.keys.revoke_key(&self.http, req).await
     }
 
     /// Retrieves information for the given api id.
@@ -252,7 +252,7 @@ impl Client {
     /// # }
     /// ````
     pub async fn get_api(&self, req: GetApiRequest) -> Result<GetApiResponse, HttpError> {
-        self.apis.get_api(&self.http, req).await.into()
+        self.apis.get_api(&self.http, req).await
     }
 
     /// Retrieves information for the given api id.
@@ -281,7 +281,7 @@ impl Client {
     /// # }
     /// ````
     pub async fn update_key(&self, req: UpdateKeyRequest) -> Result<(), HttpError> {
-        self.keys.update_key(&self.http, req).await.into()
+        self.keys.update_key(&self.http, req).await
     }
 
     /// Retrieves information for the given api id.
@@ -310,7 +310,7 @@ impl Client {
     /// # }
     /// ````
     pub async fn get_key(&self, req: GetKeyRequest) -> Result<ApiKey, HttpError> {
-        self.keys.get_key(&self.http, req).await.into()
+        self.keys.get_key(&self.http, req).await
     }
 
     /// Update the remaining verifications for a key.
@@ -343,7 +343,7 @@ impl Client {
         &self,
         req: UpdateRemainingRequest,
     ) -> Result<UpdateRemainingResponse, HttpError> {
-        self.keys.update_remaining(&self.http, req).await.into()
+        self.keys.update_remaining(&self.http, req).await
     }
 }
 

@@ -25,7 +25,7 @@ cargo add unkey
 Add the following to your `Cargo.toml` dependencies array:
 
 ```toml
-unkey = "0.3" # I won't forget to update this™
+unkey = "0.4" # I won't forget to update this™
 ```
 
 ## Examples

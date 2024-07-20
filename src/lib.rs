@@ -6,6 +6,7 @@ pub mod models;
 mod routes;
 mod services;
 
+use models::HttpError;
 use serde::Deserialize;
 
 pub use client::Client;
@@ -13,7 +14,7 @@ use models::ErrorCode;
 use models::HttpResult;
 use models::Wrapped;
 
-/// Creates a new Err variant of [`Response`].
+/// Creates a new Err variant of [`Wrapped`].
 ///
 /// # Arguments
 /// - `$code`: The [`ErrorCode`] for the error.
@@ -23,18 +24,21 @@ use models::Wrapped;
 /// The wrapped error.
 macro_rules! response_error {
     ($code:expr, $err:expr) => {
-        $crate::models::Wrapped::Err($crate::models::HttpError::new($code, $err.to_string()))
+        ::std::result::Result::Err($crate::models::HttpError::new($code, $err.to_string()))
     };
 }
 
-/// Wraps the http result.
+/// Parses the http result.
 ///
 /// # Arguments
 /// - `result`: The http result from the request.
 ///
 /// # Returns
-/// The wrapped response or an error.
-pub(crate) async fn wrap_response<T>(result: HttpResult) -> Wrapped<T>
+/// A [`Result`] containing the response, or an error.
+///
+/// # Errors
+/// The [`HttpError`], if one occurred.
+pub(crate) async fn parse_response<T>(result: HttpResult) -> Result<T, HttpError>
 where
     T: for<'a> Deserialize<'a>,
 {
@@ -53,7 +57,7 @@ where
 
             match serde_json::from_str::<Wrapped<T>>(&text) {
                 Err(e) => response_error!(ErrorCode::Unknown, e),
-                Ok(r) => r,
+                Ok(r) => r.into(),
             }
         }
     }
@@ -65,8 +69,11 @@ where
 /// - `result`: The http result from the request.
 ///
 /// # Returns
-/// The wrapped response or an error.
-pub(crate) async fn wrap_empty_response(result: HttpResult) -> Wrapped<()> {
+/// A [`Result`] containing the response, or an error.
+///
+/// # Errors
+/// The [`HttpError`], if one occurred.
+pub(crate) async fn parse_empty_response(result: HttpResult) -> Result<(), HttpError> {
     let data = match result {
         Ok(r) => r.text().await,
         Err(e) => {
@@ -81,7 +88,7 @@ pub(crate) async fn wrap_empty_response(result: HttpResult) -> Wrapped<()> {
             logging::debug!(format!("INCOMING: {text}"));
 
             match serde_json::from_str::<Wrapped<()>>(&text) {
-                Ok(r) => r,
+                Ok(r) => r.into(),
                 Err(e) => {
                     if text.contains("error") {
                         // If the text contains error and we failed to deserialize
@@ -90,7 +97,7 @@ pub(crate) async fn wrap_empty_response(result: HttpResult) -> Wrapped<()> {
                     } else {
                         // Otherwise it was successful even though we are in Err
                         // due to serde failing to deserialize a unit type
-                        Wrapped::Ok(())
+                        Ok(())
                     }
                 }
             }
@@ -98,7 +105,7 @@ pub(crate) async fn wrap_empty_response(result: HttpResult) -> Wrapped<()> {
     }
 }
 
-/// Fetchs the given route with the provided http service.
+/// Fetches the given route with the provided http service.
 macro_rules! fetch {
     ($http:expr, $route:ident) => {
         $http.fetch($route, None::<u8>)
@@ -114,7 +121,6 @@ pub(crate) use fetch;
 mod test {
     use crate::models::ErrorCode;
     use crate::models::HttpError;
-    use crate::models::Wrapped;
 
     struct FakeHttp;
 
@@ -130,12 +136,12 @@ mod test {
     }
 
     #[test]
-    fn reponse_error() {
-        let res: Wrapped<()> = response_error!(ErrorCode::NotFound, "not found!");
+    fn response_error() {
+        let res: Result<(), _> = response_error!(ErrorCode::NotFound, "not found!");
 
         assert_eq!(
             res,
-            Wrapped::Err(HttpError::new(
+            Err(HttpError::new(
                 ErrorCode::NotFound,
                 String::from("not found!")
             ))

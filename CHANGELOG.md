@@ -1,3 +1,16 @@
+# v0.4.0 (Jul 2024)
+
+## Breaking changes
+
+- All async `Client` methods and service methods now return a `Result` instead of `Wrapped`.
+- Wrapped is now `pub(crate)` and considered internal implementation detail.
+
+## Additions
+
+- `Result<T, HttpErrorResponse>` now implements `From<Wrapped<T>>`.
+
+---
+
 # v0.3.0 (Dec 2023)
 
 ## Breaking changes
@@ -32,6 +45,8 @@
 ## Changes
 
 - Rename `UsageExceeded` error code to `KeyUsageExceeded`.
+
+---
 
 # v0.1.0 (Aug 2023)
 

@@ -12,7 +12,6 @@ use crate::models::UpdateRemainingRequest;
 use crate::models::UpdateRemainingResponse;
 use crate::models::VerifyKeyRequest;
 use crate::models::VerifyKeyResponse;
-use crate::models::Wrapped;
 use crate::services::ApiService;
 use crate::services::HttpService;
 use crate::services::KeyService;
@@ -117,24 +116,26 @@ impl Client {
     /// - `req`: The verify key request to send.
     ///
     /// # Returns
-    /// A wrapper containing the response, or an [`HttpError`].
+    /// A [`Result`] containing the response, or an error.
+    ///
+    /// # Errors
+    /// The [`HttpError`], if one occurred.
     ///
     /// # Example
     /// ```no_run
     /// # async fn verify() {
     /// # use unkey::Client;
     /// # use unkey::models::VerifyKeyRequest;
-    /// # use unkey::models::Wrapped;
     /// let c = Client::new("abc123");
     /// let req = VerifyKeyRequest::new("test_KEYABC", "api_123123");
     ///
     /// match c.verify_key(req).await {
-    ///     Wrapped::Ok(res) => println!("{:?}", res),
-    ///     Wrapped::Err(err) => println!("{:?}", err),
+    ///     Ok(res) => println!("{:?}", res),
+    ///     Err(err) => println!("{:?}", err),
     /// }
     /// # }
     /// ```
-    pub async fn verify_key(&self, req: VerifyKeyRequest) -> Wrapped<VerifyKeyResponse> {
+    pub async fn verify_key(&self, req: VerifyKeyRequest) -> Result<VerifyKeyResponse, HttpError> {
         self.keys.verify_key(&self.http, req).await
     }
 
@@ -144,24 +145,26 @@ impl Client {
     /// - `req`: The create key request to send.
     ///
     /// # Returns
-    /// A wrapper containing the response, or an [`HttpError`].
+    /// A [`Result`] containing the response, or an error.
+    ///
+    /// # Errors
+    /// The [`HttpError`], if one occurred.
     ///
     /// # Example
     /// ```no_run
     /// # async fn create() {
     /// # use unkey::Client;
     /// # use unkey::models::CreateKeyRequest;
-    /// # use unkey::models::Wrapped;
     /// let c = Client::new("abc123");
     /// let req = CreateKeyRequest::new("api_CCC").set_remaining(100);
     ///
     /// match c.create_key(req).await {
-    ///     Wrapped::Ok(res) => println!("{:?}", res),
-    ///     Wrapped::Err(err) => println!("{:?}", err),
+    ///     Ok(res) => println!("{:?}", res),
+    ///     Err(err) => println!("{:?}", err),
     /// }
     /// # }
     /// ```
-    pub async fn create_key(&self, req: CreateKeyRequest) -> Wrapped<CreateKeyResponse> {
+    pub async fn create_key(&self, req: CreateKeyRequest) -> Result<CreateKeyResponse, HttpError> {
         self.keys.create_key(&self.http, req).await
     }
 
@@ -171,24 +174,26 @@ impl Client {
     /// - `req`: The list keys request to send.
     ///
     /// # Returns
-    /// A wrapper containing the response, or an [`HttpError`].
+    /// A [`Result`] containing the response, or an error.
+    ///
+    /// # Errors
+    /// The [`HttpError`], if one occurred.
     ///
     /// # Example
     /// ```no_run
     /// # async fn list() {
     /// # use unkey::Client;
     /// # use unkey::models::ListKeysRequest;
-    /// # use unkey::models::Wrapped;
     /// let c = Client::new("abc123");
     /// let req = ListKeysRequest::new("api_id").set_limit(25);
     ///
     /// match c.list_keys(req).await {
-    ///     Wrapped::Ok(res) => println!("{:?}", res),
-    ///     Wrapped::Err(err) => println!("{:?}", err),
+    ///     Ok(res) => println!("{:?}", res),
+    ///     Err(err) => println!("{:?}", err),
     /// }
     /// # }
     /// ```
-    pub async fn list_keys(&self, req: ListKeysRequest) -> Wrapped<ListKeysResponse> {
+    pub async fn list_keys(&self, req: ListKeysRequest) -> Result<ListKeysResponse, HttpError> {
         self.apis.list_keys(&self.http, req).await
     }
 
@@ -198,24 +203,26 @@ impl Client {
     /// - `req`: The revoke key request to send.
     ///
     /// # Returns
-    /// A wrapper containing the empty response, or an [`HttpError`].
+    /// A [`Result`] containing the response, or an error.
+    ///
+    /// # Errors
+    /// The [`HttpError`], if one occurred.
     ///
     /// # Example
     /// ```no_run
     /// # async fn revoke() {
     /// # use unkey::Client;
     /// # use unkey::models::RevokeKeyRequest;
-    /// # use unkey::models::Wrapped;
     /// let c = Client::new("abc123");
     /// let req = RevokeKeyRequest::new("test_123");
     ///
     /// match c.revoke_key(req).await {
-    ///     Wrapped::Ok(_) => println!("Success!"), // Nothing on success
-    ///     Wrapped::Err(err) => println!("{:?}", err),
+    ///     Ok(_) => println!("Success!"), // Nothing on success
+    ///     Err(err) => println!("{:?}", err),
     /// }
     /// # }
     /// ```
-    pub async fn revoke_key(&self, req: RevokeKeyRequest) -> Wrapped<()> {
+    pub async fn revoke_key(&self, req: RevokeKeyRequest) -> Result<(), HttpError> {
         self.keys.revoke_key(&self.http, req).await
     }
 
@@ -225,24 +232,26 @@ impl Client {
     /// - `req`: The get api request to send.
     ///
     /// # Returns
-    /// A wrapper containing the response, or an [`HttpError`].
+    /// A [`Result`] containing the response, or an error.
+    ///
+    /// # Errors
+    /// The [`HttpError`], if one occurred.
     ///
     /// # Example
     /// ```no_run
     /// # async fn get() {
     /// # use unkey::Client;
     /// # use unkey::models::GetApiRequest;
-    /// # use unkey::models::Wrapped;
     /// let c = Client::new("abc123");
     /// let req = GetApiRequest::new("api_id");
     ///
     /// match c.get_api(req).await {
-    ///     Wrapped::Ok(res) => println!("{:?}", res),
-    ///     Wrapped::Err(err) => println!("{:?}", err),
+    ///     Ok(res) => println!("{:?}", res),
+    ///     Err(err) => println!("{:?}", err),
     /// }
     /// # }
     /// ````
-    pub async fn get_api(&self, req: GetApiRequest) -> Wrapped<GetApiResponse> {
+    pub async fn get_api(&self, req: GetApiRequest) -> Result<GetApiResponse, HttpError> {
         self.apis.get_api(&self.http, req).await
     }
 
@@ -252,24 +261,26 @@ impl Client {
     /// - `req`: The get api request to send.
     ///
     /// # Returns
-    /// A wrapper containing the response, or an [`HttpError`].
+    /// A [`Result`] containing the response, or an error.
+    ///
+    /// # Errors
+    /// The [`HttpError`], if one occurred.
     ///
     /// # Example
     /// ```no_run
     /// # async fn get() {
     /// # use unkey::Client;
     /// # use unkey::models::UpdateKeyRequest;
-    /// # use unkey::models::Wrapped;
     /// let c = Client::new("abc123");
     /// let req = UpdateKeyRequest::new("api_id").set_remaining(Some(100));
     ///
     /// match c.update_key(req).await {
-    ///     Wrapped::Ok(res) => println!("{:?}", res),
-    ///     Wrapped::Err(err) => println!("{:?}", err),
+    ///     Ok(res) => println!("{:?}", res),
+    ///     Err(err) => println!("{:?}", err),
     /// }
     /// # }
     /// ````
-    pub async fn update_key(&self, req: UpdateKeyRequest) -> Wrapped<()> {
+    pub async fn update_key(&self, req: UpdateKeyRequest) -> Result<(), HttpError> {
         self.keys.update_key(&self.http, req).await
     }
 
@@ -279,24 +290,26 @@ impl Client {
     /// - `req`: The get key request to send.
     ///
     /// # Returns
-    /// A wrapper containing the response, or an [`HttpError`].
+    /// A [`Result`] containing the response, or an error.
+    ///
+    /// # Errors
+    /// The [`HttpError`], if one occurred.
     ///
     /// # Example
     /// ```no_run
     /// # async fn get() {
     /// # use unkey::Client;
     /// # use unkey::models::GetKeyRequest;
-    /// # use unkey::models::Wrapped;
     /// let c = Client::new("abc123");
-    /// let req = GetKeyRequest::new("api_id");
+    /// let req = GetKeyRequest::new("key_id");
     ///
     /// match c.get_key(req).await {
-    ///     Wrapped::Ok(res) => println!("{:?}", res),
-    ///     Wrapped::Err(err) => println!("{:?}", err),
+    ///     Ok(res) => println!("{:?}", res),
+    ///     Err(err) => println!("{:?}", err),
     /// }
     /// # }
     /// ````
-    pub async fn get_key(&self, req: GetKeyRequest) -> Wrapped<ApiKey> {
+    pub async fn get_key(&self, req: GetKeyRequest) -> Result<ApiKey, HttpError> {
         self.keys.get_key(&self.http, req).await
     }
 
@@ -306,7 +319,10 @@ impl Client {
     /// - `req`: The update remaining request to send.
     ///
     /// # Returns
-    /// A wrapper containing the response, or an [`HttpError`].
+    /// A [`Result`] containing the response, or an error.
+    ///
+    /// # Errors
+    /// The [`HttpError`], if one occurred.
     ///
     /// # Example
     /// ```no_run
@@ -314,20 +330,19 @@ impl Client {
     /// # use unkey::Client;
     /// # use unkey::models::UpdateRemainingRequest;
     /// # use unkey::models::UpdateOp;
-    /// # use unkey::models::Wrapped;
     /// let c = Client::new("abc123");
-    /// let req = UpdateRemainingRequest::new("api_id", Some(100), UpdateOp::Set);
+    /// let req = UpdateRemainingRequest::new("key_id", Some(100), UpdateOp::Set);
     ///
     /// match c.update_remaining(req).await {
-    ///     Wrapped::Ok(res) => println!("{:?}", res),
-    ///     Wrapped::Err(err) => println!("{:?}", err),
+    ///     Ok(res) => println!("{:?}", res),
+    ///     Err(err) => println!("{:?}", err),
     /// }
     /// # }
     /// ````
     pub async fn update_remaining(
         &self,
         req: UpdateRemainingRequest,
-    ) -> Wrapped<UpdateRemainingResponse> {
+    ) -> Result<UpdateRemainingResponse, HttpError> {
         self.keys.update_remaining(&self.http, req).await
     }
 }
@@ -345,7 +360,4 @@ mod test {
         assert_eq!(c.apis, ApiService);
         assert_eq!(c.keys, KeyService);
     }
-
-    // TODO: Write a custom API to run for integration tests with the client.
-    // It will be the clients base URL for testing requests.
 }

@@ -6,7 +6,7 @@ All the API key management features you love, now with more type safety!
 
 ## MSRV
 
-The minimum supported Rust verision for the project is `1.63.0`.
+The minimum supported Rust version for the project is `1.63.0`.
 
 ## Documentation
 
@@ -17,7 +17,7 @@ Full documentation can be found at [https://docs.rs/unkey](https://docs.rs/unkey
 ### Using `cargo`
 
 ```bash
-$ cargo add unkey
+cargo add unkey
 ```
 
 ### Manually
@@ -33,7 +33,7 @@ unkey = "0.3" # I won't forget to update this™
 ### Verifying a key
 
 ```rust
-use unkey::models::{VerifyKeyRequest, Wrapped};
+use unkey::models::VerifyKeyRequest;
 use unkey::Client;
 
 async fn verify_key() {
@@ -41,8 +41,8 @@ async fn verify_key() {
     let req = VerifyKeyRequest::new("test_DEF", "api_JJJ");
 
     match c.verify_key(req).await {
-        Wrapped::Ok(res) => println!("{res:?}"),
-        Wrapped::Err(err) => eprintln!("{err:?}"),
+        Ok(res) => println!("{res:?}"),
+        Err(err) => eprintln!("{err:?}"),
     }
 }
 ```
@@ -50,7 +50,7 @@ async fn verify_key() {
 ### Creating a key
 
 ```rust
-use unkey::models::{CreateKeyRequest, Wrapped};
+use unkey::models::CreateKeyRequest;
 use unkey::Client;
 
 async fn create_key() {
@@ -62,8 +62,8 @@ async fn create_key() {
         .set_owner_id("jonxslays");
 
     match c.create_key(req).await {
-        Wrapped::Ok(res) => println!("{res:?}"),
-        Wrapped::Err(err) => eprintln!("{err:?}"),
+        Ok(res) => println!("{res:?}"),
+        Err(err) => eprintln!("{err:?}"),
     }
 }
 ```
@@ -71,7 +71,7 @@ async fn create_key() {
 ### Updating a key
 
 ```rust
-use unkey::models::{Refill, RefillInterval, UpdateKeyRequest, Wrapped};
+use unkey::models::{Refill, RefillInterval, UpdateKeyRequest};
 use unkey::Client;
 
 async fn update_key() {
@@ -83,8 +83,8 @@ async fn update_key() {
         .set_refill(Some(Refill::new(100, RefillInterval::Daily)));
 
     match c.update_key(req).await {
-        Wrapped::Ok(res) => println!("{res:?}"),
-        Wrapped::Err(err) => eprintln!("{err:?}"),
+        Ok(res) => println!("{res:?}"),
+        Err(err) => eprintln!("{err:?}"),
     }
 }
 ```
@@ -92,7 +92,7 @@ async fn update_key() {
 ### Revoking a key
 
 ```rust
-use unkey::models::{RevokeKeyRequest, Wrapped};
+use unkey::models::RevokeKeyRequest;
 use unkey::Client;
 
 async fn revoke_key() {
@@ -100,8 +100,8 @@ async fn revoke_key() {
     let req = RevokeKeyRequest::new("key_XYZ");
 
     match c.revoke_key(req).await {
-        Wrapped::Ok(res) => println!("{res:?}"),
-        Wrapped::Err(err) => eprintln!("{err:?}"),
+        Ok(res) => println!("{res:?}"),
+        Err(err) => eprintln!("{err:?}"),
     }
 }
 ```
@@ -109,7 +109,7 @@ async fn revoke_key() {
 ### Listing api keys
 
 ```rust
-use unkey::models::{ListKeysRequest, Wrapped};
+use unkey::models::ListKeysRequest;
 use unkey::Client;
 
 async fn list_keys() {
@@ -117,8 +117,8 @@ async fn list_keys() {
     let req = ListKeysRequest::new("api_123");
 
     match c.list_keys(req).await {
-        Wrapped::Ok(res) => println!("{res:?}"),
-        Wrapped::Err(err) => eprintln!("{err:?}"),
+        Ok(res) => println!("{res:?}"),
+        Err(err) => eprintln!("{err:?}"),
     }
 }
 ```
@@ -126,7 +126,7 @@ async fn list_keys() {
 ### Getting api information
 
 ```rust
-use unkey::models::{GetApiRequest, Wrapped};
+use unkey::models::GetApiRequest;
 use unkey::Client;
 
 async fn get_api() {
@@ -134,8 +134,8 @@ async fn get_api() {
     let req = GetApiRequest::new("api_123");
 
     match c.get_api(req).await {
-        Wrapped::Ok(res) => println!("{res:?}"),
-        Wrapped::Err(err) => eprintln!("{err:?}"),
+        Ok(res) => println!("{res:?}"),
+        Err(err) => eprintln!("{err:?}"),
     }
 }
 ```
@@ -143,7 +143,7 @@ async fn get_api() {
 ### Getting key details
 
 ```rust
-use unkey::models::{GetKeyRequest, Wrapped};
+use unkey::models::GetKeyRequest;
 use unkey::Client;
 
 async fn get_key() {
@@ -151,8 +151,8 @@ async fn get_key() {
     let req = GetKeyRequest::new("key_123");
 
     match c.get_key(req).await {
-        Wrapped::Ok(res) => println!("{res:?}"),
-        Wrapped::Err(err) => eprintln!("{err:?}"),
+        Ok(res) => println!("{res:?}"),
+        Err(err) => eprintln!("{err:?}"),
     }
 }
 ```
@@ -160,7 +160,7 @@ async fn get_key() {
 ### Update remaining verifications
 
 ```rust
-use unkey::models::{UpdateOp, UpdateRemainingRequest, Wrapped};
+use unkey::models::{UpdateOp, UpdateRemainingRequest};
 use unkey::Client;
 
 async fn update_remaining() {
@@ -168,8 +168,8 @@ async fn update_remaining() {
     let req = UpdateRemainingRequest::new("key_123", Some(100), UpdateOp::Set);
 
     match c.update_remaining(req).await {
-        Wrapped::Ok(res) => println!("{res:?}"),
-        Wrapped::Err(err) => eprintln!("{err:?}"),
+        Ok(res) => println!("{res:?}"),
+        Err(err) => eprintln!("{err:?}"),
     }
 }
 ```

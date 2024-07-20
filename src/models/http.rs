@@ -83,6 +83,7 @@ impl HttpError {
 
 /// A wrapper around the response type or an error.
 #[derive(Deserialize, Debug, Clone, Eq, PartialEq)]
+#[must_use = "this `Wrapped` result may be an `Err` variant, which should be handled"]
 pub enum Wrapped<T> {
     /// The error value.
     #[serde(rename = "error")]
@@ -91,4 +92,37 @@ pub enum Wrapped<T> {
     /// The ok value.
     #[serde(untagged)]
     Ok(T),
+}
+
+impl<T> From<Wrapped<T>> for Result<T, HttpError> {
+    fn from(wrapped: Wrapped<T>) -> Self {
+        match wrapped {
+            Wrapped::Err(err) => Err(err),
+            Wrapped::Ok(res) => Ok(res),
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::ErrorCode;
+    use super::HttpError;
+    use super::Wrapped;
+
+    #[test]
+    fn test_from_wrapped_ok() {
+        let wrapped = Wrapped::Ok(120);
+        let result: Result<_, HttpError> = wrapped.into();
+
+        assert_eq!(result.unwrap(), 120);
+    }
+
+    #[test]
+    fn test_from_wrapped_err() {
+        let err = HttpError::new(ErrorCode::Conflict, "test".to_string());
+        let wrapped = Wrapped::Err(err.clone());
+        let result: Result<u8, HttpError> = wrapped.into();
+
+        assert_eq!(result.unwrap_err(), err);
+    }
 }

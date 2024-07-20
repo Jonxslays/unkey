@@ -13,7 +13,7 @@ use models::ErrorCode;
 use models::HttpResult;
 use models::Wrapped;
 
-/// Creates a new Err variant of [`Response`].
+/// Creates a new Err variant of [`Wrapped`].
 ///
 /// # Arguments
 /// - `$code`: The [`ErrorCode`] for the error.
@@ -98,7 +98,7 @@ pub(crate) async fn wrap_empty_response(result: HttpResult) -> Wrapped<()> {
     }
 }
 
-/// Fetchs the given route with the provided http service.
+/// Fetches the given route with the provided http service.
 macro_rules! fetch {
     ($http:expr, $route:ident) => {
         $http.fetch($route, None::<u8>)
@@ -130,7 +130,7 @@ mod test {
     }
 
     #[test]
-    fn reponse_error() {
+    fn response_error() {
         let res: Wrapped<()> = response_error!(ErrorCode::NotFound, "not found!");
 
         assert_eq!(

@@ -2,7 +2,8 @@
 
 ## Breaking changes
 
-- All async `Client` methods now return a `Result` instead of `Wrapped`.
+- All async `Client` methods and service methods now return a `Result` instead of `Wrapped`.
+- Wrapped is now `pub(crate)` and considered internal implementation detail.
 
 ## Additions
 

@@ -891,7 +891,7 @@ impl UpdateRemainingRequest {
     }
 }
 
-/// An outgoing update remaining request.
+/// An incoming update remaining request.
 #[derive(Debug, Clone, Deserialize)]
 pub struct UpdateRemainingResponse {
     /// The number of remaining verifications for the key.

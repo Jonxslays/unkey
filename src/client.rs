@@ -275,7 +275,7 @@ impl Client {
     /// let req = UpdateKeyRequest::new("api_id").set_remaining(Some(100));
     ///
     /// match c.update_key(req).await {
-    ///     Ok(res) => println!("{:?}", res),
+    ///     Ok(_) => println!("Success"), // Nothing on success
     ///     Err(err) => println!("{:?}", err),
     /// }
     /// # }

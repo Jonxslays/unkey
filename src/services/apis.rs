@@ -36,6 +36,10 @@ impl ApiService {
             .query_insert("apiId", &req.api_id)
             .query_insert("limit", &req.limit.unwrap_or(100).to_string());
 
+        if let Some(revalidate) = &req.revalidate_cache {
+            route.query_insert("revalidateKeysCache", &revalidate.to_string());
+        }
+
         if let Some(owner) = &req.owner_id {
             route.query_insert("ownerId", owner);
         }

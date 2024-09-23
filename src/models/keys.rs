@@ -418,6 +418,9 @@ pub struct ApiKey {
     /// The unique id of this key.
     pub id: String,
 
+    /// The optional name for the key.
+    pub name: Option<String>,
+
     /// The id of the api this key belongs to.
     pub api_id: String,
 

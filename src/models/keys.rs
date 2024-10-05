@@ -298,7 +298,7 @@ impl CreateKeyRequest {
     ///
     /// # Arguments
     /// - `expires`: The number of milliseconds in the future this key should
-    /// expire at.
+    ///   expire at.
     ///
     /// # Returns
     /// Self for chained calls.

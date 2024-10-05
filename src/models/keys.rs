@@ -3,6 +3,7 @@ use std::time::SystemTime;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
+use super::ErrorCode;
 use super::Ratelimit;
 use super::RatelimitState;
 use super::Refill;
@@ -72,6 +73,9 @@ pub struct VerifyKeyResponse {
     /// The keys unique id, if any.
     pub key_id: Option<String>,
 
+    /// The name for this key, if any.
+    pub name: Option<String>,
+
     /// The owner id for this key, if any.
     pub owner_id: Option<String>,
 
@@ -81,6 +85,12 @@ pub struct VerifyKeyResponse {
     /// The number of verifications before this key becomes invalidated, if
     /// any limit was set on the key.
     pub remaining: Option<usize>,
+
+    /// The code for the verification.
+    pub code: ErrorCode,
+
+    /// Whether or not the key is enabled.
+    pub enabled: Option<bool>,
 
     /// The unix epoch in ms when this key expires, if it does.
     pub expires: Option<usize>,
@@ -288,7 +298,7 @@ impl CreateKeyRequest {
     ///
     /// # Arguments
     /// - `expires`: The number of milliseconds in the future this key should
-    /// expire at.
+    ///   expire at.
     ///
     /// # Returns
     /// Self for chained calls.

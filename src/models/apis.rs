@@ -131,6 +131,7 @@ impl ListKeysRequest {
     ///
     /// assert_eq!(r.revalidate_cache.unwrap(), true);
     /// ```
+    #[must_use]
     pub fn set_revalidate_cache(mut self, revalidate_cache: bool) -> Self {
         self.revalidate_cache = Some(revalidate_cache);
         self

@@ -1,3 +1,17 @@
+# v0.5.0 (Oct 2024)
+
+## Additions
+
+- Add `name` field to `ApiKey`.
+- Add `revalidate_cache` to `ListKeysRequest`.
+- Add `name`, `code`, and `enabled` fields to `VerifyKeyResponse`.
+
+## Changes
+
+- Updated ErrorCodes to more closely align with Unkey.
+
+---
+
 # v0.4.0 (Jul 2024)
 
 ## Breaking changes

@@ -7,6 +7,9 @@ pub(crate) type HttpResult = Result<reqwest::Response, reqwest::Error>;
 #[derive(Debug, Clone, Deserialize, Eq, PartialEq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum ErrorCode {
+    /// This is a valid resource - no error.
+    Valid,
+
     /// Resource not found.
     NotFound,
 
@@ -17,25 +20,37 @@ pub enum ErrorCode {
     BadRequest,
 
     /// You are ratelimited.
-    Ratelimited,
+    RateLimited,
 
     /// Not authorized for resource.
     Unauthorized,
 
-    /// The key has exceeded its usage.
-    KeyUsageExceeded,
+    /// The resource has exceeded its usage.
+    UsageExceeded,
 
     /// An internal server error occurred with the api.
     InternalServerError,
 
-    // An invalid key type was used (shouldn't happen usually).
+    /// An invalid key type was used (shouldn't happen usually).
     InvalidKeyType,
 
-    // The identifier is in use by another resource.
+    /// The identifier is in use by another resource.
     NotUnique,
 
-    // Another resource already uses this identifier.
+    /// Another resource already uses this identifier.
     Conflict,
+
+    /// The resource is delete protected.
+    DeleteProtected,
+
+    /// The resource is expired.
+    Expired,
+
+    /// The resource is disabled.
+    Disabled,
+
+    /// You have made too many requests.
+    TooManyRequests,
 
     /// Reserved for unknown interactions.
     #[serde(other)]

@@ -17,6 +17,9 @@ pub struct ListKeysRequest {
 
     /// The pagination cursor indicating the last key that was returned.
     pub cursor: Option<String>,
+
+    /// Whether to revalidate the cache for this request.
+    pub revalidate_cache: Option<bool>,
 }
 
 impl ListKeysRequest {
@@ -37,6 +40,7 @@ impl ListKeysRequest {
     /// assert_eq!(r.limit, None);
     /// assert_eq!(r.cursor, None);
     /// assert_eq!(r.owner_id, None);
+    /// assert_eq!(r.revalidate_cache, None);
     /// ```
     #[must_use]
     pub fn new<T: Into<String>>(api_id: T) -> Self {
@@ -45,6 +49,7 @@ impl ListKeysRequest {
             owner_id: None,
             limit: None,
             cursor: None,
+            revalidate_cache: None,
         }
     }
 
@@ -108,6 +113,26 @@ impl ListKeysRequest {
     #[must_use]
     pub fn set_owner_id<T: Into<String>>(mut self, owner_id: T) -> Self {
         self.owner_id = Some(owner_id.into());
+        self
+    }
+
+    /// Sets the flag for revalidating the cache for this request.
+    ///
+    /// # Arguments
+    /// - `revalidate_cache`: Whether to revalidate the cache with this request.
+    ///
+    /// # Returns
+    /// Self for chained calls.
+    ///
+    /// # Example
+    /// ```
+    /// # use unkey::models::ListKeysRequest;
+    /// let r = ListKeysRequest::new("test").set_revalidate_cache(true);
+    ///
+    /// assert_eq!(r.revalidate_cache.unwrap(), true);
+    /// ```
+    pub fn set_revalidate_cache(mut self, revalidate_cache: bool) -> Self {
+        self.revalidate_cache = Some(revalidate_cache);
         self
     }
 }

@@ -1,11 +1,9 @@
 use crate::fetch;
 use crate::models::DeleteApiRequest;
-use crate::models::DeleteApiRequest;
 use crate::models::GetApiRequest;
 use crate::models::GetApiResponse;
 use crate::models::ListKeysRequest;
 use crate::models::ListKeysResponse;
-use crate::parse_empty_response;
 use crate::parse_empty_response;
 use crate::parse_response;
 use crate::routes;

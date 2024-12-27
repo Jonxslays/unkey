@@ -93,8 +93,9 @@ impl ApiService {
         http: &HttpService,
         req: DeleteApiRequest,
     ) -> Result<(), HttpError> {
-        let route = routes::DELETE_API.compile();
+        let mut route = routes::DELETE_API.compile();
+        route.query_insert("apiId", &req.api_id);
 
-        parse_empty_response(fetch!(http, route, req).await).await
+        parse_empty_response(fetch!(http, route).await).await
     }
 }

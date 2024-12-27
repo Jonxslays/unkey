@@ -198,7 +198,7 @@ pub struct GetApiResponse {
     pub workspace_id: String,
 }
 
-/// An outgoing request to delete an API.
+/// An outgoing request to delete an API
 #[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DeleteApiRequest {

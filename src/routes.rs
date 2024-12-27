@@ -30,6 +30,9 @@ pub(crate) static GET_API: Route = Route::new(Method::GET, "/apis.getApi");
 /// The list keys endpoint `GET /apis.listKeys`
 pub(crate) static LIST_KEYS: Route = Route::new(Method::GET, "/apis.listKeys");
 
+/// The delete api endpoint `POST /apis.deleteApi`
+pub(crate) static DELETE_API: Route = Route::new(Method::POST, "/apis.deleteApi");
+
 ////////////////////////////////////////////////////////////////////////////////
 // END ROUTES
 ////////////////////////////////////////////////////////////////////////////////

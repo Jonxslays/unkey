@@ -197,3 +197,11 @@ pub struct GetApiResponse {
     #[serde(rename = "workspaceId")]
     pub workspace_id: String,
 }
+
+/// An outgoing request to delete an API
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct DeleteApiRequest {
+    // The id of the api to delete.
+    pub api_id: String,
+}

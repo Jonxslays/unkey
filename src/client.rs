@@ -273,7 +273,7 @@ impl Client {
     /// # async fn delete() {
     /// # use unkey::Client;
     /// # use unkey::models::DeleteApiRequest;
-    /// let c = Client
+    /// let c = Client::new("abc123");
     /// let req = DeleteApiRequest::new("api_id");
     ///
     /// match c.delete_api(req).await {
@@ -282,7 +282,7 @@ impl Client {
     /// }
     /// # }
     /// ````
-    pub async fn delete_api(&self, req: DeleteApiRequest) -> Result<DeleteApiRequest, HttpError> {
+    pub async fn delete_api(&self, req: DeleteApiRequest) -> Result<(), HttpError> {
         self.apis.delete_api(&self.http, req).await
     }
 

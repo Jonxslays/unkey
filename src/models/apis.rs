@@ -199,9 +199,33 @@ pub struct GetApiResponse {
 }
 
 /// An outgoing request to delete an API
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DeleteApiRequest {
     // The id of the api to delete.
     pub api_id: String,
+}
+
+impl DeleteApiRequest {
+    /// Creates a new delete api request.
+    ///
+    /// # Arguments
+    /// - `api_id`: The id of the api to delete.
+    ///
+    /// # Returns
+    /// The new delete api request.
+    ///
+    /// # Example
+    /// ```
+    /// # use unkey::models::DeleteApiRequest;
+    /// let r = DeleteApiRequest::new("test");
+    ///
+    /// assert_eq!(r.api_id, String::from("test"));
+    /// ```
+    #[must_use]
+    pub fn new<T: Into<String>>(api_id: T) -> Self {
+        Self {
+            api_id: api_id.into(),
+        }
+    }
 }

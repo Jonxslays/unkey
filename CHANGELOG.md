@@ -1,3 +1,12 @@
+# v0.6.0 (Dec 2024)
+
+## Additions
+
+- Add `delete_api` method to `ApiService` and corresponding `Route`.
+- Add models supporting `delete_api` method.
+
+---
+
 # v0.5.0 (Oct 2024)
 
 ## Additions

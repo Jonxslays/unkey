@@ -34,6 +34,11 @@ pub(crate) static LIST_KEYS: Route = Route::new(Method::GET, "/apis.listKeys");
 pub(crate) static DELETE_API: Route = Route::new(Method::POST, "/apis.deleteApi");
 
 ////////////////////////////////////////////////////////////////////////////////
+
+/// The retrieve usage numbers endpoint `GET /keys.getVerifications`
+pub(crate) static GET_VERIFICATIONS: Route = Route::new(Method::GET, "/keys.getVerifications");
+
+////////////////////////////////////////////////////////////////////////////////
 // END ROUTES
 ////////////////////////////////////////////////////////////////////////////////
 

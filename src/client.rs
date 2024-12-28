@@ -5,6 +5,8 @@ use crate::models::DeleteApiRequest;
 use crate::models::GetApiRequest;
 use crate::models::GetApiResponse;
 use crate::models::GetKeyRequest;
+use crate::models::GetUsageNumbersRequest;
+use crate::models::GetUsageNumbersResponse;
 use crate::models::ListKeysRequest;
 use crate::models::ListKeysResponse;
 use crate::models::RevokeKeyRequest;
@@ -375,6 +377,24 @@ impl Client {
         req: UpdateRemainingRequest,
     ) -> Result<UpdateRemainingResponse, HttpError> {
         self.keys.update_remaining(&self.http, req).await
+    }
+
+    /// Retrieves usage numbers for a key.
+    ///
+    /// # Arguments
+    /// - `req`: The get usage numbers request to send.
+    ///
+    /// # Returns
+    /// A [`Result`] containing the response, or an error.
+    ///
+    /// # Errors
+    /// The [`HttpError`], if one occurred.
+    ///
+    pub async fn get_verifications(
+        &self,
+        req: GetUsageNumbersRequest,
+    ) -> Result<GetUsageNumbersResponse, HttpError> {
+        self.keys.get_verifications(&self.http, req).await
     }
 }
 

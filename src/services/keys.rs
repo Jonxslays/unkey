@@ -3,6 +3,8 @@ use crate::models::ApiKey;
 use crate::models::CreateKeyRequest;
 use crate::models::CreateKeyResponse;
 use crate::models::GetKeyRequest;
+use crate::models::GetUsageNumbersRequest;
+use crate::models::GetUsageNumbersResponse;
 use crate::models::RevokeKeyRequest;
 use crate::models::UpdateKeyRequest;
 use crate::models::UpdateRemainingRequest;
@@ -145,6 +147,27 @@ impl KeyService {
         req: UpdateRemainingRequest,
     ) -> Result<UpdateRemainingResponse, HttpError> {
         let route = routes::UPDATE_REMAINING.compile();
+
+        parse_response(fetch!(http, route, req).await).await
+    }
+
+    /// Retrieve usage numbers
+    ///
+    /// # Arguments
+    /// - `http`: The http service to use for the request.
+    /// - `req`: The request to send.
+    ///
+    /// # Returns
+    /// A [`Result`] containing the response, or an error.
+    ///
+    /// # Errors
+    /// The [`HttpError`], if one occurred.
+    pub async fn get_verifications(
+        &self,
+        http: &HttpService,
+        req: GetUsageNumbersRequest,
+    ) -> Result<GetUsageNumbersResponse, HttpError> {
+        let route = routes::GET_VERIFICATIONS.compile();
 
         parse_response(fetch!(http, route, req).await).await
     }

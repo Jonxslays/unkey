@@ -1,8 +1,10 @@
 use crate::fetch;
+use crate::models::DeleteApiRequest;
 use crate::models::GetApiRequest;
 use crate::models::GetApiResponse;
 use crate::models::ListKeysRequest;
 use crate::models::ListKeysResponse;
+use crate::parse_empty_response;
 use crate::parse_response;
 use crate::routes;
 use crate::services::HttpService;
@@ -71,5 +73,27 @@ impl ApiService {
         route.query_insert("apiId", &req.api_id);
 
         parse_response(fetch!(http, route).await).await
+    }
+
+    /// Permanently delete an API and revoke all keys associated with it
+    ///
+    /// # Arguments
+    /// - `http`: The http service to use for the request.
+    /// - `req`: The request to send.
+    ///
+    /// # Returns
+    /// A [`Result`] containing the response, or an error.
+    ///
+    /// # Errors
+    /// The [`HttpError`], if one occurred.
+    pub async fn delete_api(
+        &self,
+        http: &HttpService,
+        req: DeleteApiRequest,
+    ) -> Result<(), HttpError> {
+        let mut route = routes::DELETE_API.compile();
+        route.query_insert("apiId", &req.api_id);
+
+        parse_empty_response(fetch!(http, route).await).await
     }
 }

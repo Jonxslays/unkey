@@ -1,9 +1,12 @@
 use crate::models::ApiKey;
 use crate::models::CreateKeyRequest;
 use crate::models::CreateKeyResponse;
+use crate::models::DeleteApiRequest;
 use crate::models::GetApiRequest;
 use crate::models::GetApiResponse;
 use crate::models::GetKeyRequest;
+use crate::models::GetUsageNumbersRequest;
+use crate::models::GetUsageNumbersResponse;
 use crate::models::ListKeysRequest;
 use crate::models::ListKeysResponse;
 use crate::models::RevokeKeyRequest;
@@ -255,6 +258,36 @@ impl Client {
         self.apis.get_api(&self.http, req).await
     }
 
+    /// Permanently deletes an api and revokes all keys associated with it.
+    ///
+    /// # Arguments
+    ///
+    /// - `req`: The delete api request to send.
+    ///
+    /// # Returns
+    /// A [`Result`] containing the response, or an error.
+    ///
+    /// # Errors
+    /// The [`HttpError`], if one occurred.
+    ///
+    /// # Example
+    /// ```no_run
+    /// # async fn delete() {
+    /// # use unkey::Client;
+    /// # use unkey::models::DeleteApiRequest;
+    /// let c = Client::new("abc123");
+    /// let req = DeleteApiRequest::new("api_id");
+    ///
+    /// match c.delete_api(req).await {
+    ///    Ok(res) => println!("{:?}", res),
+    ///    Err(err) => println!("{:?}", err),
+    /// }
+    /// # }
+    /// ````
+    pub async fn delete_api(&self, req: DeleteApiRequest) -> Result<(), HttpError> {
+        self.apis.delete_api(&self.http, req).await
+    }
+
     /// Retrieves information for the given api id.
     ///
     /// # Arguments
@@ -344,6 +377,24 @@ impl Client {
         req: UpdateRemainingRequest,
     ) -> Result<UpdateRemainingResponse, HttpError> {
         self.keys.update_remaining(&self.http, req).await
+    }
+
+    /// Retrieves usage numbers for a key.
+    ///
+    /// # Arguments
+    /// - `req`: The get usage numbers request to send.
+    ///
+    /// # Returns
+    /// A [`Result`] containing the response, or an error.
+    ///
+    /// # Errors
+    /// The [`HttpError`], if one occurred.
+    ///
+    pub async fn get_verifications(
+        &self,
+        req: GetUsageNumbersRequest,
+    ) -> Result<GetUsageNumbersResponse, HttpError> {
+        self.keys.get_verifications(&self.http, req).await
     }
 }
 

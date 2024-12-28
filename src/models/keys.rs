@@ -910,3 +910,82 @@ pub struct UpdateRemainingResponse {
     /// The number of remaining verifications for the key.
     pub remaining: usize,
 }
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub enum Granularity {
+    Day,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GetUsageNumbersRequest {
+    /// Optional key ID to get usage numbers for.
+    pub key_id: Option<String>,
+    /// Optional owner ID to get usage numbers for.
+    pub owner_id: Option<String>,
+    /// Optional start time in milliseconds since the Unix epoch.
+    pub start: Option<usize>,
+    /// Optional end time in milliseconds since the Unix epoch.
+    pub end: Option<usize>,
+    /// Optional granularity for the usage data.
+    pub granularity: Option<Granularity>,
+}
+
+impl GetUsageNumbersRequest {
+    /// Creates a new `GetUsageNumbersRequest`.
+    ///
+    /// # Arguments
+    /// - `key_id`: The ID of the key to get usage numbers for.
+    /// - `owner_id`: The ID of the owner to get usage numbers for.
+    /// - `start`: The start time in milliseconds since the Unix epoch.
+    /// - `end`: The end time in milliseconds since the Unix epoch.
+    /// - `granularity`: The granularity of the usage numbers.
+    ///
+    /// # Returns
+    /// A `Result` containing the new `GetUsageNumbersRequest` or an error string
+    /// if neither `key_id` nor `owner_id` is provided.
+    pub fn new<T: Into<Option<String>>>(
+        key_id: T,
+        owner_id: T,
+        start: Option<usize>,
+        end: Option<usize>,
+        granularity: Option<Granularity>,
+    ) -> Result<Self, String> {
+        let key_id = key_id.into();
+        let owner_id = owner_id.into();
+
+        // Ensure at least one of key_id or owner_id is provided
+        if key_id.is_none() && owner_id.is_none() {
+            return Err("Either key_id or owner_id must be provided.".to_string());
+        }
+
+        Ok(Self {
+            key_id,
+            owner_id,
+            start,
+            end,
+            granularity,
+        })
+    }
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Verifications {
+    /// Number of rate-limited requests.
+    pub rate_limited: usize,
+    /// Number of successful requests.
+    pub success: usize,
+    /// Time spent processing requests (in milliseconds).
+    pub time: usize,
+    /// Number of requests that exceeded usage limits.
+    pub usage_exceeded: usize,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GetUsageNumbersResponse {
+    /// List of verifications, each representing usage statistics.
+    pub usage: Vec<Verifications>,
+}

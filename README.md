@@ -25,7 +25,7 @@ cargo add unkey
 Add the following to your `Cargo.toml` dependencies array:
 
 ```toml
-unkey = "0.4" # I won't forget to update this™
+unkey = "0.6" # I won't forget to update this™
 ```
 
 ## Examples
@@ -134,6 +134,23 @@ async fn get_api() {
     let req = GetApiRequest::new("api_123");
 
     match c.get_api(req).await {
+        Ok(res) => println!("{res:?}"),
+        Err(err) => eprintln!("{err:?}"),
+    }
+}
+```
+
+### Deleting an api
+
+```rust
+use unkey::models::DeleteApiRequest;
+use unkey::Client;
+
+async fn delete_api() {
+    let c = Client::new("unkey_ABC");
+    let req = DeleteApiRequest::new("api_XYZ");
+
+    match c.delete_api(req).await {
         Ok(res) => println!("{res:?}"),
         Err(err) => eprintln!("{err:?}"),
     }

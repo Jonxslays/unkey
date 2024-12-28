@@ -75,7 +75,7 @@ impl ApiService {
         parse_response(fetch!(http, route).await).await
     }
 
-    /// Permanently delete an API and revoke all keys associated with it
+    /// Permanently delete an API and revoke all keys associated with it.
     ///
     /// # Arguments
     /// - `http`: The http service to use for the request.
@@ -91,9 +91,8 @@ impl ApiService {
         http: &HttpService,
         req: DeleteApiRequest,
     ) -> Result<(), HttpError> {
-        let mut route = routes::DELETE_API.compile();
-        route.query_insert("apiId", &req.api_id);
+        let route = routes::DELETE_API.compile();
 
-        parse_empty_response(fetch!(http, route).await).await
+        parse_empty_response(fetch!(http, route, req).await).await
     }
 }

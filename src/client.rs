@@ -259,7 +259,6 @@ impl Client {
     /// Permanently deletes an api and revokes all keys associated with it.
     ///
     /// # Arguments
-    ///
     /// - `req`: The delete api request to send.
     ///
     /// # Returns

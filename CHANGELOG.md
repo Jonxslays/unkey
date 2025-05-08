@@ -1,4 +1,8 @@
-# v0.6.0 (Dec 2024)
+# v0.6.0 (May 2025)
+
+## Breaking changes
+
+- Upgraded `reqwest` which bumped MSRV from 1.63 to 1.71.
 
 ## Additions
 

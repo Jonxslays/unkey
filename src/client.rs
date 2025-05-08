@@ -62,7 +62,6 @@ impl Client {
     /// # Arguments
     /// - `key`: The root api key the client should send with requests.
     /// - `url`: The base url to use, excluding trailing slash.
-    ///     i.e. `http://localhost:3000`.
     ///
     /// # Returns
     /// The new client.

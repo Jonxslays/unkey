@@ -6,7 +6,7 @@ All the API key management features you love, now with more type safety!
 
 ## MSRV
 
-The minimum supported Rust version for the project is `1.63.0`.
+The minimum supported Rust version for the project is `1.71.0`.
 
 ## Documentation
 

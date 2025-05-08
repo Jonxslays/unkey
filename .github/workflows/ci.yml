@@ -79,8 +79,8 @@ jobs:
       - name: Install cargo-msrv
         run: cargo install cargo-msrv
 
-      - name: Run cargo-msrv 
-        run: cargo msrv verify 
+      - name: Run cargo-msrv
+        run: cargo msrv verify
 
   test:
     name: Test
@@ -89,7 +89,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        rust_version: [1.63.0, stable, nightly]
+        rust_version: [1.71, stable, nightly]
 
     runs-on: ${{ matrix.os }}
 
